@@ -46,12 +46,12 @@ const userSchema = new mongoose.Schema(
         program: {
             type: String,
             default:"",
-            required: true,
+            //required: true,
         },
         yearOfGraduation: {
             type: String,
             default:"",
-            required: true,
+            //required: true,
         },
         savedPosts: {
             type: Array,
