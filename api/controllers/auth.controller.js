@@ -24,7 +24,7 @@ export const signup = async (req, res, next) => {
         };
 
         const createActivationToken = (user) => {
-            return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "10m" });
+            return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "5m" });
         };
 
         const activationToken = createActivationToken(user);
