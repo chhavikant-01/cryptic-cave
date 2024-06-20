@@ -79,3 +79,30 @@ export const activation = async (req, res, next) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+export const login = async (req, res, next) => {
+    try{
+        const { email, password } = req.body;
+
+        if(!email || !password){
+            return res.status(400).json({message: "Please enter all fields!"})
+        }
+
+        const user = await User.findOne({email}).select("+password");
+
+        if(!user){
+            return res.status(400).json({message: "User doesn't exist!"})
+        }
+
+        const isPasswordValid = await user.comparePassword(password);
+
+        if(!isPasswordValid){
+            return res.status(400).json({message: "Please provide the correct information"})
+        }
+
+        sendToken(user,200,res)
+
+    } catch(e){
+        res.status(500).json({message: e.message})
+    }
+}
