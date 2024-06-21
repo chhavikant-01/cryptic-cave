@@ -1,3 +1,4 @@
+import mongoose from "mongoose"
 import User from "../models/user.model.js"
 
 export const logout = (req,res,next)=>{
@@ -68,4 +69,136 @@ export const updateUser = async (req, res, next) => {
     } catch(e){
         res.status(500).json({message: e.message})
     }
+}
+
+export const deleteUser = async (req,res,next) => {
+    try{
+        const user = await User.findById(req.params.userId).select("+password")
+        
+        if(!user){
+            res
+                .status(400)
+                .json({message: "User does not exist!"})
+           }
+
+        const isPasswordValid = user.comparePassword(req.body.password)
+        if(!isPasswordValid){
+            res
+                .status(400)
+                .json({message: "Incorrect Password!"})
+           }
+        
+        try{
+            await User.findByIdAndDelete(req.params.userId);
+            res.status(200).json('User has been deleted');
+        } catch(e){
+            res.status(500).json({message: e.message})
+        }
+        
+    }catch(e){
+        res.status(500).json({message: e.message})
+    }
+}
+
+export const getUser = async (req,res,next) => {
+    try{
+        const user = await User.findById(req.params.userId);
+
+        const { password, updatedAt, createdAt, savedPosts, ...other } = user._doc;
+
+        res.status(200).json(other)
+    } catch(e){
+        res.status(500).json({message: e.message})
+    }
+}
+
+export const followUser = async (req,res,next) => {
+    try{
+        if(req.body.userId!==req.params.userId){ //user can't follow itself!
+
+            const session = await mongoose.startSession();
+            session.startTransaction();
+            try{
+                const user = await User.findById(req.params.userId).session(session);
+                const currentUser = await User.findById(req.body.userId).session(session);
+
+                if (!user || !currentUser) {
+                    await session.abortTransaction();
+                    session.endSession();
+                    return res.status(404).json("User not found");
+                  }
+
+                if(!currentUser.followings.includes(req.params.userId)){
+                    await currentUser.updateOne({ $addToSet:{ followings:req.params.userId } }, { session });
+                    await user.updateOne({ $addToSet:{ followers:req.body.userId } }, { session });
+                    await session.commitTransaction();
+                    res.status(201).json({message: "User has been followed"})
+                }else {
+                    await session.abortTransaction();
+                    res.status(400).json("You already follow this user");
+                  }
+            }catch(e){
+                await session.abortTransaction();
+                res.status(500).json({message: e.message});
+            } finally{
+                session.endSession();
+            }
+        
+        } else{
+            res.status(400).json({message: "You can't follow yourself"})
+        }
+    }catch(e){
+        res.status(500).json({message: e.message})
+    }
+}
+
+export const unfollowUser = async (req,res,next) => {
+    try{
+        if(req.body.userId!==req.params.userId){ //user can't unfollow itself!
+
+            const session = await mongoose.startSession();
+            session.startTransaction();
+            try{
+                const user = await User.findById(req.params.userId).session(session);
+                const currentUser = await User.findById(req.body.userId).session(session);
+
+                if (!user || !currentUser) {
+                    await session.abortTransaction();
+                    session.endSession();
+                    return res.status(404).json("User not found");
+                  }
+            
+
+                if(currentUser.followings.includes(req.params.userId)){
+                    await currentUser.updateOne({ $pull:{ followings:req.params.userId } }, { session });
+                    await user.updateOne({ $pull:{ followers:req.body.userId } }, { session });
+                    await session.commitTransaction();
+                    res.status(201).json({message: "User has been unfollowed"})
+                }else {
+                    await session.abortTransaction();
+                    res.status(400).json("You do not follow this user");
+                  }
+            }catch(e){
+                await session.abortTransaction();
+                res.status(500).json({message: e.message});
+            } finally{
+                session.endSession();
+            }
+        
+        } else{
+            res.status(400).json({message: "You can't unfollow yourself"})
+        }
+    }catch(e){
+        res.status(500).json({message: e.message})
+    }
+}
+
+export const allUsers = async (req,res,next) => {
+    
+    try {
+        const data = await User.find();
+        res.status(200).json(data);
+      } catch (err) {
+        res.status(404).json({message: err.message});
+      }
 }
