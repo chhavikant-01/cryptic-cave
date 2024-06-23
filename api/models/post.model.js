@@ -1,17 +1,16 @@
 import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema({
-
     userId: {
         type: String,
         required: true,
     },
-    Title: {
+    title: {
         type: String,
         required: true,
         max: 15,
     },
-    Desc: {
+    desc: {
         type: String,
         max: 500,
     },
@@ -21,11 +20,11 @@ const postSchema = new mongoose.Schema({
     },
     fileType: {
         type: String,
-        enum: ["ppt","pdf","doc","txt","img"],
-        default: "",
+        enum: ["ppt", "pdf", "doc", "txt", "img"],
+        default: "img", 
         validate: {
-            validator: function(v){
-                return ["ppt","pdf","doc","txt","img"].includes(v);
+            validator: function(v) {
+                return ["ppt", "pdf", "doc", "txt", "img"].includes(v);
             },
             message: props => `${props.value} is not a valid fileType`
         }
@@ -35,11 +34,41 @@ const postSchema = new mongoose.Schema({
         default: "",
     },
     likes: {
-        type: Array,
+        type: [String], 
         default: [],
-    }
     },
-    {
-        timestamps: true
+    category: {
+        program: {
+            type: String,
+            default: "NA", 
+        },
+        semester: {
+            type: Number,
+            default: -1, 
+        },
+        subject: {
+            type: String,
+            default: "NA", 
+        },
+        pyq: {
+            type: Boolean,
+            default: false,
+        },
+        notes: {
+            type: Boolean,
+            default: false,
+        },
+        ebook: {
+            type: Boolean,
+            default: false,
+        },
+        lecturePPT: {
+            type: Boolean,
+            default: false,
+        }
     }
-);
+}, {
+    timestamps: true
+});
+
+export default mongoose.model('Post', postSchema);

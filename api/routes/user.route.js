@@ -6,10 +6,10 @@ import { isAuthenticated } from "../middleware/auth.js"
 const router = express.Router()
 
 router.post("/logout", logout)
-router.put("/update-user/:userId", updateUser, isAuthenticated)
-router.delete("/delete-user/:userId", deleteUser, isAuthenticated)
+router.put("/update-user", isAuthenticated, updateUser )
+router.delete("/delete-user", isAuthenticated, deleteUser )
 router.get("/:userId", getUser)
-router.put("/:userId/follow", followUser, isAuthenticated)
-router.put("/:userId/unfollow", unfollowUser, isAuthenticated)
+router.put("/:userId/follow", isAuthenticated, followUser )
+router.put("/:userId/unfollow", isAuthenticated, unfollowUser )
 router.get("/", allUsers)
 export default router
