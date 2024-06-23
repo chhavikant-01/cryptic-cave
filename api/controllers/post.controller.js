@@ -84,3 +84,53 @@ export const updatePost = async (req,res,next) => {
         res.status(500).json({message: e.message})
     }
 }
+
+export const deletePost = async (req, res, next) => {
+  try {
+    
+    const post = await Post.findById(req.params.postId);
+    if (!post) {
+      return res.status(404).json({ message: "Post doesn't exist!" });
+    }
+
+    if (req.user.id !== post.userId.toString()) {
+      return res.status(403).json({ message: "You're not allowed to delete this post" });
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+
+    await user.updateOne({ $pull: { posts: post._id } });
+
+    await post.deleteOne();
+
+    res.status(200).json({ message: "The post has been deleted" });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+}
+
+export const getPost = async (req,res,next) => {
+  try{
+    const post = await Post.findById(req.params.postId);
+
+    if(!post){
+      return res.status(404).json({message: "Post doesn't exist!"})
+    }
+
+    res.status(200).json(post)
+} catch(e){
+    res.status(500).json({message: e.message})
+}
+}
+
+export const allPosts = async (req, res, next) => {
+  try {
+    const data = await Post.find();
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(404).json({message: err.message});
+  }
+}
