@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 import User from "../models/user.model.js"
+import Post from "../models/post.model.js"
 
 export const logout = (req,res,next)=>{
     try{
@@ -203,4 +204,20 @@ export const allUsers = async (req,res,next) => {
       } catch (err) {
         res.status(404).json({message: err.message});
       }
+}
+
+export const userPosts = async (req,res,next) => {
+    try{
+        const user = await User.findById(req.params.userId);
+        if(!user){
+            return res.status(404).json({message: "User doesn't exist!"})
+        }
+
+        const posts = await Post.find({userId: user._id})
+
+        res.status(200).json(posts)
+
+    }catch(e){
+        res.status(500).json({message: e.message})
+    }
 }
