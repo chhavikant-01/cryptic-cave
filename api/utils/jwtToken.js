@@ -11,11 +11,18 @@ const sendToken = (user, statusCode, res) => {
         secure: true,
       };
     
-      res.status(statusCode).cookie("token", token, options).json({
-        success: true,
-        user,
-        token,
-      });
+      if(statusCode === 201){
+        res.status(statusCode).cookie("token", token, options).json({
+          success: true,
+          message: "User created successfully"
+        });
+      }
+      if(statusCode === 200){
+        res.status(statusCode).cookie("token", token, options).json({
+          success: true,
+          message: "User logged in successfully"
+        });
+      }
     };
 
     export default sendToken;

@@ -8,6 +8,7 @@ dotenv.config();
 export const signup = async (req, res, next) => {
     try {
         const { firstname, lastname, email, password } = req.body;
+        console.log(req.body);
         const userEmail = await User.findOne({ email });
         const userUsername = email.split("@")[0];
 
@@ -28,7 +29,7 @@ export const signup = async (req, res, next) => {
         };
 
         const activationToken = createActivationToken(user);
-        const activationUrl = `${process.env.BASE_URL}/api/auth/activation/${activationToken}`;
+        const activationUrl = `${process.env.BASE_URL}/api/v1/auth/activation/${activationToken}`;
         const htmlMessage = `
         <!DOCTYPE html>
         <html>
@@ -90,7 +91,7 @@ export const signup = async (req, res, next) => {
                     <h1>Email Verification</h1>
                 </div>
                 <div class="content">
-                    <p>Hello,${user.firstname}</p>
+                    <p>Hello, ${user.firstname}</p>
                     <p>Thank you for registering with us. Please click the button below to verify your email address.</p>
                     <a href="${activationUrl}" class="button">Verify Email</a>
                 </div>

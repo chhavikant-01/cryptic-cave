@@ -40,9 +40,9 @@ app.use(cors(
 ));
 app.use(cookieParser());
 
-app.use("/api/auth", authRoutes);
-app.use("/api/user", userRoutes);
-app.use("/api/posts", postRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/posts", postRoutes);
 
 app.get("/", (req, res)=>{
     res.send("Hello World");
