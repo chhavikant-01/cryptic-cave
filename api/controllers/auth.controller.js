@@ -173,7 +173,7 @@ export const login = async (req, res, next) => {
         if(!isPasswordValid){
             return res.status(400).json({message: "Please provide the correct information"})
         }
-
+        
         sendToken(user,200,res)
 
     } catch(e){

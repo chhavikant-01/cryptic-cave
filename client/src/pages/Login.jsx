@@ -4,10 +4,17 @@ import { Button } from "../components/ui/button";
 import { toast } from "react-hot-toast";
 import "./custom.css";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../redux/user/userSlice";
 
 export const Login = () => {
   const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false);
+  const { loading, error } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -19,14 +26,13 @@ export const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     console.log(formData);
     if (!formData.email || !formData.password) {
-      setLoading(false);
-      toast.error("Please enter all fields!");
-      return;
+      dispatch(signInFailure("Please enter all fields!"));
+      return toast.error(error);
     }
     try {
+      dispatch(signInStart());
       const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/login`, {
         method: 'POST',
         headers: {
@@ -36,17 +42,17 @@ export const Login = () => {
       });
       const data = await res.json();
       if (!res.ok) {
-        setLoading(false);
+        dispatch(signInFailure(data.message));
         return toast.error(data.message);
       }
       if(res.ok) {
+        dispatch(signInSuccess(data));
         toast.success(data.message);
         navigate("/");
       }
-      setLoading(false);
     } catch (err) {
-      setLoading(false);
-      toast.error("Something went wrong, please try again.");
+      dispatch(signInFailure("Something went wrong, please try again."));
+      return toast.error("Something went wrong, please try again.");
     }
   };
 
