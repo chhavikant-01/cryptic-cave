@@ -46,7 +46,7 @@ const postSchema = new mongoose.Schema({
             type: Number,
             default: -1, 
         },
-        subject: {
+        course: {
             type: String,
             default: "NA", 
         },

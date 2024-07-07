@@ -21,13 +21,13 @@ const Navbar = () => {
             >
               Home
             </Link>
-            <div
-              href="#"
-              className="px-2 py-1 rounded-md text-sm font-medium hover:bg-muted transition-colors"
-              prefetch={false}
+            <Link
+              to="/notes"
+              className={`${path === "/notes" ? "bg-muted":""}  px-2 py-1 rounded-md text-sm font-medium hover:bg-muted transition-colors`}
+              
             >
               Notes
-            </div>
+            </Link>
             <Link
               to="/my-profile"
               className={`${path === "/my-profile" ? "bg-muted":""} px-2 py-1 rounded-md text-sm font-medium hover:bg-muted transition-colors`}
