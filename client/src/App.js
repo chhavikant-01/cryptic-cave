@@ -8,6 +8,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { ProtectedRoute } from "./routes/ProtectedRoute";
 import Navbar from "./components/Navbar";
+import Home2 from "./pages/Home2";
+import Test from "./pages/Test";
 
 function App() {
   return (
@@ -17,7 +19,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route element={<ProtectedRoute />} >
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home2 />} />
             <Route path="/my-profile" element={<Profile />} />
             <Route path="/post/:id" element={<Post />} />
             <Route path="/notes" element={<Notes />} />

@@ -7,6 +7,7 @@ import { Card, CardContent } from "../components/ui/card"
 import HomeCard from "../components/HomeCard"
 import { Input } from "../components/ui/input"
 import { Link } from "react-router-dom"
+import Toggle from "../components/ToggleButton"
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationLink, PaginationNext } from "../components/ui/pagination"
 
 export default function Component() {
@@ -100,8 +101,14 @@ export default function Component() {
     <div className="container mx-auto px-4 md:px-6 py-8">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
         <div className="grid gap-4">
-          <h1 className="text-2xl font-bold">Filter Resources</h1>
-          <p className="text-muted-foreground">Refine your search by applying various filters.</p>
+          <div className="flex gap-4">
+             <h1 className="text-2xl font-bold">Filter Resources</h1>
+            <Toggle />
+          </div>
+          <div>
+            <p className="text-muted-foreground">Refine your search by applying various filters.</p>
+          </div>
+         
         </div>
        {/* Search bar */} 
         <div className="flex items-center w-full max-w-md rounded-md bg-background border border-input focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
