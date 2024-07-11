@@ -2,6 +2,7 @@
 const sendToken = (user, statusCode, res) => {
 
     const token = user.getJwtToken();
+    const { password, ...rest } = user._doc
 
     // Options for cookies
     const options = {
@@ -20,7 +21,8 @@ const sendToken = (user, statusCode, res) => {
       if(statusCode === 200){
         res.status(statusCode).cookie("token", token, options).json({
           success: true,
-          message: "User logged in successfully"
+          message: "User logged in successfully",
+          rest
         });
       }
     };

@@ -3,13 +3,27 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import React from 'react'
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { UseDispatch, useSelector } from "react-redux"
+
+
 
 const ProfileUser = () => {
-    const [name, setName] = useState("John Doe");
-  const [email, setEmail] = useState("john@example.com");
-  const [phone, setPhone] = useState("+1 (555) 555-5555");
-  const [address, setAddress] = useState("123 Main St, Anytown USA");
+
+  const currentUser = useSelector((state) => state.user.currentUser);
+  useEffect( () => {
+    // Fetch user data
+    // const user = await fetch(`${process.env.REACT_APP_BASE_URL}/api/user/${user._id}`,{
+    //   method: "GET",
+
+
+
+  }, []);
+  const [name, setName] = useState(currentUser.firstname + " " + currentUser.lastname);
+  const [email, setEmail] = useState(currentUser.email);
+  const [program, setProgram] = useState(currentUser.program);
+  const [yearOfGraduation, setYearOfGraduation] = useState(currentUser.yearOfGraduation)
+  const [username, setUsername] = useState(currentUser.username)
   const [password, setPassword] = useState("********");
   const [editField, setEditField] = useState(null);
   const [currentPassword, setCurrentPassword] = useState("");
@@ -36,24 +50,19 @@ const ProfileUser = () => {
               </CardHeader>
               <CardContent className="grid gap-6">
                 {[
-                  { label: "Name", value: name, setter: setName },
-                  { label: "Email", value: email, setter: setEmail },
-                  { label: "Phone", value: phone, setter: setPhone },
-                  { label: "Address", value: address, setter: setAddress },
-                  { label: "Password", value: password, setter: setPassword, type: "password" },
-                ].map(({ label, value, setter, type = "text" }) => (
+                  { label: "Name", value: name, setter: setName, editable: true },
+                  { label: "Username", value: username, setter: setUsername, editable: false },
+                  { label: "Email", value: email, setter: setEmail, editable: false },
+                  { label: "Program", value: program, setter: setProgram, editable: true },
+                  { label: "Year Of Graduation", value: yearOfGraduation, setter: setYearOfGraduation, editable: true },
+                  { label: "Password", value: password, setter: setPassword, type: "password", editable: true },
+                ].map(({ label, value, setter, type = "text", editable }) => (
                   <div className="grid grid-cols-[1fr_auto] items-center gap-2" key={label}>
                     <p className="text-sm font-medium">{label}</p>
                     <div className="flex items-center gap-2">
-                      <Input
-                        type={type}
-                        value={value}
-                        onChange={handleChange(setter)}
-                        className="max-w-[200px]"
-                        disabled={editField !== label}
-                      />
-                      {editField === label && (
+                      {((editField === label) && editable) && (
                         <div className="flex items-center gap-2">
+                          <Button variant="" size="sm" onClick={()=>handleConfirmClick(label)} >Confirm Changes</Button>
                           <Input
                             type="password"
                             value={currentPassword}
@@ -61,10 +70,16 @@ const ProfileUser = () => {
                             placeholder="Current Password"
                             className="max-w-[200px]"
                           />
-                          <Button variant="" size="sm" onClick={()=>handleConfirmClick(label)} >Confirm Changes</Button>
                         </div>
                       )}
-                      {editField!==label && (<Button variant="outline" size="sm" onClick = {()=>handleEditClick(label)} >Edit</Button>)}
+                      {((editField!==label) && editable) && (<Button variant="outline" size="sm" onClick = {()=>handleEditClick(label)} >Edit</Button>)}
+                      <Input
+                        type={type}
+                        value={value}
+                        onChange={handleChange(setter)}
+                        className="max-w-[200px]"
+                        disabled={editField !== label}
+                      />
                     </div>
                   </div>
                 ))}

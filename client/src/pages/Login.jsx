@@ -26,7 +26,6 @@ export const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
     if (!formData.email || !formData.password) {
       dispatch(signInFailure("Please enter all fields!"));
       return toast.error(error);
@@ -46,7 +45,7 @@ export const Login = () => {
         return toast.error(data.message);
       }
       if(res.ok) {
-        dispatch(signInSuccess(data));
+        dispatch(signInSuccess(data.rest));
         toast.success(data.message);
         navigate("/");
       }
