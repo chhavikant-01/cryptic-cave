@@ -14,69 +14,40 @@ export const logout = (req,res,next)=>{
 }
 
 export const updateUser = async (req, res, next) => {
+    console.log(req.body)
+    try {
+        const user = await User.findById(req.user.id).select("+password");
+        if (!user) {
+            return res.status(400).json({ message: "User does not exist!" });
+        }
+        const isPasswordValid = await user.comparePassword(req.body.password);
+        if (!isPasswordValid) {
+            return res.status(400).json({ message: "!Incorrect Password!" });
+        }
 
-    try{
-       const user = await User.findById(req.user.id).select("+password")
-       if(!user){
-        res
-            .status(400)
-            .json({message: "User does not exist!"})
-       }
-       const isPasswordValid = user.comparePassword(req.body.password)
-       if(!isPasswordValid){
-        res
-            .status(400)
-            .json({message: "Incorrect Password!"})
-       }
+        if (req.body.profilePicture) user.profilePicture = req.body.profilePicture;
+        if (req.body.program) user.program = req.body.program;
+        if (req.body.yearOfGraduation) user.yearOfGraduation = req.body.yearOfGraduation;
+        if(req.body.newPassword) user.password = req.body.newPassword;
+        
+        await user.save();
 
-        if(req.body.password){
-            try{
-                user.password = req.body.password;
-                await user.save();
-
-                res.status(201).json({
-                    success: true,
-                    message: "Password updated"
-                })
-            } catch(e){
-                res.status(500).json({message: e.message})
-            }
-        }       
-        if(req.body.profilePicture){
-            try{
-                user.profilePicture = req.body.profilePicture;
-                await user.save();
-
-                res.status(201).json({
-                    success: true,
-                    message: "Profile Picture updated"
-                })
-            } catch(e){
-                res.status(500).json({message: e.message})
-            }
-        }       
-        if(req.body.yearOfGraduation){
-            try{
-                user.yearOfGraduation = req.body.yearOfGraduation;
-                await user.save();
-
-                res.status(201).json({
-                    success: true,
-                    message: "Profile updated"
-                })
-            } catch(e){
-                res.status(500).json({message: e.message})
-            }
-        }       
-    } catch(e){
-        res.status(500).json({message: e.message})
+        const {password, ...rest} = user._doc;
+        console.log(rest)
+        res.status(201).json({
+            success: true,
+            message: "Profile updated",
+            rest
+        });
+    } catch (e) {
+        res.status(500).json({ message: e.message });
     }
 }
 
 export const deleteUser = async (req,res,next) => {
     
     try{
-        const user = await User.findById(req.user.id).select("+password")
+        const user = await User.findById(req.user.id)
         
         if(!user){
             res
@@ -84,13 +55,6 @@ export const deleteUser = async (req,res,next) => {
                 .json({message: "User does not exist!"})
            }
 
-        const isPasswordValid = user.comparePassword(req.body.password)
-        if(!isPasswordValid){
-            res
-                .status(400)
-                .json({message: "Incorrect Password!"})
-           }
-        
         try{
             await User.findByIdAndDelete(req.user.id);
             res.status(200).json('User has been deleted');
