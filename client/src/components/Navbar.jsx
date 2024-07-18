@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Button } from './ui/button'
 import { useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import Upload from './Upload'
 const Navbar = () => {
   const path = useLocation().pathname
   
@@ -40,10 +41,7 @@ const Navbar = () => {
               <MenuIcon className="h-5 w-5" />
               <span className="sr-only">Toggle menu</span>
             </Button>
-            <Button>
-              <UploadIcon className="h-5 w-5 mr-2" />
-              Upload
-            </Button>
+            <Upload />
           </div>
         </div>
       </header>
