@@ -29,7 +29,7 @@ connectDB(URL);
 app.use(express.json());
 app.use(cors(
     {
-        origin: ["http://localhost:3000"],
+        origin: ["http://localhost:3000", "https://5w7hr854-3000.inc1.devtunnels.ms"],
         methods: ["GET","POST","DELETE", "PUT"],
         credentials: true,
         // allowedHeaders:[],
