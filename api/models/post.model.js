@@ -20,16 +20,20 @@ const postSchema = new mongoose.Schema({
     },
     fileType: {
         type: String,
-        enum: ["ppt", "pdf", "doc", "txt", "img"],
-        default: "img", 
-        validate: {
-            validator: function(v) {
-                return ["ppt", "pdf", "doc", "txt", "img"].includes(v);
-            },
-            message: props => `${props.value} is not a valid fileType`
-        }
+        // enum: ["ppt", "pdf", "doc", "txt", "png", "jpg", "jpeg"],
+        // default: "img", 
+        // validate: {
+        //     validator: function(v) {
+        //         return ["ppt", "pdf", "doc", "txt", "img"].includes(v);
+        //     },
+        //     message: props => `${props.value} is not a valid fileType`
+        // }
     },
     fileName: {
+        type: String,
+        default: "",
+    },
+    fileUrl: {
         type: String,
         default: "",
     },
@@ -49,6 +53,9 @@ const postSchema = new mongoose.Schema({
         course: {
             type: String,
             default: "NA", 
+        },
+        category: {
+
         },
         pyq: {
             type: Boolean,

@@ -10,23 +10,75 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import toast from "react-hot-toast";
 
 export default function Upload() {
-  const [fileUrl, setFileUrl] = useState(null);
+
   const [file, setFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadTask, setUploadTask] = useState(null);
   const fileInputRef = useRef(null);
+  const [formValues, setFormValues] = useState({
+    title: "",
+    desc: "",
+    fileType: "",
+    fileName: "",
+    fileUrl: "",
+    category: {
+      program: "",
+      semester: "",
+      course: "",
+      pyq: false,
+      notes: false,
+      ebook: false,
+      lecturePPT: false,
+    }
+  });
 
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted");
-    setFile(null);
+    if(!formValues.title || !formValues.desc || !formValues.category.program || !formValues.category.semester || !formValues.category.course || !formValues.fileUrl){
+      return toast.error("Please fill out all the fields");
+    }
+    console.log(formValues);
+    const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/create-post`,{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(formValues),
+    })
+    const data  = await res.json();
+    if(!res.ok){
+      return toast.error(data.message);
+    }
+    if(res.ok){
+      toast.success(data.message);
+      setFormValues({
+        title: "",
+        desc: "",
+        fileType: "",
+        fileName: "",
+        fileUrl: "",
+        category: {
+          program: "",
+          semester: "",
+          course: "",
+          pyq: false,
+          notes: false,
+          ebook: false,
+          lecturePPT: false,
+            }
+        });
+      setFile(null);
+      setUploadProgress(0);
+    }
   };
 
   const handleRemoveFile = () => {
     if (uploadTask) {
       uploadTask.cancel();
-      toast("Upload canceled");
+      toast.error("File Removed");
     }
     setFile(null);
     setUploadProgress(0);
@@ -52,7 +104,8 @@ export default function Upload() {
           },
           () => {
             getDownloadURL(task.snapshot.ref).then((downloadURL) => {
-              setFileUrl(downloadURL);
+              setFormValues({...formValues, fileUrl: downloadURL, fileName: file.name, fileType: file.type.split("/")[1]});
+              console.log(formValues);
               toast.success("File uploaded successfully");
               setIsUploading(false);
             });
@@ -68,6 +121,17 @@ export default function Upload() {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
     if (!selectedFile) toast.error("Please select a file to upload");
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      category: {
+        ...prevValues.category,
+        [name]: value,
+      },
+    }));
   };
 
   return (
@@ -87,21 +151,21 @@ export default function Upload() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="title">Title</Label>
-              <Input id="title" placeholder="Enter course title" />
+              <Input id="title" placeholder="Enter course title" value={formValues.title} onChange={(e)=>setFormValues({...formValues, title:e.target.value})} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="description">Description</Label>
-              <Textarea id="description" placeholder="Enter course description" />
+              <Textarea id="description" placeholder="Enter course description" value={formValues.desc} onChange={(e)=>setFormValues({...formValues, desc: e.target.value})} />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="program">Program</Label>
-              <Select id="program">
+              <Select id="program" name="program" onValueChange={(value)=>handleChange({target:{name:'program', value}})} value={formValues.category.program} >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select program" />
+                  <SelectValue placeholder="Select program"  />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent >
                   <SelectItem value="program1">Program 1</SelectItem>
                   <SelectItem value="program2">Program 2</SelectItem>
                   <SelectItem value="program3">Program 3</SelectItem>
@@ -110,13 +174,13 @@ export default function Upload() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="semester">Semester</Label>
-              <Select id="semester">
+              <Select id="semester" name="semester" onValueChange={(value)=>handleChange({target:{name:'semester', value}})} value={formValues.category.semester}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select semester" />
+                  <SelectValue placeholder="Select semester"  />
                 </SelectTrigger>
                 <SelectContent>
                   {[...Array(8)].map((_, index) => (
-                    <SelectItem key={index} value={`semester${index + 1}`}>Semester {index + 1}</SelectItem>
+                    <SelectItem key={index} value={`${index + 1}`}>Semester {index + 1}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -125,9 +189,9 @@ export default function Upload() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="course">Course</Label>
-              <Select id="course">
+              <Select id="course" name="course" onValueChange={(value)=>handleChange({target:{name:'course', value}})} value={formValues.category.course}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select course" />
+                  <SelectValue placeholder="Select course"  />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="course1">Course 1</SelectItem>
@@ -182,7 +246,7 @@ export default function Upload() {
             </div>
           </div>
           <Button type="submit">Confirm</Button>
-          <Button variant="outline" onClick={() => {}}>Cancel</Button>
+          <Button variant="outline" onClick={() => {}}>Clear All</Button>
         </form>
       </DialogContent>
     </Dialog>

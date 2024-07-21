@@ -8,12 +8,13 @@ export const createPost = async (req, res, next) => {
             desc, 
             thumbnail, 
             fileType, 
-            fileName, 
+            fileName,
+            fileUrl, 
             category, } = req.body;
 
           const userId = req.user.id
         
-        if(!userId || !title || !fileType){
+        if(!userId || !title || !fileType || !fileUrl){
             return res.status(400).json({message: "Missing required fields"})
         }
 
@@ -22,6 +23,7 @@ export const createPost = async (req, res, next) => {
             title,
             desc,
             thumbnail,
+            fileUrl,
             fileType,
             fileName,
             category
@@ -37,9 +39,10 @@ export const createPost = async (req, res, next) => {
 
         await user.updateOne({$push: { posts: savedPost._id }});
 
-        res.status(201).json({message: savedPost})
+        res.status(201).json({message: "Post created successfully"})
 
     }catch(e){
+        console.log(e)
         res.status(500).json({message: e.message})
     }
 }
