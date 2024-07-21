@@ -39,6 +39,9 @@ const postSchema = new mongoose.Schema({
     },
     likes: {
         type: [String], 
+        default: []},
+    comments: {
+        type: [String], 
         default: [],
     },
     category: {
@@ -54,25 +57,11 @@ const postSchema = new mongoose.Schema({
             type: String,
             default: "NA", 
         },
-        category: {
-
+        resourceType: {
+            type: String,
+            default: "NA", 
         },
-        pyq: {
-            type: Boolean,
-            default: false,
-        },
-        notes: {
-            type: Boolean,
-            default: false,
-        },
-        ebook: {
-            type: Boolean,
-            default: false,
-        },
-        lecturePPT: {
-            type: Boolean,
-            default: false,
-        }
+        
     }
 }, {
     timestamps: true

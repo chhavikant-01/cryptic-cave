@@ -26,17 +26,14 @@ export default function Upload() {
       program: "",
       semester: "",
       course: "",
-      pyq: false,
-      notes: false,
-      ebook: false,
-      lecturePPT: false,
+      resourceType: "",
     }
   });
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!formValues.title || !formValues.desc || !formValues.category.program || !formValues.category.semester || !formValues.category.course || !formValues.fileUrl){
+    if(!formValues.title || !formValues.desc || !formValues.category.program || !formValues.category.semester || !formValues.category.course){
       return toast.error("Please fill out all the fields");
     }
     console.log(formValues);
@@ -64,10 +61,7 @@ export default function Upload() {
           program: "",
           semester: "",
           course: "",
-          pyq: false,
-          notes: false,
-          ebook: false,
-          lecturePPT: false,
+          resourceType: "",
             }
         });
       setFile(null);
@@ -201,8 +195,8 @@ export default function Upload() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
-              <Select id="category">
+              <Label htmlFor="resourceType">Resource Type</Label>
+              <Select id="resourceType" name="resourceType" onValueChange={(value)=>handleChange({target:{name:'resourceType', value}})} value={formValues.category.resourceType}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>

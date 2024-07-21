@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./ui/card";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,6 +19,10 @@ const ProfileUser = () => {
   const [password, setPassword] = useState("");
   const [editField, setEditField] = useState(null);
   const [currentPassword, setCurrentPassword] = useState("");
+
+  useEffect(() => {
+    console.log(currentUser)
+  },[]);
 
   const userData = [
     { label: "Name", value: name, setter: setName, backendField: "name", editable: true },
