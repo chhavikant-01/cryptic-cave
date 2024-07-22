@@ -2,6 +2,7 @@ import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, Pagi
 import { Button } from "./ui/button"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
+import DropMenu from "./DropdownMenu"
 
 
 export default function ProfilePosts() {
@@ -53,16 +54,19 @@ export default function ProfilePosts() {
                   <span>{post.comments.length}</span>
                 </div>
               </div>
-              <div className="flex flex-col"><h3 className="text-lg font-semibold transition-colors duration-300 group-hover:text-primary">
+              <div className="flex justify-between"><h3 className="text-lg font-semibold transition-colors duration-300 group-hover:text-primary">
                 {post.title}
               </h3>
-              <Button
-          variant="ghost"
-          size="icon"
-          className="absolute bottom-0 right-0 rounded-full bg-background p-1 shadow-md"
-        >
-          <PencilIcon className="h-4 w-4" />
-        </Button>
+              <div className="z-20 bottom-0 right-0 p-1 shadow-md">
+              <DropMenu 
+                title={post.title}
+                _id={post._id}
+                description={post.desc} 
+                program={post.category.program} 
+                course={post.category.course} 
+                semester={post.category.semester}
+              />
+              </div>  
               </div>
               
             </div>
