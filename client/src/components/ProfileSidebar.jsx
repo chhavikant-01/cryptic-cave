@@ -24,6 +24,7 @@ const ProfileSidebar = () => {
         try{
             const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/user/logout`, {
                 method: 'POST',
+                credentials: "include"
             });
             const data = await response.json();
             if(!response.ok){

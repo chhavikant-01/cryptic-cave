@@ -1,5 +1,6 @@
 import Post from "../models/post.model.js"
 import User from "../models/user.model.js";
+import getPosts from "../utils/getPosts.js";
 
 export const createPost = async (req, res, next) => {
     try{
@@ -131,8 +132,8 @@ export const getPost = async (req,res,next) => {
 
 export const allPosts = async (req, res, next) => {
   try {
-    const data = await Post.find();
-    res.status(200).json(data);
+    const posts = await getPosts();
+    res.status(200).json(posts);
   } catch (err) {
     res.status(404).json({message: err.message});
   }
@@ -168,6 +169,30 @@ export const userPosts = async (req,res,next) => {
     res.status(200).json(posts)
   }catch(e){
     res.status(500).json({message: e.message})
+  }
+}
+
+export const savePost = async (req,res,next) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    if(!user){
+      return res.status(404).json({message: "user doesn't exist!"});
+    }
+    const post = await Post.findById(req.params.postId);
+    if(!post){
+      return res.status(404).json({message: "Post doesn't exist!"});
+    }
+    if(!user.savedPosts.includes(req.params.postId)){
+      await user.updateOne({$push:{savedPosts: req.params.postId}});
+      res.status(200).json({ message: "The post has been saved." });
+    }else{
+      await user.updateOne({$pull:{savedPosts: req.params.postId}});
+      res.status(200).json({ message: "The post has been removed from saved posts." });
+    }
+
+  } catch (error) {
+    return res.status(500).json({message: error.message})
   }
 }
 

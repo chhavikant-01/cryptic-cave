@@ -29,10 +29,10 @@ const userSchema = new mongoose.Schema(
             type: String,
             default: "",
         },
-        followers: {
-            type: Array,
-            default: [],
-        },
+        followers: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }],
         followings: {
             type: Array,
             default: [],

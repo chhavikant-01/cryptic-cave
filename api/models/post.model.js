@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema({
     userId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true,
     },
     title: {
@@ -36,6 +37,10 @@ const postSchema = new mongoose.Schema({
     fileUrl: {
         type: String,
         default: "",
+    },
+    savedPosts: {
+        type: [String],
+        default: [],
     },
     likes: {
         type: [String], 

@@ -2,17 +2,26 @@ import mongoose from "mongoose"
 import User from "../models/user.model.js"
 import Post from "../models/post.model.js"
 
-export const logout = (req,res,next)=>{
-    try{
-        res
-            .clearCookie("token")
-            .status(200)
-            .json({message: "Logout successfully!"})
-    }catch(e){
-        res.status(500).json({message: e.message})
-    }
-}
+export const logout = (req, res, next) => {
+    try {
+        const cookies = req.cookies;
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            domain: "localhost" 
+        });
 
+        if (cookies.token) {
+
+            return res.status(500).json({ message: "Failed to clear authentication token" });
+        }
+
+        return res.status(200).json({ message: "Logout successful!" });
+    } catch (e) {
+        return res.status(500).json({ message: e.message });
+    }
+};
 export const updateUser = async (req, res, next) => {
     console.log(req.body)
     try {
