@@ -25,7 +25,7 @@ const ProfileUser = () => {
   },[]);
 
   const userData = [
-    { label: "Name", value: name, setter: setName, backendField: "name", editable: true },
+    { label: "Name", value: name, setter: setName, backendField: "name", editable: false },
     { label: "Username", value: username, setter: setUsername, backendField: "username", editable: false },
     { label: "Email", value: email, setter: setEmail, backendField: "email", editable: false },
     { label: "Program", value: program, setter: setProgram, backendField: "program", editable: true },

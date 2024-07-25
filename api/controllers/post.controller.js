@@ -185,10 +185,14 @@ export const savePost = async (req,res,next) => {
     }
     if(!user.savedPosts.includes(req.params.postId)){
       await user.updateOne({$push:{savedPosts: req.params.postId}});
-      res.status(200).json({ message: "The post has been saved." });
+      const {password, ...rest} = user._doc;
+      console.log(rest)
+      res.status(200).json({ message: "The post has been saved.", rest });
     }else{
       await user.updateOne({$pull:{savedPosts: req.params.postId}});
-      res.status(200).json({ message: "The post has been removed from saved posts." });
+      const {password, ...rest} = user._doc;
+      console.log(rest)
+      res.status(200).json({ message: "The post has been removed from saved posts.", rest });
     }
 
   } catch (error) {

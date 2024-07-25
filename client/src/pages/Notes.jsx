@@ -3,10 +3,8 @@ import { Button } from "../components/ui/button"
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "../components/ui/collapsible"
 import { Label } from "../components/ui/label"
 import { Checkbox } from "../components/ui/checkbox"
-import { Card, CardContent } from "../components/ui/card"
 import HomeCard from "../components/HomeCard"
 import { Input } from "../components/ui/input"
-import { Link } from "react-router-dom"
 import Toggle from "../components/ToggleButton"
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationLink, PaginationNext } from "../components/ui/pagination"
 import { useEffect, useState } from "react"
@@ -26,6 +24,7 @@ export default function Notes() {
         });
         const data = await res.json();
         setPosts(data);
+        console.log(data);
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
@@ -222,17 +221,16 @@ export default function Notes() {
         <div className="flex flex-col gap-6">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((post) => (
-              <Link to={`/post/1`}>
                 <HomeCard
-                  key={post.id}
+                  key={post._id}
+                  _id={post._id}
                   user={post.author}
                   likes={post.likes.length}
                   comments={post.comments.length}
                   title={post.title}
                   description={post.desc}
                   thumbnail={post.thumbnail}
-                  uploadedAt={post.uploadedAt} />
-                </Link>
+                  uploadedAt={post.updatedAt} />
               ))}
           </div>
           <div className="flex justify-end">
@@ -279,94 +277,6 @@ function ChevronDownIcon(props) {
       strokeLinejoin="round"
     >
       <path d="m6 9 6 6 6-6" />
-    </svg>
-  )
-}
-
-
-function DownloadIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-      <polyline points="7 10 12 15 17 10" />
-      <line x1="12" x2="12" y1="15" y2="3" />
-    </svg>
-  )
-}
-
-
-function FileIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-      <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-    </svg>
-  )
-}
-
-
-function FilePlusIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-      <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-      <path d="M9 15h6" />
-      <path d="M12 18v-6" />
-    </svg>
-  )
-}
-
-
-function FileQuestionIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 17h.01" />
-      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z" />
-      <path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3" />
     </svg>
   )
 }
