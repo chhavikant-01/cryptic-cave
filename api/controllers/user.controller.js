@@ -22,15 +22,17 @@ export const updateUser = async (req, res, next) => {
         if (!user) {
             return res.status(400).json({ message: "User does not exist!" });
         }
-        const isPasswordValid = await user.comparePassword(req.body.password);
-        if (!isPasswordValid) {
-            return res.status(400).json({ message: "!Incorrect Password!" });
-        }
-
         if (req.body.profilePicture) user.profilePicture = req.body.profilePicture;
-        if (req.body.program) user.program = req.body.program;
-        if (req.body.yearOfGraduation) user.yearOfGraduation = req.body.yearOfGraduation;
-        if(req.body.newPassword) user.password = req.body.newPassword;
+
+        if(!req.body.profilePicture){
+            const isPasswordValid = await user.comparePassword(req.body.password);
+            if (!isPasswordValid) {
+                return res.status(400).json({ message: "!Incorrect Password!" });
+            }
+            if (req.body.program) user.program = req.body.program;
+            if (req.body.yearOfGraduation) user.yearOfGraduation = req.body.yearOfGraduation;
+            if(req.body.newPassword) user.password = req.body.newPassword;
+        }
         
         await user.save();
 
