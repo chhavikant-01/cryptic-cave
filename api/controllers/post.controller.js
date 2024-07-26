@@ -172,31 +172,41 @@ export const userPosts = async (req,res,next) => {
   }
 }
 
-export const savePost = async (req,res,next) => {
+export const savePost = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
-
-    if(!user){
-      return res.status(404).json({message: "user doesn't exist!"});
+    if (!user) {
+      return res.status(404).json({ message: "User doesn't exist!" });
     }
+
     const post = await Post.findById(req.params.postId);
-    if(!post){
-      return res.status(404).json({message: "Post doesn't exist!"});
-    }
-    if(!user.savedPosts.includes(req.params.postId)){
-      await user.updateOne({$push:{savedPosts: req.params.postId}});
-      const {password, ...rest} = user._doc;
-      console.log(rest)
-      res.status(200).json({ message: "The post has been saved.", rest });
-    }else{
-      await user.updateOne({$pull:{savedPosts: req.params.postId}});
-      const {password, ...rest} = user._doc;
-      console.log(rest)
-      res.status(200).json({ message: "The post has been removed from saved posts.", rest });
+    if (!post) {
+      return res.status(404).json({ message: "Post doesn't exist!" });
     }
 
+    let updatedSavedPosts;
+    if (!user.savedPosts.includes(req.params.postId)) {
+      updatedSavedPosts = [...user.savedPosts, req.params.postId];
+      
+      user.savedPosts = updatedSavedPosts;
+      await user.save();
+      const { password, ...rest } = user._doc;
+      console.log(rest);
+      res.status(200).json({ message:"Post has been saved", rest });
+    } else {
+      updatedSavedPosts = user.savedPosts.filter(postId => postId !== req.params.postId);
+      
+      user.savedPosts = updatedSavedPosts;
+      await user.save();
+      const { password, ...rest } = user._doc;
+      console.log(rest);
+      res.status(200).json({ message:"Post has been removed saved", rest });
+    }
+
+    
   } catch (error) {
-    return res.status(500).json({message: error.message})
+    return res.status(500).json({ message: error.message });
   }
-}
+};
+
 

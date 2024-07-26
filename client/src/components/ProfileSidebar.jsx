@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react'
-import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar"
 import { Button } from "./ui/button"
 import { Link, useLocation } from "react-router-dom"
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { signInSuccess } from '../redux/user/userSlice'
+import { signoutSuccess } from '../redux/user/userSlice'
 import toast from 'react-hot-toast'
 const ProfileSidebar = () => {
     const location = useLocation()
@@ -30,7 +29,7 @@ const ProfileSidebar = () => {
             if(!response.ok){
                 toast.error(data.message)}
             if(response.ok){
-                dispatch(signInSuccess())
+                dispatch(signoutSuccess())
                 toast.success(data.message)
             }
         }catch(error){
