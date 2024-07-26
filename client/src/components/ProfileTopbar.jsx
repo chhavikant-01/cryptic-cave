@@ -1,96 +1,107 @@
-import { useEffect, useState, useRef } from "react"
-import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar"
-import { Button } from "./ui/button"
-import { Input } from "./ui/input"
-import { useSelector, useDispatch } from "react-redux"
-import { DropdownMenu, 
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem } from "./ui/dropdown-menu"
-import { storage } from "../firebaseConfig"
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
-import toast from "react-hot-toast"
-import { updateStart, updateSuccess, updateFailure } from "../redux/user/userSlice"
+import { useEffect, useState, useRef } from "react";
+import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { useSelector, useDispatch } from "react-redux";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu";
+import { storage } from "../firebaseConfig";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import toast from "react-hot-toast";
+import { updateStart, updateSuccess, updateFailure } from "../redux/user/userSlice";
 
 export default function ProfileTopbar() {
   const { currentUser } = useSelector((state) => state.user);
-const [imageFile, setImageFile] = useState(null);
-const [imageSrc, setImageSrc] = useState(null);
-const dispatch = useDispatch();
-const [followers, setFollowers] = useState(0);
-const [posts, setPosts] = useState(0);
-const [saved, setSaved] = useState(0);
-const fileInputRef = useRef(null);
+  const [imageFile, setImageFile] = useState(null);
+  const [imageSrc, setImageSrc] = useState(null);
+  const dispatch = useDispatch();
+  const [followers, setFollowers] = useState(0);
+  const [posts, setPosts] = useState(0);
+  const [saved, setSaved] = useState(0);
+  const fileInputRef = useRef(null);
 
-useEffect(() => {
-  if (currentUser) {
-    setFollowers(currentUser.followers.length);
-    setPosts(currentUser.posts.length);
-    setSaved(currentUser.savedPosts.length);
-    if (currentUser.profilePicture) {
-      setImageSrc(currentUser.profilePicture);
+  useEffect(() => {
+    if (currentUser) {
+      setFollowers(currentUser.followers.length);
+      setPosts(currentUser.posts.length);
+      setSaved(currentUser.savedPosts.length);
+      if (currentUser.profilePicture) {
+        setImageSrc(currentUser.profilePicture);
+      }
     }
-  }
-}, [currentUser]);
+  }, [currentUser]);
 
-useEffect(() => {
-  if (imageFile) {
-    dispatch(updateStart());
-    const uploadFile = async () => {
-      const storageRef = ref(storage, `image-assets/${currentUser._id}`);
-      const uploadTask = uploadBytesResumable(storageRef, imageFile);
+  useEffect(() => {
+    if (imageFile) {
+      dispatch(updateStart());
+      const uploadFile = async () => {
+        return new Promise((resolve, reject) => {
+          const storageRef = ref(storage, `image-assets/${currentUser._id}`);
+          const uploadTask = uploadBytesResumable(storageRef, imageFile);
 
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(progress);
-        },
-        (error) => {
-          dispatch(updateFailure(error.message));
-          return toast.error("Failed to upload image");
-        },
-        async () => {
-          try {
-            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            setImageSrc(downloadURL);
-            console.log("File available at", downloadURL);
-
-            const updateDB = async () => {
-              console.log("updateDB was called");
+          uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+              const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              console.log(progress);
+            },
+            (error) => {
+              dispatch(updateFailure(error.message));
+              reject("Failed to upload image");
+            },
+            async () => {
               try {
-                const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/user/update-user`, {
-                  method: 'PUT',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  credentials: 'include',
-                  body: JSON.stringify({ profilePicture: downloadURL }), 
-                });
-                const data = await res.json();
-                if (!res.ok) {
-                  return toast.error(data.message);
-                }
-                if (res.ok) {
-                  dispatch(updateSuccess(data.rest)); 
-                  return toast.success("Image uploaded successfully");
-                }
-              } catch {
-                dispatch(updateFailure("Failed to upload image"));
-                return toast.error("Failed to upload image");
+                const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                setImageSrc(downloadURL);
+                console.log("File available at", downloadURL);
+                resolve(downloadURL);
+              } catch (error) {
+                dispatch(updateFailure(error.message));
+                reject("Failed to get download URL");
               }
-            };
-            await updateDB();
-          } catch (error) {
-            dispatch(updateFailure(error.message));
-            return toast.error("Failed to get download URL");
+            }
+          );
+        });
+      };
+
+      const updateDB = async (downloadURL) => {
+        return new Promise(async (resolve, reject) => {
+          console.log("updateDB was called");
+          try {
+            const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/user/update-user`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              credentials: 'include',
+              body: JSON.stringify({ profilePicture: downloadURL }), 
+            });
+            const data = await res.json();
+            if (!res.ok) {
+              reject(data.message);
+            } else {
+              dispatch(updateSuccess(data.rest)); 
+              resolve("Image uploaded successfully");
+            }
+          } catch {
+            dispatch(updateFailure("Failed to upload image"));
+            reject("Failed to upload image");
           }
+        });
+      };
+
+      toast.promise(
+        (async () => {
+          const downloadURL = await uploadFile();
+          await updateDB(downloadURL);
+        })(),
+        {
+          loading: 'Uploading image...',
+          success: 'Image uploaded successfully!',
+          error: 'Failed to upload image',
         }
       );
-    };
-    uploadFile();
-  }
-}, [imageFile, currentUser._id]);
+    }
+  }, [imageFile, currentUser._id]);
 
   const handleImageChange = (e) => {
     console.log("handleImageChange was called");
