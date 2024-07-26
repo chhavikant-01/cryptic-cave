@@ -1,6 +1,36 @@
-import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext } from "./ui/pagination"
+import { Pagination, 
+  PaginationContent, 
+  PaginationItem,
+  PaginationPrevious,
+  PaginationNext } from "./ui/pagination"
+import { useSelector } from "react-redux"
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function ProfileSavedPosts() {
+  const currentUser = useSelector((state)=>state.user.currentUser);
+  const [posts, setPosts] = useState([])
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await res.json();
+        const result = data.filter((post) =>{
+          return currentUser.savedPosts.includes(post._id);
+        })
+        setPosts(result);
+      } catch (error) {
+          return toast.error("Error fetching posts:", error);
+      }
+    };
+
+    fetchPosts();
+  }, [currentUser.savedPosts]);
   return (
     <section className="w-full py-12 md:py-16 lg:py-20">
       <div className="container mx-auto px-4 md:px-6">
@@ -8,7 +38,9 @@ export default function ProfileSavedPosts() {
           <h2 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">Saved Posts</h2>
         </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          <div className="group bg-slate-900 relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
+          {posts.map((post)=>{
+
+          return (<div key={post._id} className="group bg-slate-900 relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
             <div href="#" className="absolute inset-0 z-10" prefetch={false}>
               <span className="sr-only">View post</span>
             </div>
@@ -21,97 +53,20 @@ export default function ProfileSavedPosts() {
             />
             <div className="p-4">
               <div className="flex flex-col gap-2 mb-2">
-                <div className="text-sm text-muted-foreground">PDF, Semester: 1, Subject: Computer Science</div>
+                <div className="text-sm text-muted-foreground"> {post.fileType}, Semester: {post.category.semester}, Subject: {post.category.course}</div>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <HeartIcon className="w-4 h-4" />
-                  <span>12</span>
+                  <span>{post.likes.length}</span>
                   <MessageCircleIcon className="w-4 h-4" />
-                  <span>4</span>
+                  <span>{post.comments.length}</span>
                 </div>
               </div>
               <h3 className="text-lg font-semibold transition-colors duration-300 group-hover:text-primary">
-                Exploring the Wonders of Nature
+                {post.title}
               </h3>
             </div>
-          </div>
-          <div className="group bg-slate-900 relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
-            <div href="#" className="absolute inset-0 z-10" prefetch={false}>
-              <span className="sr-only">View post</span>
-            </div>
-            <img
-              src="https://picsum.photos/seed/picsum/300/200"
-              alt="Post thumbnail"
-              width={300}
-              height={200}
-              className="h-40 w-full object-cover transition-all duration-300 group-hover:scale-105"
-            />
-            <div className="p-4">
-              <div className="flex flex-col gap-2 mb-2">
-                <div className="text-sm text-muted-foreground">DOCX, Semester: 2, Subject: Biology</div>
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <HeartIcon className="w-4 h-4" />
-                  <span>8</span>
-                  <MessageCircleIcon className="w-4 h-4" />
-                  <span>2</span>
-                </div>
-              </div>
-              <h3 className="text-lg font-semibold transition-colors duration-300 group-hover:text-primary">
-                The Art of Mindful Living
-              </h3>
-            </div>
-          </div>
-          <div className="group bg-slate-900 relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
-            <div href="#" className="absolute inset-0 z-10" prefetch={false}>
-              <span className="sr-only">View post</span>
-            </div>
-            <img
-              src="https://picsum.photos/seed/picsum/300/200"
-              alt="Post thumbnail"
-              width={300}
-              height={200}
-              className="h-40 w-full object-cover transition-all duration-300 group-hover:scale-105"
-            />
-            <div className="p-4">
-              <div className="flex flex-col gap-2 mb-2">
-                <div className="text-sm text-muted-foreground">XLSX, Semester: 3, Subject: Mathematics</div>
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <HeartIcon className="w-4 h-4" />
-                  <span>15</span>
-                  <MessageCircleIcon className="w-4 h-4" />
-                  <span>6</span>
-                </div>
-              </div>
-              <h3 className="text-lg font-semibold transition-colors duration-300 group-hover:text-primary">
-                The Power of Positive Thinking
-              </h3>
-            </div>
-          </div>
-          <div className="group bg-slate-900 relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
-            <div href="#" className="absolute inset-0 z-10" prefetch={false}>
-              <span className="sr-only">View post</span>
-            </div>
-            <img
-              src="https://picsum.photos/seed/picsum/300/200"
-              alt="Post thumbnail"
-              width={300}
-              height={200}
-              className="h-40 w-full object-cover transition-all duration-300 group-hover:scale-105"
-            />
-            <div className="p-4">
-              <div className="flex flex-col gap-2 mb-2">
-                <div className="text-sm text-muted-foreground">DOCX, Semester: 4, Subject: English</div>
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <HeartIcon className="w-4 h-4" />
-                  <span>9</span>
-                  <MessageCircleIcon className="w-4 h-4" />
-                  <span>3</span>
-                </div>
-              </div>
-              <h3 className="text-lg font-semibold transition-colors duration-300 group-hover:text-primary">
-                The Art of Storytelling
-              </h3>
-            </div>
-          </div>
+          </div>)
+          })}
         </div>
         <div className="mt-8 md:mt-10 lg:mt-12 flex justify-center">
           <Pagination>
