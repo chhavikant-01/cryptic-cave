@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
 import { useSelector, useDispatch } from "react-redux";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu";
 import { storage } from "../firebaseConfig";
@@ -101,7 +100,7 @@ export default function ProfileTopbar() {
         }
       );
     }
-  }, [imageFile, currentUser._id]);
+  }, [imageFile, currentUser._id, dispatch]);
 
   const handleImageChange = (e) => {
     console.log("handleImageChange was called");
