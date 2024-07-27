@@ -8,9 +8,13 @@ import { Button } from './ui/button'
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateFailure, updateStart, updateSuccess } from '../redux/user/userSlice'
+import Comments from './Comments'
 
 const HomeCard = (props) => {
   const [isSaved, setIsSaved] = useState(false)
+  const [isLiked, setIsLiked] = useState(false)
+  const [numberOfLikes, setNumberOfLikes] = useState(props.likes)
+  const [numberOfComments, setNumberOfComments] = useState(props.comments)
   const currentUser = useSelector((state) => state.user.currentUser);
   const dispatch = useDispatch();
 
@@ -19,6 +23,11 @@ const HomeCard = (props) => {
       setIsSaved(true);
     } else {
       setIsSaved(false);
+    }
+    if (currentUser && props.likedBy.includes(currentUser._id)) {
+      setIsLiked(true);
+    }else{
+      setIsLiked(false);
     }
   }, [currentUser, props._id]);
 
@@ -58,11 +67,43 @@ const HomeCard = (props) => {
       }
 
       dispatch(updateSuccess(data.rest));
-      setIsSaved(!isSaved); 
+      setIsSaved(!isSaved);
       return toast.success(data.message);
     } catch (err) {
       dispatch(updateFailure(err.message));
       return toast.error(err.message);
+    }
+  }
+
+  const handleLike = async () => {
+    try {
+      if(!currentUser){
+        return toast.error('Please login to like this post');
+      }
+      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/${props._id}/like`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+      const data = await res.json();
+      if(!res.ok){
+        return toast.error('Failed to like post');
+      }
+      if(res.ok){
+        setIsLiked(!isLiked);
+        if(data.offset === 1){
+          setNumberOfLikes(prevLikes => prevLikes + 1);
+          return toast(data.message, {icon: '🥳'});
+        }
+        if(data.offset === -1){
+          setNumberOfLikes(prevLikes => prevLikes - 1);
+          return toast(data.message, {icon: '🥹' });
+        }
+      }
+    }catch(e){
+      return toast.error(e.message);
     }
   }
 
@@ -74,7 +115,7 @@ const HomeCard = (props) => {
             <div className="flex items-center gap-2">
               <Avatar>
                 <AvatarImage src="/placeholder-user.jpg" />
-                <AvatarFallback>{props.user.name.split(" ")[0][0] + props.user.name.split(" ")[1][0]}</AvatarFallback>
+                <AvatarFallback>{props.user.name ? props.user.name.split(" ")[0][0] + props.user.name.split(" ")[1][0] : "UN"}</AvatarFallback>
               </Avatar>
               <div className='text-center'>
                 <p className="font-medium">{props.name}</p>
@@ -103,11 +144,13 @@ const HomeCard = (props) => {
         </CardContent>
         <CardFooter className="text-sm text-muted-foreground">
           <div className='flex mt-4 items-center gap-5 p-2'>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <HeartIcon className="h-5 w-5" />
-              <span>{props.likes}</span>
-              <MessageCircleIcon className="h-5 w-5" />
-              <span>{props.comments}</span>
+            <div className="flex items-center text-muted-foreground">
+              <Button variant="ghost" onClick={handleLike} className='flex items-center gap-1'>
+                <HeartIcon className={isLiked ? "h-5 w-5 fill-current text-blue-500" : "h-5 w-5"} />
+                <span>{numberOfLikes}</span>
+              </Button>
+             
+              <Comments comments={numberOfComments} />
             </div>
             <h3>
               {formattedDate}

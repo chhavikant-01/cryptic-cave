@@ -149,10 +149,10 @@ export const likePost = async (req, res, next) => {
     if (!post.likes.includes(req.user.id)) {
 
       await post.updateOne({ $push: { likes: req.user.id } });
-      res.status(200).json({ message: "The post has been liked" });
+      res.status(200).json({ message: "The post has been liked", offset: 1 });
     } else {
       await post.updateOne({ $pull: { likes: req.user.id } });
-      res.status(200).json({ message: "The post has been disliked" });
+      res.status(200).json({ message: "The post has been disliked", offset: -1 });
     }
   } catch (e) {
     res.status(500).json({ message: e.message });

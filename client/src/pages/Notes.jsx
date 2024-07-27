@@ -226,11 +226,12 @@ export default function Notes() {
                   _id={post._id}
                   user={post.author}
                   likes={post.likes.length}
+                  likedBy={post.likes}
                   comments={post.comments.length}
                   title={post.title}
                   description={post.desc}
                   thumbnail={post.thumbnail}
-                  uploadedAt={post.updatedAt} />
+                  uploadedAt={post.createdAt} />
               ))}
           </div>
           <div className="flex justify-end">
