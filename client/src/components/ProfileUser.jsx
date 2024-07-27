@@ -22,7 +22,7 @@ const ProfileUser = () => {
 
   useEffect(() => {
     console.log(currentUser)
-  },[]);
+  },[currentUser]);
 
   const userData = [
     { label: "Name", value: name, setter: setName, backendField: "name", editable: false },

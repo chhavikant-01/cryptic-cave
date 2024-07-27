@@ -2,13 +2,12 @@ import React, { useEffect } from 'react'
 import { Button } from "./ui/button"
 import { Link, useLocation } from "react-router-dom"
 import { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { signoutSuccess } from '../redux/user/userSlice'
 import toast from 'react-hot-toast'
 const ProfileSidebar = () => {
     const location = useLocation()
-    const dispatch = useDispatch()  
-    const currentUser = useSelector((state) => state.user)
+    const dispatch = useDispatch()
     const [tab, setTab] = useState('')
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search)

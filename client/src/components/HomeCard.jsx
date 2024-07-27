@@ -9,6 +9,7 @@ import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateFailure, updateStart, updateSuccess } from '../redux/user/userSlice'
 import Comments from './Comments'
+import { Link } from 'react-router-dom'
 
 const HomeCard = (props) => {
   const [isSaved, setIsSaved] = useState(false)
@@ -29,7 +30,7 @@ const HomeCard = (props) => {
     }else{
       setIsLiked(false);
     }
-  }, [currentUser, props._id]);
+  }, [currentUser, props._id, props.likedBy]);
 
   const truncateText = (text, maxLength) => {
     if (text.length <= maxLength) {
@@ -126,21 +127,23 @@ const HomeCard = (props) => {
               <BookmarkIcon className={isSaved ? "h-5 w-5 fill-current text-blue-500" : "h-5 w-5"} />
             </Button>
           </div>
-          <div className="mt-4 h-[100px]">
-            <img
-              src={Thumbnail}
-              width={400}
-              height={225}
-              alt="Note thumbnail"
-              className="rounded-md object-cover aspect-video"
-            />
-          </div>
-          <div className="mt-4">
-            <h3 className="text-lg font-medium">{props.title}</h3>
-            <p className="text-sm text-muted-foreground">
-              {truncateText((props.description), 80)}
-            </p>
-          </div>
+          <Link to={`/post/1`}>
+            <div className="mt-4 h-[100px]">
+              <img
+                src={Thumbnail}
+                width={400}
+                height={225}
+                alt="Note thumbnail"
+                className="rounded-md object-cover aspect-video"
+              />
+            </div>
+            <div className="mt-4">
+              <h3 className="text-lg font-medium">{props.title}</h3>
+              <p className="text-sm text-muted-foreground">
+                {truncateText((props.description), 80)}
+              </p>
+            </div>
+          </Link>
         </CardContent>
         <CardFooter className="text-sm text-muted-foreground">
           <div className='flex mt-4 items-center gap-5 p-2'>
@@ -202,21 +205,3 @@ function BookmarkIcon(props) {
   )
 }
 
-function MessageCircleIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
-    </svg>
-  )
-}
