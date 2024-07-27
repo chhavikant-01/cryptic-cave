@@ -2,7 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from './ui/button'
 import { useLocation } from 'react-router-dom'
-import { useEffect, useState } from 'react'
 import Upload from './Upload'
 const Navbar = () => {
   const path = useLocation().pathname
@@ -11,7 +10,7 @@ const Navbar = () => {
     <div>
          <header className="bg-background border-b">
         <div className="container flex items-center justify-between h-14 px-4 md:px-6">
-          <div href="#" className="flex items-center gap-2 font-semibold" prefetch={false}>
+          <div href="#" className="flex items-center gap-2 font-semibold" prefetch="false">
             <BookIcon className="h-6 w-6" />
             <span>Student Notes</span>
           </div>
@@ -50,28 +49,6 @@ const Navbar = () => {
 }
 
 export default Navbar
-
-
-function UploadIcon(props) {
-    return (
-      <svg
-        {...props}
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-        <polyline points="17 8 12 3 7 8" />
-        <line x1="12" x2="12" y1="3" y2="15" />
-      </svg>
-    )
-  }
 
   function MenuIcon(props) {
     return (

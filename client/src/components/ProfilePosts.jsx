@@ -1,5 +1,4 @@
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext } from "./ui/pagination"
-import { Button } from "./ui/button"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import DropMenu from "./DropdownMenu"
@@ -22,7 +21,7 @@ export default function ProfilePosts() {
       
     }
     fetchPosts()
-   }, [])
+   }, [currentUser._id])
 
   return (
     <section className="w-full py-12 md:py-16 lg:py-20">
@@ -34,7 +33,7 @@ export default function ProfilePosts() {
         {posts.map((post, key) => (
 
           <div className="group bg-slate-900 relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
-            <div href="#" className="absolute inset-0 z-10" prefetch={false}>
+            <div href="#" className="absolute inset-0 z-10" prefetch="false">
               <span className="sr-only">View post</span>
             </div>
             <img
@@ -129,23 +128,4 @@ function MessageCircleIcon(props) {
   )
 }
 
-function PencilIcon(props) {
-    return (
-      <svg
-        {...props}
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-        <path d="m15 5 4 4" />
-      </svg>
-    )
-  }
   

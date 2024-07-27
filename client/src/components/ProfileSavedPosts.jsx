@@ -41,7 +41,7 @@ export default function ProfileSavedPosts() {
           {posts.map((post)=>{
 
           return (<div key={post._id} className="group bg-slate-900 relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
-            <div href="#" className="absolute inset-0 z-10" prefetch={false}>
+            <div href="#" className="absolute inset-0 z-10" prefetch="false">
               <span className="sr-only">View post</span>
             </div>
             <img

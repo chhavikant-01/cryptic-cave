@@ -20,7 +20,7 @@ export default function Home2() {
                   <div
                     href="#"
                     className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                    prefetch={false}
+                    prefetch="false"
                   >
                     Join Now
                   </div>
@@ -192,10 +192,10 @@ export default function Home2() {
       <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
         <p className="text-xs text-muted-foreground">&copy; 2024 University Resource Sharing. All rights reserved.</p>
         <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-          <div href="#" className="text-xs hover:underline underline-offset-4" prefetch={false}>
+          <div href="#" className="text-xs hover:underline underline-offset-4" prefetch="false">
             Terms of Service
           </div>
-          <div href="#" className="text-xs hover:underline underline-offset-4" prefetch={false}>
+          <div href="#" className="text-xs hover:underline underline-offset-4" prefetch="false">
             Privacy
           </div>
         </nav>
@@ -204,24 +204,6 @@ export default function Home2() {
   )
 }
 
-function BookIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
-    </svg>
-  )
-}
 
 
 function DownloadIcon(props) {
