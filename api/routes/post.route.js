@@ -5,7 +5,7 @@ import { createPost, updatePost, deletePost, allPosts, getPost, likePost, userPo
 const router = express.Router();
 
 router.get("/", allPosts)
-router.get("/:userId", userPosts)
+router.get("/all-post/:userId", userPosts)
 router.post("/create-post", isAuthenticated, createPost)
 router.get("/:postId", getPost)
 router.put("/:postId/update",isAuthenticated, updatePost )

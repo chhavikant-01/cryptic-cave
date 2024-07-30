@@ -1,109 +1,147 @@
 import { Button } from "../components/ui/button"
 import { Textarea } from "../components/ui/textarea"
 import { Avatar, AvatarImage, AvatarFallback } from "../components/ui/avatar"
+import GooglePreview from "../components/GooglePreview"
+import { useLocation } from "react-router-dom"
+import { useEffect, useState } from "react"
+import toast from "react-hot-toast"
 
 export default function Post() {
-    return (
-        <div className="flex h-screen w-full">
-          <div className="flex-1 bg-background">
-            <div className="h-full w-full flex items-center justify-center">
-              <img
-                src="https://picsum.photos/seed/picsum/1500/1000"
-                alt="File Preview"
-                className="max-w-full max-h-full object-cover"
-              />
+  const location = useLocation()
+  const [id, setId] = useState('')
+  const [post, setPost] = useState(null)
+
+  useEffect(() => {
+    const query = new URLSearchParams(location.search)
+    const queryFromUrl = query.get("id")
+    if (queryFromUrl) {
+      setId(queryFromUrl)
+    }
+  }, [location.search])
+
+  useEffect(() => {
+    if (!id) return
+
+    const getPost = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/${id}`, {
+          method: 'GET',
+        })
+        const data = await response.json()
+        if (!response.ok) {
+          return toast(data.message, { icon: "😭" })
+        }
+        if (response.ok) {
+          setPost(data)
+          console.log(data.fileUrl)
+        }
+      } catch (e) {
+        return toast(e.message, { icon: "🥲" })
+      }
+    }
+    getPost()
+  }, [id])
+
+  return (
+    <div className="flex h-screen w-full">
+      {id && post && 
+      <div className="flex-1 bg-background">
+        <div className="h-full w-full flex items-center justify-center">
+          <GooglePreview fileUrl={post.fileUrl} />
+        </div>
+      </div>
+      }
+      <div className="w-[400px] bg-muted border-l transition-all duration-300 data-[collapsed=true]:w-[60px]">
+        <div className="sticky top-0 z-10 flex items-center justify-between bg-background px-4 py-3 shadow">
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="icon" className="data-[collapsed=true]:rotate-180 transition-transform">
+              <ChevronLeftIcon className="w-5 h-5" />
+              <span className="sr-only">Toggle Sidebar</span>
+            </Button>
+            <h3 className="text-xl font-bold">Presentation.pptx</h3>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="icon">
+              <HeartIcon className="w-5 h-5" />
+              <span className="sr-only">Like</span>
+            </Button>
+            <Button variant="ghost" size="icon">
+              <SaveIcon className="w-5 h-5" />
+              <span className="sr-only">Save</span>
+            </Button>
+            <Button variant="ghost" size="icon">
+              <DownloadIcon className="w-5 h-5" />
+              <span className="sr-only">Download</span>
+            </Button>
+          </div>
+        </div>
+        <div className="p-4 space-y-4">
+          <div>
+            <h4 className="text-lg font-bold">Description</h4>
+            <p className="text-muted-foreground">
+              This is a presentation file with information about our latest product launch.
+            </p>
+          </div>
+          <div>
+            <h4 className="text-lg font-bold">Uploaded by</h4>
+            <div className="flex items-center gap-3">
+              <Avatar className="w-8 h-8">
+                <AvatarImage src="/placeholder-user.jpg" />
+                <AvatarFallback>JD</AvatarFallback>
+              </Avatar>
+              <div className="space-y-1">
+                <div className="font-medium">John Doe</div>
+                <p className="text-muted-foreground text-sm">Product Manager</p>
+              </div>
+              <Button variant="outline" className="ml-auto">
+                Follow
+              </Button>
             </div>
           </div>
-          <div className="w-[400px] bg-muted border-l transition-all duration-300 data-[collapsed=true]:w-[60px]">
-            <div className="sticky top-0 z-10 flex items-center justify-between bg-background px-4 py-3 shadow">
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon" className="data-[collapsed=true]:rotate-180 transition-transform">
-                  <ChevronLeftIcon className="w-5 h-5" />
-                  <span className="sr-only">Toggle Sidebar</span>
-                </Button>
-                <h3 className="text-xl font-bold">Presentation.pptx</h3>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon">
-                  <HeartIcon className="w-5 h-5" />
-                  <span className="sr-only">Like</span>
-                </Button>
-                <Button variant="ghost" size="icon">
-                  <SaveIcon className="w-5 h-5" />
-                  <span className="sr-only">Save</span>
-                </Button>
-                <Button variant="ghost" size="icon">
-                  <DownloadIcon className="w-5 h-5" />
-                  <span className="sr-only">Download</span>
-                </Button>
-              </div>
-            </div>
-            <div className="p-4 space-y-4">
-              <div>
-                <h4 className="text-lg font-bold">Description</h4>
-                <p className="text-muted-foreground">
-                  This is a presentation file with information about our latest product launch.
-                </p>
-              </div>
-              <div>
-                <h4 className="text-lg font-bold">Uploaded by</h4>
-                <div className="flex items-center gap-3">
+          <div>
+            <h4 className="text-lg font-bold">Comments</h4>
+            <div className="space-y-2">
+              <Textarea placeholder="Add a comment..." className="w-full rounded-md border bg-background p-2 text-sm" />
+              <div className="space-y-2">
+                <div className="flex items-start gap-3">
                   <Avatar className="w-8 h-8">
                     <AvatarImage src="/placeholder-user.jpg" />
                     <AvatarFallback>JD</AvatarFallback>
                   </Avatar>
                   <div className="space-y-1">
-                    <div className="font-medium">John Doe</div>
-                    <p className="text-muted-foreground text-sm">Product Manager</p>
+                    <div className="flex items-center justify-between">
+                      <div className="font-medium">John Doe</div>
+                      <time className="text-muted-foreground text-sm">2 days ago</time>
+                    </div>
+                    <p className="text-muted-foreground text-sm">
+                      Great presentation, can't wait to see the final product!
+                    </p>
                   </div>
-                  <Button variant="outline" className="ml-auto">
-                    Follow
-                  </Button>
                 </div>
-              </div>
-              <div>
-                <h4 className="text-lg font-bold">Comments</h4>
-                <div className="space-y-2">
-                  <Textarea placeholder="Add a comment..." className="w-full rounded-md border bg-background p-2 text-sm" />
-                  <div className="space-y-2">
-                    <div className="flex items-start gap-3">
-                      <Avatar className="w-8 h-8">
-                        <AvatarImage src="/placeholder-user.jpg" />
-                        <AvatarFallback>JD</AvatarFallback>
-                      </Avatar>
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between">
-                          <div className="font-medium">John Doe</div>
-                          <time className="text-muted-foreground text-sm">2 days ago</time>
-                        </div>
-                        <p className="text-muted-foreground text-sm">
-                          Great presentation, can't wait to see the final product!
-                        </p>
-                      </div>
+                <div className="flex items-start gap-3">
+                  <Avatar className="w-8 h-8">
+                    <AvatarImage src="/placeholder-user.jpg" />
+                    <AvatarFallback>JA</AvatarFallback>
+                  </Avatar>
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <div className="font-medium">Jane Appleseed</div>
+                      <time className="text-muted-foreground text-sm">1 week ago</time>
                     </div>
-                    <div className="flex items-start gap-3">
-                      <Avatar className="w-8 h-8">
-                        <AvatarImage src="/placeholder-user.jpg" />
-                        <AvatarFallback>JA</AvatarFallback>
-                      </Avatar>
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between">
-                          <div className="font-medium">Jane Appleseed</div>
-                          <time className="text-muted-foreground text-sm">1 week ago</time>
-                        </div>
-                        <p className="text-muted-foreground text-sm">
-                          Looks good, but I have a few suggestions for the design.
-                        </p>
-                      </div>
-                    </div>
+                    <p className="text-muted-foreground text-sm">
+                      Looks good, but I have a few suggestions for the design.
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      )
+      </div>
+    </div>
+  )
 }
+
 
 function ChevronLeftIcon(props) {
   return (

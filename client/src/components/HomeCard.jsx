@@ -9,7 +9,7 @@ import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateFailure, updateStart, updateSuccess } from '../redux/user/userSlice'
 import Comments from './Comments'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 const HomeCard = (props) => {
   const [isSaved, setIsSaved] = useState(false)
@@ -127,7 +127,7 @@ const HomeCard = (props) => {
               <BookmarkIcon className={isSaved ? "h-5 w-5 fill-current text-blue-500" : "h-5 w-5"} />
             </Button>
           </div>
-          <Link to={`/post/1`}>
+          <Link to={`/post?id=${props._id}`}>
             <div className="mt-4 h-[100px]">
               <img
                 src={Thumbnail}
