@@ -7,24 +7,25 @@ import HomeCard from "../components/HomeCard"
 import { Input } from "../components/ui/input"
 import Toggle from "../components/ToggleButton"
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationLink, PaginationNext } from "../components/ui/pagination"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { addPost } from "../redux/posts/postSlice"
 
 
 export default function Notes() {
-  const [posts, setPosts] = useState([]);
+  
+  const dispatch = useDispatch();
+  const posts = useSelector((state) => state.posts.posts);
 
   useEffect(() => {
     const fetchPosts = async () => {
+      console.log("Fetch called");
       try {
         const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/`, {
           method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
         });
         const data = await res.json();
-        setPosts(data);
-        console.log(data);
+        dispatch(addPost(data));
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
@@ -32,6 +33,7 @@ export default function Notes() {
 
     fetchPosts();
   }, []);
+
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-8">
@@ -220,7 +222,7 @@ export default function Notes() {
         </div>
         <div className="flex flex-col gap-6">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((post) => (
+          {posts && posts.map((post) => (
                 <HomeCard
                   key={post._id}
                   _id={post._id}
