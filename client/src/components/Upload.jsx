@@ -60,6 +60,10 @@ export default function Upload() {
         username: currentUser.username,
         name: currentUser.firstname + " " + currentUser.lastname,
         profilePicture: currentUser.profilePicture,
+        program: currentUser.program,
+        yearOfGraduation: currentUser.yearOfGraduation,
+        numberOfPosts: currentUser.posts.length,
+        numberOfFollowers: currentUser.followers.length,
       };
       toast.success(data.message);
       dispatch(addPost(newPost));

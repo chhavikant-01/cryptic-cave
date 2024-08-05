@@ -204,7 +204,7 @@ export default function Notes() {
                 <HomeCard
                   key={post._id}
                   _id={post._id}
-                  user={post.author}
+                  author={post.author}
                   likes={post.likes.length}
                   likedBy={post.likes}
                   comments={post.comments.length}

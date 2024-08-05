@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { updateFailure, updateStart, updateSuccess } from '../redux/user/userSlice'
 import Comments from './Comments'
 import { Link } from 'react-router-dom'
+import UserCard from './UserCard'
 import { updatePostLikes } from '../redux/posts/postSlice'
 
 const HomeCard = (props) => {
@@ -118,10 +119,7 @@ const HomeCard = (props) => {
         <CardContent>
           <div className="flex items-center justify-between p-2">
             <div className="flex items-center gap-2">
-              <Avatar>
-                <AvatarImage src="/placeholder-user.jpg" />
-                <AvatarFallback>{props.user.name ? props.user.name.split(" ")[0][0] + props.user.name.split(" ")[1][0] : "UN"}</AvatarFallback>
-              </Avatar>
+              <UserCard user={props.author} />
               <div className='text-center'>
                 <p className="font-medium">{props.name}</p>
                 <p className="text-sm text-muted-foreground">Computer Science</p>
