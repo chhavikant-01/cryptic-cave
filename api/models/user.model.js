@@ -90,3 +90,29 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
 const User = mongoose.model("User", userSchema);
 
 export default User;
+
+// Create the Anonymous User
+const createAnonymousUser = async () => {
+    const existingUser = await User.findOne({ username: "anonymous" });
+    
+    if (!existingUser) {
+        const anonymousUser = new User({
+            username: "anonymous",
+            firstname: "Anonymous",
+            lastname: "User",
+            email: "anonymous@yourdomain.com",
+            password: "securepassword", 
+            isAdmin: false,
+            profilePicture: "", 
+            program: "NA",
+            yearOfGraduation: "NA",
+        });
+        
+        await anonymousUser.save();
+        console.log("Anonymous user created successfully.");
+    } else {
+        console.log("Anonymous user already exists.");
+    }
+};
+
+createAnonymousUser();

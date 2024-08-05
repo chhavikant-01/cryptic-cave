@@ -8,8 +8,23 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { ProtectedRoute } from "./routes/ProtectedRoute";
 import Navbar from "./components/Navbar";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPosts } from "./redux/posts/postsThunks";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 function App() {
+  // Loading posts from the server to the Redux store
+  const dispatch = useDispatch();
+  const status = useSelector((state) => state.posts.status);
+  const error = useSelector((state) => state.posts.error);
+
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchPosts());
+    }
+  }, [dispatch, status]);
+
   return (
     <>
       <Toaster />

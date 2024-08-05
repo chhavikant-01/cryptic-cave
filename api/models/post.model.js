@@ -49,6 +49,10 @@ const postSchema = new mongoose.Schema({
         type: [String], 
         default: [],
     },
+    isAnonymous: {
+        type: Boolean,
+        default: false,
+    },
     category: {
         program: {
             type: String,

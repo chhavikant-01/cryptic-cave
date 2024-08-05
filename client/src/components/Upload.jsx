@@ -8,6 +8,8 @@ import { useEffect,useRef, useState } from "react";
 import { storage } from "../firebaseConfig";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import toast from "react-hot-toast";
+import { useSelector, useDispatch } from "react-redux";
+import { addPost } from "../redux/posts/postSlice";
 
 export default function Upload() {
 
@@ -29,6 +31,8 @@ export default function Upload() {
       resourceType: "",
     }
   });
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state)=>state.user.currentUser);
 
 
   const handleSubmit = async (e) => {
@@ -36,7 +40,7 @@ export default function Upload() {
     if(!formValues.title || !formValues.desc || !formValues.category.program || !formValues.category.semester || !formValues.category.course){
       return toast.error("Please fill out all the fields");
     }
-    console.log(formValues);
+
     const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/create-post`,{
       method: "POST",
       headers: {
@@ -50,7 +54,15 @@ export default function Upload() {
       return toast.error(data.message);
     }
     if(res.ok){
+      let newPost = data.newPost;
+      newPost.author = {
+        _id: currentUser._id,
+        username: currentUser.username,
+        name: currentUser.firstname + " " + currentUser.lastname,
+        profilePicture: currentUser.profilePicture,
+      };
       toast.success(data.message);
+      dispatch(addPost(newPost));
       setFormValues({
         title: "",
         desc: "",
@@ -99,7 +111,6 @@ export default function Upload() {
           () => {
             getDownloadURL(task.snapshot.ref).then((downloadURL) => {
               setFormValues({...formValues, fileUrl: downloadURL, fileName: file.name, fileType: file.type.split("/")[1]});
-              console.log(formValues);
               toast.success("File uploaded successfully");
               setIsUploading(false);
             });

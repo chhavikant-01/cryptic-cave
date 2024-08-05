@@ -17,16 +17,22 @@ import {
   AlertDialogTitle,
 } from "./ui/alert-dialog"
 import toast from "react-hot-toast";
-
+import { useSelector, useDispatch } from "react-redux"
+import { deletePost } from "../redux/posts/postSlice"
+import { updateSuccess } from "../redux/user/userSlice"
+import { anonymizePost } from "../redux/posts/postSlice"
 export default function DropMenu(props) {
     const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+    const currentPosts = useSelector((state)=>state.posts.posts);
+    const currentUser = useSelector((state)=>state.user.currentUser);
+    const dispatch = useDispatch();
 
     const handleDeletePost = async () => {
       try{
         console.log(props._id)
-        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/${props._id}/delete`, {
-        method: 'DELETE',
+        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/${props._id}/anonymize`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
       },
@@ -38,6 +44,16 @@ export default function DropMenu(props) {
         return toast.error(data.message)
       }
       if(res.ok){
+        const author = {
+          _id: data.anonymousId,
+          username: 'anonymous',
+          name: "Anonymous User",
+          profilePicture: ""
+        }
+        const restPosts = currentUser.posts.filter(post => post !== props._id)
+        const updatedUser = {...currentUser, posts: restPosts}
+        dispatch(updateSuccess(updatedUser))
+        dispatch(anonymizePost({postId: props._id, author}))
         setIsAlertDialogOpen(false)
         return toast.success(data.message)
       }

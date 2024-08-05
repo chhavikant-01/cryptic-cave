@@ -4,33 +4,11 @@ import { Pagination,
   PaginationPrevious,
   PaginationNext } from "./ui/pagination"
 import { useSelector } from "react-redux"
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 
 export default function ProfileSavedPosts() {
+  const currentPosts = useSelector((state)=>state.posts.posts);
   const currentUser = useSelector((state)=>state.user.currentUser);
-  const [posts, setPosts] = useState([])
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        const data = await res.json();
-        const result = data.filter((post) =>{
-          return currentUser.savedPosts.includes(post._id);
-        })
-        setPosts(result);
-      } catch (error) {
-          return toast.error("Error fetching posts:", error);
-      }
-    };
-
-    fetchPosts();
-  }, [currentUser.savedPosts]);
+  const savedPosts = currentPosts.filter(post => currentUser.savedPosts.includes(post._id));
   return (
     <section className="w-full py-12 md:py-16 lg:py-20">
       <div className="container mx-auto px-4 md:px-6">
@@ -38,7 +16,7 @@ export default function ProfileSavedPosts() {
           <h2 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">Saved Posts</h2>
         </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {posts.map((post)=>{
+          {savedPosts.map((post)=>{
 
           return (<div key={post._id} className="group bg-slate-900 relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
             <div href="#" className="absolute inset-0 z-10" prefetch="false">

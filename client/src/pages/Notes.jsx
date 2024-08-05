@@ -7,33 +7,11 @@ import HomeCard from "../components/HomeCard"
 import { Input } from "../components/ui/input"
 import Toggle from "../components/ToggleButton"
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationLink, PaginationNext } from "../components/ui/pagination"
-import { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { addPost } from "../redux/posts/postSlice"
-
+import { useSelector } from "react-redux"
 
 export default function Notes() {
   
-  const dispatch = useDispatch();
-  const posts = useSelector((state) => state.posts.posts);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      console.log("Fetch called");
-      try {
-        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/`, {
-          method: 'GET',
-        });
-        const data = await res.json();
-        dispatch(addPost(data));
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      }
-    };
-
-    fetchPosts();
-  }, []);
-
+  const currentPosts = useSelector((state) => state.posts.posts);
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-8">
@@ -222,7 +200,7 @@ export default function Notes() {
         </div>
         <div className="flex flex-col gap-6">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts && posts.map((post) => (
+          {currentPosts && currentPosts.map((post) => (
                 <HomeCard
                   key={post._id}
                   _id={post._id}

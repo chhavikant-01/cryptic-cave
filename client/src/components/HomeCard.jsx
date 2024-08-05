@@ -9,7 +9,8 @@ import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateFailure, updateStart, updateSuccess } from '../redux/user/userSlice'
 import Comments from './Comments'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { updatePostLikes } from '../redux/posts/postSlice'
 
 const HomeCard = (props) => {
   const [isSaved, setIsSaved] = useState(false)
@@ -17,6 +18,7 @@ const HomeCard = (props) => {
   const [numberOfLikes, setNumberOfLikes] = useState(props.likes)
   const [numberOfComments, setNumberOfComments] = useState(props.comments)
   const currentUser = useSelector((state) => state.user.currentUser);
+  const currentPosts = useSelector((state) => state.posts.posts);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -95,10 +97,12 @@ const HomeCard = (props) => {
       if(res.ok){
         setIsLiked(!isLiked);
         if(data.offset === 1){
+          dispatch(updatePostLikes({postId: props._id, userId: currentUser._id, offset: 1}));
           setNumberOfLikes(prevLikes => prevLikes + 1);
           return toast(data.message, {icon: '🥳'});
         }
         if(data.offset === -1){
+          dispatch(updatePostLikes({postId: props._id, userId: currentUser._id, offset: -1}));
           setNumberOfLikes(prevLikes => prevLikes - 1);
           return toast(data.message, {icon: '🥹' });
         }

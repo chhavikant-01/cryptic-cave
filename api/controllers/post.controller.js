@@ -2,6 +2,26 @@ import Post from "../models/post.model.js"
 import User from "../models/user.model.js";
 import getPosts from "../utils/getPosts.js";
 
+const getAnonymousUserId = async () => {
+  const anonymous = await User.findOne({ username: "anonymous" });
+  if (!anonymous) {
+    const anonymousUser = new User({
+      username: "anonymous",
+      firstname: "Anonymous",
+      lastname: "User",
+      email: "anonymous@yourdomain.com",
+      password: "securepassword", 
+      isAdmin: false,
+      profilePicture: "", 
+      program: "NA",
+      yearOfGraduation: "NA",
+  });
+  
+  await anonymousUser.save();
+  }
+  return anonymous._id;
+}
+
 export const createPost = async (req, res, next) => {
     try{
         const {
@@ -40,7 +60,7 @@ export const createPost = async (req, res, next) => {
 
         await user.updateOne({$push: { posts: savedPost._id }});
 
-        res.status(201).json({message: "Post created successfully"})
+        res.status(201).json({message:"Post succesfully uploaded!", newPost: savedPost})
 
     }catch(e){
         console.log(e)
@@ -108,9 +128,32 @@ export const deletePost = async (req, res, next) => {
 
     await user.updateOne({ $pull: { posts: post._id } });
 
-    await post.deleteOne();
+    post.userId = null;
+    await post.save();
 
     res.status(200).json({ message: "The post has been deleted" });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+}
+
+export const anonymizePost = async (req, res, next) => {
+  try {
+    const ANONYMOUS_USER_ID = await getAnonymousUserId();
+    const post = await Post.findById(req.params.postId);
+    if (!post) {
+      return res.status(404).json({ message: "Post doesn't exist!" });
+    }
+
+    if (req.user.id !== post.userId.toString()) {
+      return res.status(403).json({ message: "You're not allowed to anonymize this post" });
+    }
+
+    post.isAnonymous = true;
+    post.userId = ANONYMOUS_USER_ID;
+    await post.save();
+
+    res.status(200).json({ message: "The post has been anonymized", anonymousId:ANONYMOUS_USER_ID});
   } catch (e) {
     res.status(500).json({ message: e.message });
   }
