@@ -106,7 +106,7 @@ export const followUser = async (req,res,next) => {
                     res.status(201).json({message: "User has been followed"})
                 }else {
                     await session.abortTransaction();
-                    res.status(400).json("You already follow this user");
+                    res.status(400).json({message:"You already follow this user"});
                   }
             }catch(e){
                 await session.abortTransaction();
