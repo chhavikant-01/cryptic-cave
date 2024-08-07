@@ -4,12 +4,14 @@ import { Button } from "./ui/button"
 import toast from "react-hot-toast"
 import { useDispatch, useSelector } from "react-redux"
 import { updateStart, updateSuccess, updateFailure } from "../redux/user/userSlice"
+import { updatePosts } from "../redux/posts/postSlice"
+import { useState } from "react"
 
 export default function UserCard(props) {
   const dispatch = useDispatch()  
   const currentUser = useSelector((state)=> state.user.currentUser);
+  const currentPosts = useSelector((state)=> state.posts.posts);
   const handleFollow = async() =>{
-      console.log("follow called")
         try{
           dispatch(updateStart());
           const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/user/${props.user._id}/follow`, {
@@ -21,10 +23,13 @@ export default function UserCard(props) {
           });
           const data = await response.json();
           if(!response.ok){
-            toast(data.message, {icon: "😿"})
+            toast(data.message, {icon: "😫"})
           }
           if(response.ok){
             const updatedUser = {...currentUser, followings: [...currentUser.followings, props.user._id]}
+            const updatedPosts = updatePostUserFollowers(1);
+            console.log(updatedUser);
+            dispatch(updatePosts(updatedPosts));
             dispatch(updateSuccess(updatedUser));
             toast(data.message, {icon: "👏"})
           }
@@ -33,6 +38,50 @@ export default function UserCard(props) {
             toast(err.message, {icon: "😿"})
         }
   }
+
+  const handleUnfollow = async() =>{
+      try{
+        dispatch(updateStart());
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/user/${props.user._id}/unfollow`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+        const data = await response.json();
+        if(!response.ok){
+            toast(data.message, {icon: "😫"});}
+        if(response.ok){
+          const updatedUser = {...currentUser, followings: currentUser.followings.filter(id => id !== props.user._id)}
+          const updatedPosts = updatePostUserFollowers(-1);
+          dispatch(updatePosts(updatedPosts));
+          dispatch(updateSuccess(updatedUser));
+          toast(data.message, {icon: "🥺"})
+        }
+  }catch(err){
+      dispatch(updateFailure(err.message));
+      toast(err.message, {icon: "😿"})
+  }       
+}
+  const updatePostUserFollowers = (offset) => {
+    console.log("updatePostUserFollowers called, offset: ", offset)
+    const updatedPosts = currentPosts.map(post => {
+      if (post.author._id === props.user._id) {
+        const updatedAuthor = {
+          ...post.author,
+          numberOfFollowers: post.author.numberOfFollowers + offset
+        };
+        return {
+          ...post,
+          author: updatedAuthor
+        };
+      }
+      return post;
+    });
+    return updatedPosts;
+  };
+  
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -61,9 +110,13 @@ export default function UserCard(props) {
               <div className="text-sm text-muted-foreground">Followers</div>
             </div>
           </div>
-          <Button variant="outline" onClick={handleFollow} className="w-full">
+          {!currentUser.followings.includes(props.user._id) && <Button variant="" onClick={handleFollow} className="w-full">
             Follow
-          </Button>
+          </Button>}
+          {currentUser.followings.includes(props.user._id) && <Button variant="outline" onClick={handleUnfollow} className="w-full">
+            Unollow
+          </Button>}
+          
         </div>
       </PopoverContent>
     </Popover>

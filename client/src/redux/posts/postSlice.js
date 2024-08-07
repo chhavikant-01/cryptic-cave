@@ -43,8 +43,10 @@ const postsSlice = createSlice({
         post.isAnonymous = true;
         post.author = author;
       }
+    },
+    updatePosts(state, action) {
+      state.posts = action.payload;
     }
-
   },
 });
 
@@ -54,6 +56,6 @@ export const { setPosts,
   updatePostLikes,
   deletePost,
   addPost,
-  anonymizePost } = postsSlice.actions;
+  anonymizePost, updatePosts } = postsSlice.actions;
 
 export default postsSlice.reducer;
