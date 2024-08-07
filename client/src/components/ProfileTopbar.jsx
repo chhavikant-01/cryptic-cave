@@ -118,7 +118,7 @@ export default function ProfileTopbar() {
       <div className="relative">
         <Avatar className="h-20 w-20">
           <AvatarImage src={imageSrc} />
-          <AvatarFallback>{currentUser.firstname[0]}{currentUser.lastname[0]}</AvatarFallback>
+          <AvatarFallback>{currentUser.firstname[0].toUpperCase()}{currentUser.lastname && currentUser.lastname[0]}{!currentUser.lastname && currentUser.firstname[1].toUpperCase()}</AvatarFallback>
         </Avatar>
         <DropdownMenu>
           <DropdownMenuTrigger>
