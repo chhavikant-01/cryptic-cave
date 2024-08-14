@@ -2,6 +2,19 @@ import mongoose from "mongoose"
 import User from "../models/user.model.js"
 import Post from "../models/post.model.js"
 
+function getUsers(ids){
+    try{
+        const users = User.find({
+            _id: {
+                $in: ids
+            }
+        })
+        return users;
+    }catch(e){
+        console.log(e)
+    }
+}
+
 export const logout = (req, res, next) => {
     try {
         res.clearCookie("token", {
@@ -185,6 +198,23 @@ export const userPosts = async (req,res,next) => {
 
         res.status(200).json(posts)
 
+    }catch(e){
+        res.status(500).json({message: e.message})
+    }
+}
+
+export const getConnections = async (req,res,next) => {
+    try{
+        let ids;
+        const query = req.query.connection;
+        if(query==="followers"){
+            ids = req.user.followers; 
+        }
+        if(query==="followings"){
+            ids = req.user.followings;
+        }
+        const users = await getUsers(ids);
+        res.status(200).json({users: users});
     }catch(e){
         res.status(500).json({message: e.message})
     }

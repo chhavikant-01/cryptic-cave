@@ -20,9 +20,6 @@ const ProfileUser = () => {
   const [editField, setEditField] = useState(null);
   const [currentPassword, setCurrentPassword] = useState("");
 
-  useEffect(() => {
-    console.log(currentUser)
-  },[currentUser]);
 
   const userData = [
     { label: "Name", value: name, setter: setName, backendField: "name", editable: false },

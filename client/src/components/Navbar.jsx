@@ -7,7 +7,7 @@ const Navbar = () => {
   const path = useLocation().pathname
   
   return (
-    <div>
+    <div className='pt-5'>
          <header className="bg-background border-b">
         <div className="container flex items-center justify-between h-14 px-4 md:px-6">
           <div href="#" className="flex items-center gap-2 font-semibold" prefetch="false">
