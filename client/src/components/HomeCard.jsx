@@ -130,7 +130,7 @@ const HomeCard = (props) => {
               <BookmarkIcon className={isSaved ? "h-5 w-5 fill-current text-blue-500" : "h-5 w-5"} />
             </Button>
           </div>
-          <Link to={`/post?id=${props._id}`}>
+          <Link to={`/dossier?id=${props._id}`}>
             <div className="mt-4 h-[100px]">
               <img
                 src={Thumbnail}

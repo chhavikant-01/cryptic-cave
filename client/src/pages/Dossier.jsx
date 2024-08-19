@@ -1,16 +1,29 @@
+import { useEffect, useState } from "react"
 import { Button } from "../components/ui/button"
 import { Input } from "../components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/tabs"
-import { StarIcon, Bookmark, GitForkIcon, EyeIcon, BellIcon, BookOpenIcon, CodeIcon, CircleIcon, FileIcon, FolderIcon, GlobeIcon, BookIcon } from "lucide-react"
-
+import { StarIcon, Bookmark,PlusIcon,FilePenLine, GitForkIcon, EyeIcon, BellIcon, BookOpenIcon, CodeIcon, CircleIcon, FileIcon, FolderIcon, GlobeIcon, BookIcon } from "lucide-react"
+import { useSelector } from "react-redux"
+import UserCard from "../components/UserCard"
 export default function Dossier() {
+  const [postId, setPostId] = useState('');
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setPostId(params.get('id'));
+  }, [])
+  const post = useSelector((state) => state.posts.posts.find((post) => (post._id).toString() === postId));
+  const user = useSelector((state) => state.user.currentUser);
+  console.log(post?.author);
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-        <div className="flex items-center mb-4 md:mb-0">
-          <BookOpenIcon className="mr-2 h-6 w-6 text-muted-foreground" />
+        <div className="flex items-center gap-2 mb-4 md:mb-0">
+          {
+            (post && post.author) &&
+              <UserCard user={post.author} /> 
+          }
           <h1 className="text-2xl font-bold">
-            octocat / <span className="text-blue-500">Hello-World</span>
+            {post?.author.username} / <span className="text-blue-500">{post?.title.replace(/ /g,"-")}</span>
           </h1>
           <span className="ml-3 inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground">
             Project
@@ -69,7 +82,7 @@ export default function Dossier() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
-          <div className="bg-card text-card-foreground rounded-lg shadow-sm mb-6">
+          <div className="bg-card text-card-foreground border-2 rounded-lg shadow-sm mb-6">
             <div className="flex justify-between items-center p-4 border-b">
               {/* <div className="flex items-center">
                 <span className="font-semibold">main</span>
@@ -114,11 +127,11 @@ export default function Dossier() {
           </div>
 
           {/* README Preview */}
-          <div className="bg-card text-card-foreground rounded-lg shadow-sm p-6">
-            <div className="flex items-center justify-between mb-4">
+          <div className="bg-card border-2 text-card-foreground rounded-lg shadow-sm p-6">
+            <div className="flex border-b items-center justify-between mb-4">
               <h2 className="text-xl font-semibold">README.md</h2>
               <Button variant="ghost" size="sm">
-                <FileIcon className="mr-2 h-4 w-4" />
+                <FilePenLine className="mr-2 h-4 w-4" />
                 Edit
               </Button>
             </div>
@@ -159,22 +172,29 @@ export default function Dossier() {
           </div>
         </div>
         <div>
-          <div className="bg-card text-card-foreground rounded-lg shadow-sm p-4">
+          {/* <div className="bg-card text-card-foreground rounded-lg shadow-sm p-4">
             <h2 className="text-lg font-semibold mb-4">About</h2>
-            <p className="text-muted-foreground mb-4">
-              This is a sample repository to demonstrate how to create a GitHub-like page using React and Tailwind CSS.
-            </p>
             <div className="flex flex-col space-y-2">
               <div className="flex items-center">
                 <GlobeIcon className="mr-2 h-4 w-4 text-muted-foreground" />
                 <a href="#" className="text-blue-500 hover:underline">https://example.com</a>
               </div>
-              <div className="flex items-center">
-                <BookIcon className="mr-2 h-4 w-4 text-muted-foreground" />
-                <span>MIT License</span>
+              <div className="mb-4">
+              <h3 className="text-sm font-semibold mb-2">Tags</h3>
+              <div className="flex flex-wrap gap-2">
+                <span className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full">PYQ</span>
+                <span className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full">Class Notes</span>
+                <span className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full">Research Paper</span>
+                <span className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full">Lab Manual</span>
+                <span className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full">Project</span>
+                <Button variant="outline" size="sm" className="h-6">
+                  <PlusIcon className="h-3 w-3 mr-1" />
+                  Add tag
+                </Button>
               </div>
             </div>
-          </div>
+            </div>
+          </div> */}
         </div>
       </div>
     </div>
