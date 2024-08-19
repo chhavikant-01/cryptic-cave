@@ -12,6 +12,7 @@ import Comments from './Comments'
 import { Link } from 'react-router-dom'
 import UserCard from './UserCard'
 import { updatePostLikes } from '../redux/posts/postSlice'
+import { Star } from 'lucide-react';
 
 const HomeCard = (props) => {
   const [isSaved, setIsSaved] = useState(false)
@@ -151,7 +152,7 @@ const HomeCard = (props) => {
           <div className='flex mt-4 items-center gap-5 p-2'>
             <div className="flex items-center text-muted-foreground">
               <Button variant="ghost" onClick={handleLike} className='flex items-center gap-1'>
-                <HeartIcon className={isLiked ? "h-5 w-5 fill-current text-[#e12f6d]" : "h-5 w-5"} />
+                <Star className={isLiked ? "h-5 w-5 fill-current text-[#e2b340]" : "h-5 w-5"} />
                 <span>{numberOfLikes}</span>
               </Button>
              

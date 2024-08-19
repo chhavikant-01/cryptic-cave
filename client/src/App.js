@@ -11,6 +11,7 @@ import Navbar from "./components/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts } from "./redux/posts/postsThunks";
 import { useEffect } from "react";
+import Dossier from "./pages/Dossier";
 import toast from "react-hot-toast";
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
             <Route path="/my-profile" element={<Profile />} />
             <Route path="/post" element={<Post />} />
             <Route path="/notes" element={<Notes />} />
+            <Route path="/dossier" element={<Dossier />} />
           </Route>
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
