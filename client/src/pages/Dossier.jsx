@@ -5,8 +5,14 @@ import { Tabs, TabsList, TabsTrigger } from "../components/ui/tabs"
 import { StarIcon, Bookmark,PlusIcon,FilePenLine, GitForkIcon, EyeIcon, BellIcon, BookOpenIcon, CodeIcon, CircleIcon, FileIcon, FolderIcon, GlobeIcon, BookIcon } from "lucide-react"
 import { useSelector } from "react-redux"
 import UserCard from "../components/UserCard"
+import HomeCard from "../components/HomeCard"
 export default function Dossier() {
   const [postId, setPostId] = useState('');
+  const [saved, setSaved] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [numberOfLikes, setNumberOfLikes] = useState(0);
+  const [numberOfSaved, setNumberOfSaved] = useState(0);
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     setPostId(params.get('id'));
@@ -14,8 +20,22 @@ export default function Dossier() {
   const post = useSelector((state) => state.posts.posts.find((post) => (post._id).toString() === postId));
   const user = useSelector((state) => state.user.currentUser);
   console.log(post?.author);
+
+  useEffect(() => {
+    if (user && user.savedPosts.includes(postId)) {
+      setSaved(true);
+    } else {
+      setSaved(false);
+    }
+    if (user && post?.likes.includes(user._id)) {
+      setLiked(true);
+    } else {
+      setLiked(false);
+    }
+  },[postId, user, post?.likes]);
+
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto xl:px-[300px] lg:px-[200px] md:px-[100px] py-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
         <div className="flex items-center gap-2 mb-4 md:mb-0">
           {
@@ -35,12 +55,12 @@ export default function Dossier() {
             Notifications
           </Button> */}
           <Button variant="outline" size="sm">
-            <StarIcon className="mr-2 h-4 w-4" />
-            Star
+            <StarIcon className={liked ? "h-4 mr-2 w-4 fill-current text-[#e2b340]" : "h-4 mr-2 w-4"} />
+            {liked ? "Starred":"Star"}
           </Button>
           <Button variant="outline" size="sm">
-            <Bookmark className="mr-2 h-4 w-4" />
-            Save
+            <Bookmark className={saved ? "h-5 mr-2 w-5 fill-current text-blue-500" : "h-5 mr-2 w-5"} />
+            {saved ? "Saved":"Save"}
           </Button>
         </div>
       </div>
@@ -80,7 +100,7 @@ export default function Dossier() {
         </TabsList>
       </Tabs> */}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         <div className="md:col-span-2">
           <div className="bg-card text-card-foreground border-2 rounded-lg shadow-sm mb-6">
             <div className="flex justify-between items-center p-4 border-b">
@@ -170,31 +190,6 @@ export default function Dossier() {
               </p>
             </div>
           </div>
-        </div>
-        <div>
-          {/* <div className="bg-card text-card-foreground rounded-lg shadow-sm p-4">
-            <h2 className="text-lg font-semibold mb-4">About</h2>
-            <div className="flex flex-col space-y-2">
-              <div className="flex items-center">
-                <GlobeIcon className="mr-2 h-4 w-4 text-muted-foreground" />
-                <a href="#" className="text-blue-500 hover:underline">https://example.com</a>
-              </div>
-              <div className="mb-4">
-              <h3 className="text-sm font-semibold mb-2">Tags</h3>
-              <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full">PYQ</span>
-                <span className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full">Class Notes</span>
-                <span className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full">Research Paper</span>
-                <span className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full">Lab Manual</span>
-                <span className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full">Project</span>
-                <Button variant="outline" size="sm" className="h-6">
-                  <PlusIcon className="h-3 w-3 mr-1" />
-                  Add tag
-                </Button>
-              </div>
-            </div>
-            </div>
-          </div> */}
         </div>
       </div>
     </div>

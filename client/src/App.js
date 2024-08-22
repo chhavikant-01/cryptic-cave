@@ -28,7 +28,10 @@ function App() {
 
   return (
     <>
-      <Toaster />
+      <Toaster
+        position="bottom-left"
+        reverseOrder={false}
+       />
       <BrowserRouter>
         <Navbar />
         <Routes>

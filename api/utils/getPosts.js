@@ -40,8 +40,8 @@ const getPosts = async () => {
                         profilePicture: "$author.profilePicture",
                         program: "$author.program",
                         yearOfGraduation: "$author.yearOfGraduation",
-                        numberOfPosts: { $size: "$author.posts" },
-                        numberOfFollowers: { $size: "$author.followers" },
+                        numberOfPosts: { $size: {$ifNull : ["$author.posts",[]] } },
+                        numberOfFollowers: { $size: {$ifNull:["$author.followers",[]]} },
                     }
                 }
             },
