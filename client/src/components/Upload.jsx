@@ -10,6 +10,58 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import toast from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
 import { addPost } from "../redux/posts/postSlice";
+import { updateStart, updateSuccess, updateFailure } from "../redux/user/userSlice";
+
+const programOptions = [
+  { 
+    value: "BTech CSF", 
+    label: "BTech CSF", 
+    courseOptions: [
+      "Computer Networks",
+      "Operating System",
+      "Database Management System", 
+      "Information of Cyber Security", 
+      "Full Stack Development", 
+      "Security Management and Cyber Laws"
+    ] 
+  },
+  { 
+    value: "BTech CSE", 
+    label: "BTech CSE", 
+    courseOptions: [
+      "Computer Networks",
+      "Operating System",
+      "Database Management System", 
+      "Big Data", 
+      "Artificial Intelligence",  
+      "Machine Learning"  
+    ] 
+  },
+  { 
+    value: "BTech ECE", 
+    label: "BTech ECE", 
+    courseOptions: [
+      "Digital Signal Processing",  
+      "VLSI Design",  
+      "Microprocessors and Microcontrollers",  
+      "Embedded Systems",  
+      "Wireless Communication"  
+    ] 
+  },
+  { 
+    value: "BTech AIDS", 
+    label: "BTech AIDS", 
+    courseOptions: [
+      "Data Mining",  
+      "Artificial Intelligence",  
+      "Machine Learning",  
+      "Data Science",  
+      "Natural Language Processing"  
+    ] 
+  }  
+]
+
+const resourceTypeOptions = ["Project","Lecture Notes", "Question Paper", "Syllabus", "Book", "Research Paper","Other"];
 
 export default function Upload() {
 
@@ -34,12 +86,16 @@ export default function Upload() {
   const dispatch = useDispatch();
   const currentUser = useSelector((state)=>state.user.currentUser);
 
+  const selectedProgram = programOptions.find((program) => program.value === formValues.category.program);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!formValues.title || !formValues.desc || !formValues.category.program || !formValues.category.semester || !formValues.category.course){
+    if(!formValues.title || !formValues.desc || !formValues.category.program || !formValues.category.course){
       return toast.error("Please fill out all the fields");
     }
+
+    dispatch(updateStart());
 
     const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/create-post`,{
       method: "POST",
@@ -51,6 +107,7 @@ export default function Upload() {
     })
     const data  = await res.json();
     if(!res.ok){
+      updateFailure(data.message);
       return toast.error(data.message);
     }
     if(res.ok){
@@ -65,6 +122,8 @@ export default function Upload() {
         numberOfPosts: currentUser.posts.length,
         numberOfFollowers: currentUser.followers.length,
       };
+      let updatedUser = {...currentUser, posts: [...currentUser.posts, newPost._id]};
+      dispatch(updateSuccess(updatedUser));
       toast.success(data.message);
       dispatch(addPost(newPost));
       setFormValues({
@@ -158,16 +217,12 @@ export default function Upload() {
         </DialogHeader>
         <form className="grid gap-4 py-4" onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 gap-4">
+            
+          <div className="flex flex-col gap-4">
             <div className="space-y-2">
               <Label htmlFor="title">Title</Label>
               <Input id="title" placeholder="Enter course title" value={formValues.title} onChange={(e)=>setFormValues({...formValues, title:e.target.value})} />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea id="description" placeholder="Enter course description" value={formValues.desc} onChange={(e)=>setFormValues({...formValues, desc: e.target.value})} />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="program">Program</Label>
               <Select id="program" name="program" onValueChange={(value)=>handleChange({target:{name:'program', value}})} value={formValues.category.program} >
@@ -175,13 +230,13 @@ export default function Upload() {
                   <SelectValue placeholder="Select program"  />
                 </SelectTrigger>
                 <SelectContent >
-                  <SelectItem value="program1">Program 1</SelectItem>
-                  <SelectItem value="program2">Program 2</SelectItem>
-                  <SelectItem value="program3">Program 3</SelectItem>
+                  {programOptions.map((program) => (
+                    <SelectItem key={program.value} value={program.value}>{program.label}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label htmlFor="semester">Semester</Label>
               <Select id="semester" name="semester" onValueChange={(value)=>handleChange({target:{name:'semester', value}})} value={formValues.category.semester}>
                 <SelectTrigger>
@@ -193,19 +248,20 @@ export default function Upload() {
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
+            </div> */}
             <div className="space-y-2">
               <Label htmlFor="course">Course</Label>
-              <Select id="course" name="course" onValueChange={(value)=>handleChange({target:{name:'course', value}})} value={formValues.category.course}>
+              <Select id="course" name="course" disabled={!selectedProgram} onValueChange={(value)=>handleChange({target:{name:'course', value}})} value={formValues.category.course}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select course"  />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="course1">Course 1</SelectItem>
-                  <SelectItem value="course2">Course 2</SelectItem>
-                  <SelectItem value="course3">Course 3</SelectItem>
+                  { selectedProgram ? selectedProgram.courseOptions.map((course) => (
+                    <SelectItem key={course} value={course}>{course}</SelectItem>
+                  )) :  
+                    <SelectItem disabled>Select a program first</SelectItem>
+                  }
+      
                 </SelectContent>
               </Select>
             </div>
@@ -216,11 +272,16 @@ export default function Upload() {
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="category1">Category 1</SelectItem>
-                  <SelectItem value="category2">Category 2</SelectItem>
-                  <SelectItem value="category3">Category 3</SelectItem>
+                  {resourceTypeOptions.map((resourceType) => (
+                    <SelectItem key={resourceType} value={resourceType}>{resourceType}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
+            </div>
+          </div>
+          <div className="space-y-2">
+              <Label htmlFor="description">Description</Label>
+              <Textarea id="description" placeholder="Enter course description" className="h-full" value={formValues.desc} onChange={(e)=>setFormValues({...formValues, desc: e.target.value})} />
             </div>
           </div>
           <div className="space-y-2">

@@ -1,5 +1,4 @@
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext } from "./ui/pagination"
-import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import DropMenu from "./DropdownMenu"
 
@@ -31,7 +30,7 @@ export default function ProfilePosts() {
             />
             <div className="p-4">
               <div className="flex flex-col gap-2 mb-2">
-                <div className="text-sm text-muted-foreground">{post.category.program}, {post.category.course}, semester {post.category.semester}, {post.fileType}</div>
+                <div className="text-sm text-muted-foreground">{post.category.program}, {post.category.course}, {post.fileType}</div>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <HeartIcon className="w-4 h-4" />
                   <span>{post.likes.length}</span>
@@ -48,8 +47,7 @@ export default function ProfilePosts() {
                 _id={post._id}
                 description={post.desc} 
                 program={post.category.program} 
-                course={post.category.course} 
-                semester={post.category.semester}
+                course={post.category.course}
               />
               </div>  
               </div>

@@ -18,15 +18,68 @@ import {
 } from "./ui/alert-dialog"
 import toast from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux"
-import { deletePost } from "../redux/posts/postSlice"
 import { updateSuccess } from "../redux/user/userSlice"
 import { anonymizePost } from "../redux/posts/postSlice"
+
+const programOptions = [
+  { 
+    value: "BTech CSF", 
+    label: "BTech CSF", 
+    courseOptions: [
+      "Computer Networks",
+      "Operating System",
+      "Database Management System", 
+      "Information of Cyber Security", 
+      "Full Stack Development", 
+      "Security Management and Cyber Laws"
+    ] 
+  },
+  { 
+    value: "BTech CSE", 
+    label: "BTech CSE", 
+    courseOptions: [
+      "Computer Networks",
+      "Operating System",
+      "Database Management System", 
+      "Big Data", 
+      "Artificial Intelligence",  
+      "Machine Learning"  
+    ] 
+  },
+  { 
+    value: "BTech ECE", 
+    label: "BTech ECE", 
+    courseOptions: [
+      "Digital Signal Processing",  
+      "VLSI Design",  
+      "Microprocessors and Microcontrollers",  
+      "Embedded Systems",  
+      "Wireless Communication"  
+    ] 
+  },
+  { 
+    value: "BTech AIDS", 
+    label: "BTech AIDS", 
+    courseOptions: [
+      "Data Mining",  
+      "Artificial Intelligence",  
+      "Machine Learning",  
+      "Data Science",  
+      "Natural Language Processing"  
+    ] 
+  }  
+]
+
+const resourceTypeOptions = ["Project","Lecture Notes", "Question Paper", "Syllabus", "Book", "Research Paper","Other"];
+
 export default function DropMenu(props) {
     const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const currentPosts = useSelector((state)=>state.posts.posts);
     const currentUser = useSelector((state)=>state.user.currentUser);
     const dispatch = useDispatch();
+
+    const selectedProgram = programOptions.find(program => program.value === props.program);
 
     const handleDeletePost = async () => {
       try{
@@ -151,9 +204,11 @@ export default function DropMenu(props) {
                 <SelectValue placeholder="Select program" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="cs">Computer Science</SelectItem>
-                <SelectItem value="ee">Electrical Engineering</SelectItem>
-                <SelectItem value="me">Mechanical Engineering</SelectItem>
+                {programOptions.map((program) => (
+                  <SelectItem key={program.value} value={program.value}>
+                    {program.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -161,34 +216,18 @@ export default function DropMenu(props) {
             <Label htmlFor="course" className="text-right">
               Course
             </Label>
-            <Select id="course" defaultValue={props.course}>
+            <Select id="course" defaultValue={props.course} disabled={!selectedProgram}>
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Select course" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="intro-programming">Introduction to Programming</SelectItem>
-                <SelectItem value="data-structures">Data Structures</SelectItem>
-                <SelectItem value="algorithms">Algorithms</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="grid items-center grid-cols-4 gap-4">
-            <Label htmlFor="semester" className="text-right">
-              Semester
-            </Label>
-            <Select id="semester" defaultValue={props.semester}>
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Select semester" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="1">1</SelectItem>
-                <SelectItem value="2">2</SelectItem>
-                <SelectItem value="3">3</SelectItem>
-                <SelectItem value="4">4</SelectItem>
-                <SelectItem value="5">5</SelectItem>
-                <SelectItem value="6">6</SelectItem>
-                <SelectItem value="7">7</SelectItem>
-                <SelectItem value="8">8</SelectItem>
+                {
+                  selectedProgram?.courseOptions.map((course) => (
+                    <SelectItem key={course} value={course}>
+                      {course}
+                    </SelectItem>
+                  ))
+                }
               </SelectContent>
             </Select>
           </div>
@@ -201,9 +240,11 @@ export default function DropMenu(props) {
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="pyq">pyq</SelectItem>
-                <SelectItem value="notes">notes</SelectItem>
-                <SelectItem value="lecturePPT">lecturePPT</SelectItem>
+                {resourceTypeOptions.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
+                  </SelectItem>
+                ))} 
               </SelectContent>
             </Select>
           </div>

@@ -151,6 +151,8 @@ export const anonymizePost = async (req, res, next) => {
 
     post.isAnonymous = true;
     post.userId = ANONYMOUS_USER_ID;
+    const user = await User.findById(req.user.id);
+    user.posts = user.posts.filter(postId => postId.toString() !== post._id.toString());
     await post.save();
 
     res.status(200).json({ message: "The post has been anonymized", anonymousId:ANONYMOUS_USER_ID});

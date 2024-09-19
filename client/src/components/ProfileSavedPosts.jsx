@@ -31,7 +31,7 @@ export default function ProfileSavedPosts() {
             />
             <div className="p-4">
               <div className="flex flex-col gap-2 mb-2">
-                <div className="text-sm text-muted-foreground"> {post.fileType}, Semester: {post.category.semester}, Subject: {post.category.course}</div>
+                <div className="text-sm text-muted-foreground"> {post.fileType}, Subject: {post.category.course}</div>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <HeartIcon className="w-4 h-4" />
                   <span>{post.likes.length}</span>

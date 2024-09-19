@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { Card, CardContent, CardFooter } from "../components/ui/card"
-import { Avatar, AvatarImage, AvatarFallback } from "../components/ui/avatar"
 import Thumbnail from "../components/rusty-morning-view-through-windows.jpg"
 import { formatDistanceToNow } from 'date-fns'
 import { toast } from 'react-hot-toast'
@@ -143,7 +142,7 @@ const HomeCard = (props) => {
             <div className="mt-4">
               <h3 className="text-lg font-medium">{props.title}</h3>
               <p className="text-sm text-muted-foreground">
-                {truncateText((props.description), 80)}
+                {truncateText((props.description), 60)}
               </p>
             </div>
           </Link>

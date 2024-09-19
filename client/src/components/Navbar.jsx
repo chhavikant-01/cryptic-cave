@@ -12,7 +12,7 @@ const Navbar = () => {
         <div className="container flex items-center justify-between h-14 px-4 md:px-6">
           <div href="#" className="flex items-center gap-2 font-semibold" prefetch="false">
             <BookIcon className="h-6 w-6" />
-            <span>Student Notes</span>
+            <span>Resource Hub</span>
           </div>
           <nav className="hidden md:flex items-center gap-4">
             <Link
@@ -26,7 +26,7 @@ const Navbar = () => {
               className={`${path === "/notes" ? "bg-muted":""}  px-2 py-1 rounded-md text-sm font-medium hover:bg-muted transition-colors`}
               
             >
-              Notes
+              Resource
             </Link>
             <Link
               to="/my-profile"
