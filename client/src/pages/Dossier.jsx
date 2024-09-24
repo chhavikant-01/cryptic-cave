@@ -4,6 +4,7 @@ import { StarIcon, Bookmark,FilePenLine, EyeIcon, FileIcon, FolderIcon } from "l
 import { useSelector } from "react-redux"
 import UserCard from "../components/UserCard"
 import { formatDistanceToNow } from "date-fns"
+import toast from "react-hot-toast"
 export default function Dossier() {
   const [postId, setPostId] = useState('');
   const [saved, setSaved] = useState(false);
@@ -26,6 +27,31 @@ export default function Dossier() {
     console.error('Invalid date value:', post?.updatedAt);
   }
 
+  const handleFileDownload = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/download/${post?.fileUrl}`);
+  
+      if (!response.ok) {
+        toast.error('Failed to download file');
+        throw new Error('Failed to download file');
+      }
+  
+      const blob = await response.blob(); 
+      const url = window.URL.createObjectURL(blob); 
+      const a = document.createElement('a'); 
+      a.href = url;
+      a.download = post?.fileName || 'file'; 
+      document.body.appendChild(a); 
+      a.click(); 
+      a.remove(); 
+      window.URL.revokeObjectURL(url); 
+      toast.success('File downloaded successfully');
+    } catch (e) {
+      console.error(e);
+      toast.error('Failed to download file');
+    }
+  };
+  
 
   useEffect(() => {
     if (user && user.savedPosts.includes(postId)) {
@@ -90,7 +116,7 @@ export default function Dossier() {
           <div className="bg-card text-card-foreground border-2 rounded-lg shadow-sm mb-6">
             <div className="p-4 border-b">
               <div className="flex justify-between items-center">
-                <Button size="sm">
+                <Button size="sm" onClick={handleFileDownload} >
                   Download
                 </Button>
                 <Button variant="destructive" size="sm">

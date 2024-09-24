@@ -4,9 +4,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "./ui/select";
-import { useEffect,useRef, useState } from "react";
-import { storage } from "../firebaseConfig";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import {useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
 import { addPost } from "../redux/posts/postSlice";
@@ -97,14 +95,19 @@ export default function Upload() {
 
     dispatch(updateStart());
 
-    const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/create-post`,{
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(formValues),
-    })
+    const formData = new FormData();
+        formData.append("file", file);
+        formData.append("title", formValues.title);
+        formData.append("desc", formValues.desc);
+        formData.append("program", formValues.category.program);
+        formData.append("course", formValues.category.course);
+        formData.append("resourceType", formValues.category.resourceType);
+
+        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/create-post`, {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        });
     const data  = await res.json();
     if(!res.ok){
       updateFailure(data.message);
@@ -152,39 +155,7 @@ export default function Upload() {
     setFile(null);
     setUploadProgress(0);
   };
-
-  useEffect(() => {
-    if (file) {
-      const uploadFile = async () => {
-        const storageRef = ref(storage, "uploaded-files/" + file.name + Math.floor(Math.random() * 1000000));
-        const task = uploadBytesResumable(storageRef, file);
-        setUploadTask(task);
-
-        task.on(
-          "state_changed",
-          (snapshot) => {
-            setIsUploading(true);
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            setUploadProgress(progress);
-          },
-          (error) => {
-            setIsUploading(false);
-            toast.error("An error occurred while uploading the file");
-          },
-          () => {
-            getDownloadURL(task.snapshot.ref).then((downloadURL) => {
-              setFormValues({...formValues, fileUrl: downloadURL, fileName: file.name, fileType: file.type.split("/")[1]});
-              toast.success("File uploaded successfully");
-              setIsUploading(false);
-            });
-          }
-        );
-      };
-
-      uploadFile();
-    }
-  }, [file]);
-
+  
   const handleFileUpload = (e) => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);

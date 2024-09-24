@@ -1,6 +1,12 @@
 import Post from "../models/post.model.js"
 import User from "../models/user.model.js";
 import getPosts from "../utils/getPosts.js";
+import path from "path";
+import { fileURLToPath } from 'url';
+
+// Construct __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const getAnonymousUserId = async () => {
   const anonymous = await User.findOne({ username: "anonymous" });
@@ -22,51 +28,72 @@ const getAnonymousUserId = async () => {
   return anonymous._id;
 }
 
+
+
 export const createPost = async (req, res, next) => {
-    try{
-        const {
-            title, 
-            desc, 
-            thumbnail, 
-            fileType, 
-            fileName,
-            fileUrl, 
-            category, } = req.body;
+  try {
+      const { title, desc, program, course, resourceType } = req.body;
 
-          const userId = req.user.id
-        
-        if(!userId || !title || !fileType || !fileUrl){
-            return res.status(400).json({message: "Missing required fields"})
-        }
+      // Extract the uploaded file from multer (req.file)
+      const file = req.file;
 
-        const newPost = new Post( {
-            userId,
-            title,
-            desc,
-            thumbnail,
-            fileUrl,
-            fileType,
-            fileName,
-            category
-        })
+      if (!file) {
+          return res.status(400).json({ message: "File is required" });
+      }
 
-        const savedPost = await newPost.save();
+      const userId = req.user.id;
 
-        const user = User.findById(userId);
+      if (!userId || !title || !file.mimetype || !file.filename) {
+          return res.status(400).json({ message: "Missing required fields" });
+      }
 
-        if(!user){
-            return res.status(404).json({message: "User does not exist!"})
-        }
+      const fileUrl = `/uploads/${file.filename}`;
 
-        await user.updateOne({$push: { posts: savedPost._id }});
+      const newPost = new Post({
+          userId,
+          title,
+          desc,
+          fileUrl: file.filename,
+          fileType: file.mimetype,
+          fileName: file.originalname,
+          category:{
+            program,
+            course,
+            resourceType
+          }
+      });
 
-        res.status(201).json({message:"Post succesfully uploaded!", newPost: savedPost})
+      const savedPost = await newPost.save();
 
-    }catch(e){
-        console.log(e)
-        res.status(500).json({message: e.message})
-    }
-}
+      const user = await User.findById(userId);
+
+      if (!user) {
+          return res.status(404).json({ message: "User does not exist!" });
+      }
+
+      await user.updateOne({ $push: { posts: savedPost._id } });
+
+      res.status(201).json({ message: "Post successfully uploaded!", newPost: savedPost });
+
+  } catch (e) {
+      console.log(e);
+      res.status(500).json({ message: e.message });
+  }
+};
+
+export const downloadFile = async (req, res, next) => {
+  const fileName = req.params.fileName;
+  const directoryPath = path.join(__dirname, '../uploads'); 
+
+    const filePath = path.join(directoryPath, fileName);
+
+    res.download(filePath, (err) => {
+      if (err) {
+          console.error("Error while downloading file:", err);
+          res.status(500).json({
+              message: "Could not download the file. " + err,
+          });
+}})};
 
 export const updatePost = async (req,res,next) => {
     try{
