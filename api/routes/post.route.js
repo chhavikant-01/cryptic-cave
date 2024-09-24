@@ -45,7 +45,7 @@ const router = express.Router();
 router.get("/", allPosts)
 router.get("/all-post/:userId", userPosts)
 router.post("/create-post", isAuthenticated, upload.single('file'), createPost)
-router.get("/download/:fileName", downloadFile)
+router.get("/download/:fileName", isAuthenticated, downloadFile)
 router.get("/:postId", getPost)
 router.put("/:postId/update",isAuthenticated, updatePost )
 router.delete("/:postId/delete", isAuthenticated, deletePost)

@@ -82,8 +82,9 @@ export const createPost = async (req, res, next) => {
 };
 
 export const downloadFile = async (req, res, next) => {
+  const folderId = req.user.id;
   const fileName = req.params.fileName;
-  const directoryPath = path.join(__dirname, '../uploads'); 
+  const directoryPath = path.join(__dirname, `../uploads/${folderId}/`); 
 
     const filePath = path.join(directoryPath, fileName);
 

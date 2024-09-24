@@ -29,7 +29,9 @@ export default function Dossier() {
 
   const handleFileDownload = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/download/${post?.fileUrl}`);
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/download/${post?.fileUrl}`,{
+        credentials: 'include',
+      });
   
       if (!response.ok) {
         toast.error('Failed to download file');
