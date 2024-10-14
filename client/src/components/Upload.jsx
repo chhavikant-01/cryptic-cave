@@ -103,7 +103,7 @@ export default function Upload() {
         formData.append("course", formValues.category.course);
         formData.append("resourceType", formValues.category.resourceType);
 
-        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/create-post`, {
+        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/upload`, {
           method: "POST",
           body: formData,
           credentials: "include",

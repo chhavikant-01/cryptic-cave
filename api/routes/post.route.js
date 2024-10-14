@@ -1,6 +1,7 @@
 import express from "express"
 import { isAuthenticated } from "../middleware/auth.js";
-import { createPost, 
+import { 
+    // createPost, 
     updatePost, 
     deletePost,
     allPosts,
@@ -9,7 +10,9 @@ import { createPost,
     userPosts,
     savePost,
     anonymizePost,
-    downloadFile
+    // downloadFile,
+    uploadPost,
+    downloadPost
  } from "../controllers/post.controller.js"
  import multer from "multer";
  import path from "path";
@@ -44,14 +47,16 @@ const router = express.Router();
 
 router.get("/", allPosts)
 router.get("/all-post/:userId", userPosts)
-router.post("/create-post", isAuthenticated, upload.single('file'), createPost)
-router.get("/download/:fileName", isAuthenticated, downloadFile)
+// router.post("/create-post", isAuthenticated, createPost)
+// router.get("/download/:fileName", isAuthenticated, downloadFile)
 router.get("/:postId", getPost)
 router.put("/:postId/update",isAuthenticated, updatePost )
 router.delete("/:postId/delete", isAuthenticated, deletePost)
 router.put("/:postId/anonymize", isAuthenticated, anonymizePost)
 router.put("/:postId/like", isAuthenticated, likePost)
 router.put("/:postId/save", isAuthenticated, savePost)
+router.post("/upload", isAuthenticated, uploadPost)
+router.get("/download-file/:postId",isAuthenticated, downloadPost)
 
 
 

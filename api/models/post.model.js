@@ -38,6 +38,10 @@ const postSchema = new mongoose.Schema({
         type: String,
         default: "",
     },
+    fileKey: {
+        type: String,
+        default: "",
+    },
     savedPosts: {
         type: [String],
         default: [],

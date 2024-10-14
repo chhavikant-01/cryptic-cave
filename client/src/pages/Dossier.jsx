@@ -3,6 +3,7 @@ import { Button } from "../components/ui/button"
 import { StarIcon, Bookmark,FilePenLine, EyeIcon, FileIcon, FolderIcon } from "lucide-react"
 import { useSelector } from "react-redux"
 import UserCard from "../components/UserCard"
+import download from "downloadjs";
 import { formatDistanceToNow } from "date-fns"
 import toast from "react-hot-toast"
 export default function Dossier() {
@@ -29,7 +30,7 @@ export default function Dossier() {
 
   const handleFileDownload = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/download/${post?.fileUrl}`,{
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/download-file/${post?._id}`, {
         credentials: 'include',
       });
   
@@ -38,15 +39,11 @@ export default function Dossier() {
         throw new Error('Failed to download file');
       }
   
-      const blob = await response.blob(); 
-      const url = window.URL.createObjectURL(blob); 
-      const a = document.createElement('a'); 
-      a.href = url;
-      a.download = post?.fileName || 'file'; 
-      document.body.appendChild(a); 
-      a.click(); 
-      a.remove(); 
-      window.URL.revokeObjectURL(url); 
+      const blob = await response.blob();  // Get the file as a blob
+      const fileName = post?.fileName || 'file';  // Get the file name from the post object
+  
+      download(blob, fileName, post?.fileType);  // Use downloadjs to trigger the download
+  
       toast.success('File downloaded successfully');
     } catch (e) {
       console.error(e);
