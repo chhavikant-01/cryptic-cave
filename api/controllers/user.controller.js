@@ -84,9 +84,9 @@ export const deleteUser = async (req,res,next) => {
     }
 }
 
-export const getUser = async (req,res,next) => {
+export const getUser = async (req,res,userId) => {
     try{
-        const user = await User.findById(req.params.userId);
+        const user = await User.findById(userId);
 
         const { password, updatedAt, createdAt, savedPosts, ...other } = user._doc;
 
@@ -96,19 +96,19 @@ export const getUser = async (req,res,next) => {
     }
 }
 
-export const followUser = async (req,res,next) => {
+export const followUser = async (req,res,userId) => {
     try {
-        if (req.user.id !== req.params.userId) { // user can't follow itself!
+        if (req.user.id !== userId) { // user can't follow itself!
     
-            const user = await User.findById(req.params.userId);
+            const user = await User.findById(userId);
             const currentUser = await User.findById(req.user.id);
     
             if (!user || !currentUser) {
                 return res.status(404).json("User not found");
             }
     
-            if (!currentUser.followings.includes(req.params.userId)) {
-                await currentUser.updateOne({ $addToSet: { followings: req.params.userId } });
+            if (!currentUser.followings.includes(userId)) {
+                await currentUser.updateOne({ $addToSet: { followings: userId } });
                 await user.updateOne({ $addToSet: { followers: req.user.id } });
                 res.status(201).json({ message: "User has been followed" });
             } else {
@@ -124,14 +124,14 @@ export const followUser = async (req,res,next) => {
     
 }
 
-export const unfollowUser = async (req,res,next) => {
+export const unfollowUser = async (req,res,userId) => {
     try{
-        if(req.user.id!==req.params.userId){ //user can't unfollow itself!
+        if(req.user.id!==userId){ //user can't unfollow itself!
 
             const session = await mongoose.startSession();
             session.startTransaction();
             try{
-                const user = await User.findById(req.params.userId).session(session);
+                const user = await User.findById(userId).session(session);
                 const currentUser = await User.findById(req.user.id).session(session);
 
                 if (!user || !currentUser) {
@@ -141,8 +141,8 @@ export const unfollowUser = async (req,res,next) => {
                   }
             
 
-                if(currentUser.followings.includes(req.params.userId)){
-                    await currentUser.updateOne({ $pull:{ followings:req.params.userId } }, { session });
+                if(currentUser.followings.includes(userId)){
+                    await currentUser.updateOne({ $pull:{ followings:userId } }, { session });
                     await user.updateOne({ $pull:{ followers:req.user.id } }, { session });
                     await session.commitTransaction();
                     res.status(201).json({message: "User has been unfollowed"})
@@ -175,9 +175,9 @@ export const allUsers = async (req,res,next) => {
       }
 }
 
-export const userPosts = async (req,res,next) => {
+export const userPosts = async (req,res,userId) => {
     try{
-        const user = await User.findById(req.params.userId);
+        const user = await User.findById(userId);
         if(!user){
             return res.status(404).json({message: "User doesn't exist!"})
         }
@@ -191,7 +191,7 @@ export const userPosts = async (req,res,next) => {
     }
 }
 
-export const getConnections = async (req,res,next) => {
+export const getConnections = async (req,res) => {
     try{
         let ids;
         const query = req.query.connection;

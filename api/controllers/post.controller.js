@@ -1,17 +1,10 @@
 import Post from "../models/post.model.js"
 import User from "../models/user.model.js";
 import getPosts from "../utils/getPosts.js";
-import path from "path";
-import { fileURLToPath } from 'url';
 import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import multer from 'multer';
 import multerS3 from 'multer-s3';
 import stream from 'stream';
-
-
-// Construct __dirname
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const getAnonymousUserId = async () => {
   const anonymous = await User.findOne({ username: "anonymous" });
@@ -101,12 +94,11 @@ const getAnonymousUserId = async () => {
 //           });
 // }})};
 
-export const updatePost = async (req,res,next) => {
+export const updatePost = async (req,res,postIdUpdate) => {
     try{
-        const postId = req.params.postId;
         const updates = req.body;
 
-    const post = await Post.findById(postId);
+    const post = await Post.findById(postIdUpdate);
     if (!post) {
       return res.status(404).json({ message: "Post doesn't exist!" });
     }
@@ -142,10 +134,10 @@ export const updatePost = async (req,res,next) => {
     }
 }
 
-export const deletePost = async (req, res, next) => {
+export const deletePost = async (req, res, postIdDelete) => {
   try {
     
-    const post = await Post.findById(req.params.postId);
+    const post = postIdDelete;
     if (!post) {
       return res.status(404).json({ message: "Post doesn't exist!" });
     }
@@ -170,10 +162,10 @@ export const deletePost = async (req, res, next) => {
   }
 }
 
-export const anonymizePost = async (req, res, next) => {
+export const anonymizePost = async (req, res, postIdUpdate) => {
   try {
     const ANONYMOUS_USER_ID = await getAnonymousUserId();
-    const post = await Post.findById(req.params.postId);
+    const post = await Post.findById(postIdUpdate);
     if (!post) {
       return res.status(404).json({ message: "Post doesn't exist!" });
     }
@@ -194,10 +186,9 @@ export const anonymizePost = async (req, res, next) => {
   }
 }
 
-export const getPost = async (req,res,next) => {
+export const getPost = async (req,res,postId) => {
   try{
-    const post = await Post.findById(req.params.postId);
-
+    const post = postId;
     if(!post){
       return res.status(404).json({message: "Post doesn't exist!"})
     }
@@ -208,7 +199,7 @@ export const getPost = async (req,res,next) => {
 }
 }
 
-export const allPosts = async (req, res, next) => {
+export const allPosts = async (req, res) => {
   try {
     const posts = await getPosts();
     res.status(200).json(posts);
@@ -217,9 +208,9 @@ export const allPosts = async (req, res, next) => {
   }
 }
 
-export const likePost = async (req, res, next) => {
+export const likePost = async (req, res, postIdUpdate) => {
   try {
-    const post = await Post.findById(req.params.postId);
+    const post = postIdUpdate;
     if (!post) {
       return res.status(404).json({ message: "Post doesn't exist!" });
     }
@@ -237,9 +228,9 @@ export const likePost = async (req, res, next) => {
   }
 };
 
-export const userPosts = async (req,res,next) => {
+export const userPosts = async (req,res,userId) => {
   try{
-    const user = await User.findById(req.params.userId)
+    const user = userId
     if(!user){
       return res.status(404).json({message: "User not found"})
     }
@@ -250,28 +241,28 @@ export const userPosts = async (req,res,next) => {
   }
 }
 
-export const savePost = async (req, res, next) => {
+export const savePost = async (req, res, postIdUpdate) => {
   try {
     const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ message: "User doesn't exist!" });
     }
 
-    const post = await Post.findById(req.params.postId);
+    const post = await Post.findById(postIdUpdate);
     if (!post) {
       return res.status(404).json({ message: "Post doesn't exist!" });
     }
 
     let updatedSavedPosts;
-    if (!user.savedPosts.includes(req.params.postId)) {
-      updatedSavedPosts = [...user.savedPosts, req.params.postId];
+    if (!user.savedPosts.includes(postIdUpdate)) {
+      updatedSavedPosts = [...user.savedPosts, postIdUpdate];
       
       user.savedPosts = updatedSavedPosts;
       await user.save();
       const { password, ...rest } = user._doc;
       res.status(200).json({ message:"Post has been saved", rest });
     } else {
-      updatedSavedPosts = user.savedPosts.filter(postId => postId !== req.params.postId);
+      updatedSavedPosts = user.savedPosts.filter(postId => postId !== postIdUpdate);
       
       user.savedPosts = updatedSavedPosts;
       await user.save();
@@ -364,9 +355,9 @@ export const uploadPost = async (req, res, next) => {
   });
 };
 
-export const downloadPost = async (req, res, next) => {
+export const downloadPost = async (req, res, postId) => {
   try {
-    const post = await Post.findById(req.params.postId);
+    const post = await Post.findById(postId);
     if (!post) {
       return res.status(404).json({ message: "Post doesn't exist!" });
     }

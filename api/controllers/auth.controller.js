@@ -122,9 +122,8 @@ export const signup = async (req, res, next) => {
     }
 };
 
-export const activation = async (req, res, next) => {
+export const activation = async (req, res, activation_token ) => {
     try {
-        const { activation_token } = req.params;
 
         const newUser = jwt.verify(activation_token, process.env.JWT_SECRET);
 

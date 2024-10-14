@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import getPosts from "../utils/getPosts.js";
 
 const connectDB = async (URL) =>{
     try{
