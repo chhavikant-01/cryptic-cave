@@ -152,7 +152,7 @@ export default function ProfileTopbar() {
         />
       </div>
       <div className="grid gap-2 flex-1">
-        <div className="flex items-center justify-between">
+        <div className="sm:flex items-center justify-between">
           <div className="font-semibold text-lg">{currentUser.firstname} {currentUser.lastname}</div>
           <div className="flex items-center gap-2 text-muted-foreground text-sm">
             <span>@{currentUser.username}</span>
@@ -160,16 +160,16 @@ export default function ProfileTopbar() {
             <span>{currentUser.email}</span>
           </div>
         </div>
-        <div className="flex items-center gap-6 text-lg font-medium text-secondary-foreground dark:text-secondary-foreground">
-          <div className="flex items-center gap-2">
+        <div className="mt-5 sm:mt-0 flex items-center gap-6 text-lg font-medium text-secondary-foreground dark:text-secondary-foreground">
+          <div className="sm:flex items-center flex flex-col justify-center sm:justify-normal gap-2">
             <UsersIcon className="h-6 w-6" />
             <span>{followers} Followers</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="sm:flex items-center flex flex-col justify-center sm:justify-normal gap-2">
             <ImageIcon className="h-6 w-6" />
             <span>{posts} Posts</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="sm:flex items-center flex flex-col justify-center sm:justify-normal gap-2">
             <BookmarkIcon className="h-6 w-6" />
             <span>{saved} Saved</span>
           </div>

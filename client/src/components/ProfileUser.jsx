@@ -86,7 +86,7 @@ const ProfileUser = () => {
 
   return (
     <main>
-      <div className="container mx-auto grid gap-8 px-4 md:px-6 lg:px-8">
+      <div className="container mx-auto grid gap-8 px-4 md:px-6 lg:px-8 mb-10">
         <Card>
           <CardHeader>
             <CardTitle>Profile</CardTitle>

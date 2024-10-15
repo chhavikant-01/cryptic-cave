@@ -17,10 +17,13 @@ const Navbar = () => {
     <div className='pt-5'>
       <header className="bg-background border-b">
         <div className="container flex items-center justify-between h-14 px-4 md:px-6">
+        <Link to="/">
+
           <div className="flex items-center gap-2 font-semibold">
             <BookIcon className="h-6 w-6" />
-            <span>Resource Hub</span>
+            <span>Link Uni</span>
           </div>
+        </Link>
 
           <nav className="hidden md:flex items-center gap-4">
             <Link
