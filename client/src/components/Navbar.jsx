@@ -4,6 +4,7 @@ import { Button } from './ui/button';
 import { useLocation } from 'react-router-dom';
 import Upload from './Upload';
 import { XIcon } from "lucide-react";
+import Logo from './Logo';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -15,14 +16,10 @@ const Navbar = () => {
 
   return (
     <div className='pt-5'>
-      <header className="bg-background border-b">
+      <header className="bg-background border-b overflow-hidden">
         <div className="container flex items-center justify-between h-14 px-4 md:px-6">
         <Link to="/">
-
-          <div className="flex items-center gap-2 font-semibold">
-            <BookIcon className="h-6 w-6" />
-            <span>Link Uni</span>
-          </div>
+            <Logo />
         </Link>
 
           <nav className="hidden md:flex items-center gap-4">
