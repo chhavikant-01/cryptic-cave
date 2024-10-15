@@ -1,54 +1,92 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { Button } from './ui/button'
-import { useLocation } from 'react-router-dom'
-import Upload from './Upload'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from './ui/button';
+import { useLocation } from 'react-router-dom';
+import Upload from './Upload';
+import { XIcon } from "lucide-react";
+
 const Navbar = () => {
-  const path = useLocation().pathname
-  
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const path = useLocation().pathname;
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   return (
     <div className='pt-5'>
-         <header className="bg-background border-b">
+      <header className="bg-background border-b">
         <div className="container flex items-center justify-between h-14 px-4 md:px-6">
-          <div href="#" className="flex items-center gap-2 font-semibold" prefetch="false">
+          <div className="flex items-center gap-2 font-semibold">
             <BookIcon className="h-6 w-6" />
             <span>Resource Hub</span>
           </div>
+
           <nav className="hidden md:flex items-center gap-4">
             <Link
               to="/"
-              className={`${path === "/" ? "bg-muted":""}  px-2 py-1 rounded-md text-sm font-medium hover:bg-muted transition-colors`}
+              className={`${path === "/" ? "bg-muted" : ""} px-2 py-1 rounded-md text-sm font-medium hover:bg-muted transition-colors`}
             >
               Home
             </Link>
             <Link
               to="/notes"
-              className={`${path === "/notes" ? "bg-muted":""}  px-2 py-1 rounded-md text-sm font-medium hover:bg-muted transition-colors`}
-              
+              className={`${path === "/notes" ? "bg-muted" : ""} px-2 py-1 rounded-md text-sm font-medium hover:bg-muted transition-colors`}
             >
               Resource
             </Link>
             <Link
               to="/my-profile"
-              className={`${path === "/my-profile" ? "bg-muted":""} px-2 py-1 rounded-md text-sm font-medium hover:bg-muted transition-colors`}
+              className={`${path === "/my-profile" ? "bg-muted" : ""} px-2 py-1 rounded-md text-sm font-medium hover:bg-muted transition-colors`}
             >
               Dashboard
             </Link>
           </nav>
+
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="icon" className="md:hidden">
-              <MenuIcon className="h-5 w-5" />
+            <Button variant="outline" size="icon" className="md:hidden" onClick={toggleMobileMenu}>
+              {isMobileMenuOpen ? <XIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
               <span className="sr-only">Toggle menu</span>
             </Button>
             <Upload />
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-background shadow-lg">
+            <nav className="flex flex-col items-center justify-center h-auto py-4 space-y-2">
+              <Link
+                to="/"
+                className={`${path === "/" ? "bg-muted" : ""} w-full text-center px-4 py-3 rounded-md text-lg font-medium hover:bg-muted transition-colors`}
+                onClick={toggleMobileMenu} // Close menu on click
+              >
+                Home
+              </Link>
+              <Link
+                to="/notes"
+                className={`${path === "/notes" ? "bg-muted" : ""} w-full text-center px-4 py-3 rounded-md text-lg font-medium hover:bg-muted transition-colors`}
+                onClick={toggleMobileMenu} // Close menu on click
+              >
+                Resource
+              </Link>
+              <Link
+                to="/my-profile"
+                className={`${path === "/my-profile" ? "bg-muted" : ""} w-full text-center px-4 py-3 rounded-md text-lg font-medium hover:bg-muted transition-colors`}
+                onClick={toggleMobileMenu} // Close menu on click
+              >
+                Dashboard
+              </Link>
+            </nav>
+          </div>
+        )}
       </header>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
+
 
   function MenuIcon(props) {
     return (

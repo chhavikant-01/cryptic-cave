@@ -11,8 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts } from "./redux/posts/postsThunks";
 import { useEffect } from "react";
 import Dossier from "./pages/Dossier";
-import toast from "react-hot-toast";
-import FilterBar from "./components/Filter";
 
 function App() {
   // Loading posts from the server to the Redux store
@@ -40,7 +38,6 @@ function App() {
             <Route path="/my-profile" element={<Profile />} />
             <Route path="/notes" element={<Notes />} />
             <Route path="/dossier" element={<Dossier />} />
-            <Route path="/test" element= {<FilterBar />} />
           </Route>
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />

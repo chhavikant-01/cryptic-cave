@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
 import { Search, ChevronDown } from 'lucide-react'
-import { Input } from "../components/ui/input"
-import { Button } from "../components/ui/button"
+import { Input } from "./ui/input"
+import { Button } from "./ui/button"
 import { 
   Select, 
   SelectContent, 
   SelectItem, 
   SelectTrigger, 
   SelectValue 
-} from "../components/ui/select"   
+} from "./ui/select"   
   import {
     CommandDialog,
     CommandEmpty,
@@ -16,7 +16,7 @@ import {
     CommandInput,
     CommandItem,
     CommandList,
-  } from "../components/ui/command"
+  } from "./ui/command"
 
 // Mock data for dropdowns
 const programs = ['BTech', 'BSc', 'BBA', 'BA', 'BCom']
