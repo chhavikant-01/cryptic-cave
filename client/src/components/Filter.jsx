@@ -16,24 +16,14 @@ import {
     CommandInput,
     CommandItem,
     CommandList,
-    CommandSeparator,
-    CommandShortcut,
   } from "../components/ui/command"
-  import {
-    Calculator,
-    Calendar,
-    CreditCard,
-    Settings,
-    Smile,
-    User,
-  } from "lucide-react"
 
 // Mock data for dropdowns
 const programs = ['BTech', 'BSc', 'BBA', 'BA', 'BCom']
 const semesters = ['1', '2', '3', '4', '5', '6', '7', '8']
 const courses = {
   BTech: ['Computer Science', 'Electrical Engineering', 'Mechanical Engineering', 'Civil Engineering'],
-  BSc: ['Physics', 'Chemistry', 'Mathematics', 'Biology'],
+  BSc: ['Physics', 'Chemistry', 'Mathematics', 'Biology', 'Computer Science', 'Statistics', 'Geology', 'Zoology', 'Botany', 'Biotechnology', 'Microbiology', 'Biochemistry', 'Environmental Science', 'Agriculture'],
   BBA: ['Finance', 'Marketing', 'Human Resources', 'Operations Management'],
   BA: ['English', 'History', 'Psychology', 'Sociology'],
   BCom: ['Accounting', 'Economics', 'Business Law', 'Taxation']
@@ -133,40 +123,15 @@ export default function FilterBar() {
         </Button>
 
         <CommandDialog open={openCourseDialog} onOpenChange={setOpenCourseDialog}>
-        <CommandInput placeholder="Type a command or search..." />
+        <CommandInput placeholder="Type a course or search..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Suggestions">
-            <CommandItem>
-              <Calendar className="mr-2 h-4 w-4" />
-              <span>Calendar</span>
-            </CommandItem>
-            <CommandItem>
-              <Smile className="mr-2 h-4 w-4" />
-              <span>Search Emoji</span>
-            </CommandItem>
-            <CommandItem>
-              <Calculator className="mr-2 h-4 w-4" />
-              <span>Calculator</span>
-            </CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Settings">
-            <CommandItem>
-              <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
-              <CommandShortcut>⌘P</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <CreditCard className="mr-2 h-4 w-4" />
-              <span>Billing</span>
-              <CommandShortcut>⌘B</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-              <CommandShortcut>⌘S</CommandShortcut>
-            </CommandItem>
+          <CommandGroup heading="Courses">
+            {filteredCourses.map((course) => (
+              <CommandItem key={course} onSelect={() => setSelectedCourse(course)}>
+                <span>{course}</span>
+              </CommandItem>
+            ))}
           </CommandGroup>
         </CommandList>
       </CommandDialog>
