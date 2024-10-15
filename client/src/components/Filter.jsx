@@ -84,7 +84,7 @@ export default function FilterBar() {
         </Select>
       </div>
 
-      <div className="flex sm:flex-wrap sm:flex-row sm:gap-2 w-full flex-col justify-center">
+      <div className="flex sm:flex-wrap sm:flex-row sm:gap-2 gap-4 w-full flex-col justify-center">
   <Select value={selectedProgram} onValueChange={setSelectedProgram}>
     <SelectTrigger className="w-full sm:w-[180px]">
       <SelectValue placeholder="Select Program" />
