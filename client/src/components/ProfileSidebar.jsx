@@ -1,110 +1,114 @@
-import React, { useEffect } from 'react'
-import { Button } from "./ui/button"
-import { Link, useLocation } from "react-router-dom"
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { signoutSuccess } from '../redux/user/userSlice'
-import toast from 'react-hot-toast'
+import React, { useEffect } from 'react';
+import { Button } from './ui/button';
+import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { signoutSuccess } from '../redux/user/userSlice';
+import toast from 'react-hot-toast';
+
 const ProfileSidebar = () => {
-    const location = useLocation()
-    const dispatch = useDispatch()
-    const [tab, setTab] = useState('')
-    useEffect(() => {
-        const urlParams = new URLSearchParams(location.search)
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const [tab, setTab] = useState('');
 
-        const tabFromUrl = urlParams.get('tab')
-        if(tabFromUrl){
-            setTab(tabFromUrl)
-        }
-    }, [location.search])
-
-    const handleLogout = async () => {
-        try{
-            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/user/logout`, {
-                method: 'POST',
-                credentials: "include"
-            });
-            const data = await response.json();
-            if(!response.ok){
-                toast.error(data.message)}
-            if(response.ok){
-                dispatch(signoutSuccess())
-                toast.success(data.message)
-            }
-        }catch(error){
-            toast.error(error.message)
-        }
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const tabFromUrl = urlParams.get('tab');
+    if (tabFromUrl) {
+      setTab(tabFromUrl);
     }
+  }, [location.search]);
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/user/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        toast.error(data.message);
+      }
+      if (response.ok) {
+        dispatch(signoutSuccess());
+        toast.success(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   return (
     <div className='pt-9'>
-        <div className="flex h-screen bg-background">
-      <div className="hidden w-64 flex-col border-r rounded-r-lg border-t bg-background p-4 md:flex">
-      <nav className="flex flex-col space-y-1">
+      <div className='flex flex-col lg:flex-row lg:h-screen bg-background px-3 lg:px-0'>
+        <div className='w-full lg:w-64 flex-col border-r lg:rounded-l-none rounded-lg border bg-background p-4 lg:flex'>
+          <nav className='flex flex-col space-y-1 h-full'>
             <Link
               className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted ${
                 tab === 'profile' || !tab ? 'bg-muted' : ''
               }`}
-              to="/my-profile?tab=profile"
+              to='/my-profile?tab=profile'
             >
-              <HomeIcon className="h-5 w-5" />
+              <HomeIcon className='h-5 w-5' />
               Profile
             </Link>
             <Link
               className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted ${
                 tab === 'posts' ? 'bg-muted' : ''
               }`}
-              to="/my-profile?tab=posts"
+              to='/my-profile?tab=posts'
             >
-              <FilePenIcon className="h-5 w-5" />
+              <FilePenIcon className='h-5 w-5' />
               My Posts
             </Link>
             <Link
               className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted ${
                 tab === 'saved' ? 'bg-muted' : ''
               }`}
-              to="/my-profile?tab=saved"
+              to='/my-profile?tab=saved'
             >
-              <BookmarkIcon className="h-5 w-5" />
+              <BookmarkIcon className='h-5 w-5' />
               Saved Posts
             </Link>
             <Link
               className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted ${
                 tab === 'following' ? 'bg-muted' : ''
               }`}
-              to="/my-profile?tab=following"
+              to='/my-profile?tab=following'
             >
-              <UsersIcon className="h-5 w-5" />
+              <UsersIcon className='h-5 w-5' />
               Following
             </Link>
             <Link
               className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted ${
                 tab === 'followers' ? 'bg-muted' : ''
               }`}
-              to="/my-profile?tab=followers"
+              to='/my-profile?tab=followers'
             >
-              <UserPlusIcon className="h-5 w-5" />
+              <UserPlusIcon className='h-5 w-5' />
               Followers
             </Link>
-            <div className="mt-auto">
+            <div className='mt-auto'>
               <Button
-                variant="ghost"
+                variant='ghost'
                 onClick={handleLogout}
-                className="w-full justify-start gap-2 text-sm font-medium hover:bg-muted"
+                className='w-full justify-start gap-2 text-sm font-medium hover:bg-muted'
               >
-                <LogOutIcon className="h-5 w-5" />
+                <LogOutIcon className='h-5 w-5' />
                 Logout
               </Button>
             </div>
           </nav>
+        </div>
+        <div className='flex-1 p-4 md:p-6 flex items-center justify-center'>
+          {/* Content goes here */}
+        </div>
       </div>
-      <div className="flex-1 p-4 md:p-6" />
     </div>
-    </div>
-  )
-}
+  );
+};
 
-export default ProfileSidebar
+export default ProfileSidebar;
 
 function HomeIcon(props) {
     return (

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { updateFailure, updateStart, updateSuccess } from "../redux/user/userSlice";
 import { useNavigate } from "react-router-dom";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog";
 
 const ProfileUser = () => {
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -93,9 +94,9 @@ const ProfileUser = () => {
           </CardHeader>
           <CardContent className="grid gap-6">
             {userData.map(({ label, value, setter, backendField, type = "text", editable }) => (
-              <div className="grid grid-cols-[1fr_auto] items-center gap-2" key={label}>
-                <p className="text-sm font-medium">{label}</p>
-                <div className="flex items-center gap-2">
+              <div className="sm:grid sm:grid-cols-[1fr_auto] items-center sm:gap-2 flex flex-col" key={label}>
+                <p className="text-sm font-medium mb-2">{label}</p>
+                <div className="sm:flex items-center flex flex-col-reverse gap-2">
                   {editField === label && editable && (
                     <div className="flex items-center gap-2">
                       <Button
@@ -136,9 +137,27 @@ const ProfileUser = () => {
             ))}
           </CardContent>
           <CardFooter>
-            <Button variant="destructive" className="ml-auto" onClick={()=>handleDelete()}>
+            
+            <AlertDialog>
+            <AlertDialogTrigger asChild>
+            <Button variant="destructive" className="ml-auto">
               Delete Account
             </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete your account and remove your data from our
+                  servers.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel className="bg-[#3c82f6]">Cancel</AlertDialogCancel>
+                <AlertDialogAction className="bg-red-800" onClick={()=>handleDelete()}>Delete Account</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
           </CardFooter>
         </Card>
       </div>
