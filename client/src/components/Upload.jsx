@@ -181,7 +181,7 @@ export default function Upload() {
           Upload
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px] max-h-[75vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Add New Resource</DialogTitle>
           <DialogDescription>Fill out the form to add a new resource to the system.</DialogDescription>
@@ -207,7 +207,7 @@ export default function Upload() {
                 </SelectContent>
               </Select>
             </div>
-            {/* <div className="space-y-2">
+            <div className="space-y-2">
               <Label htmlFor="semester">Semester</Label>
               <Select id="semester" name="semester" onValueChange={(value)=>handleChange({target:{name:'semester', value}})} value={formValues.category.semester}>
                 <SelectTrigger>
@@ -219,7 +219,7 @@ export default function Upload() {
                   ))}
                 </SelectContent>
               </Select>
-            </div> */}
+            </div>
             <div className="space-y-2">
               <Label htmlFor="course">Course</Label>
               <Select id="course" name="course" disabled={!selectedProgram} onValueChange={(value)=>handleChange({target:{name:'course', value}})} value={formValues.category.course}>
