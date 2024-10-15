@@ -61,21 +61,21 @@ const Navbar = () => {
             <nav className="flex flex-col items-center justify-center h-auto py-4 space-y-2">
               <Link
                 to="/"
-                className={`${path === "/" ? "bg-muted" : ""} w-full text-center px-4 py-3 rounded-md text-lg font-medium hover:bg-muted transition-colors`}
+                className={`${path === "/" ? "bg-muted" : ""} w-full text-center px-4 py-3 text-lg font-medium hover:bg-muted transition-colors`}
                 onClick={toggleMobileMenu} // Close menu on click
               >
                 Home
               </Link>
               <Link
                 to="/notes"
-                className={`${path === "/notes" ? "bg-muted" : ""} w-full text-center px-4 py-3 rounded-md text-lg font-medium hover:bg-muted transition-colors`}
+                className={`${path === "/notes" ? "bg-muted" : ""} w-full text-center px-4 py-3 text-lg font-medium hover:bg-muted transition-colors`}
                 onClick={toggleMobileMenu} // Close menu on click
               >
                 Resource
               </Link>
               <Link
                 to="/my-profile"
-                className={`${path === "/my-profile" ? "bg-muted" : ""} w-full text-center px-4 py-3 rounded-md text-lg font-medium hover:bg-muted transition-colors`}
+                className={`${path === "/my-profile" ? "bg-muted" : ""} w-full text-center px-4 py-3 text-lg font-medium hover:bg-muted transition-colors`}
                 onClick={toggleMobileMenu} // Close menu on click
               >
                 Dashboard
