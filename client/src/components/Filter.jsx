@@ -84,81 +84,82 @@ export default function FilterBar() {
         </Select>
       </div>
 
-      <div className="flex flex-wrap gap-2 justify-center">
-        <Select value={selectedProgram} onValueChange={setSelectedProgram}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select Program" />
-          </SelectTrigger>
-          <SelectContent>
-            {programs.map((program) => (
-              <SelectItem key={program} value={program}>{program}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      <div className="flex sm:flex-wrap sm:flex-row sm:gap-2 w-full flex-col justify-center">
+  <Select value={selectedProgram} onValueChange={setSelectedProgram}>
+    <SelectTrigger className="w-full sm:w-[180px]">
+      <SelectValue placeholder="Select Program" />
+    </SelectTrigger>
+    <SelectContent>
+      {programs.map((program) => (
+        <SelectItem key={program} value={program}>{program}</SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
 
-        <Select 
-          value={selectedSemester} 
-          onValueChange={setSelectedSemester}
-          disabled={!selectedProgram}
-        >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select Semester" />
-          </SelectTrigger>
-          <SelectContent>
-            {semesters.map((semester) => (
-              <SelectItem key={semester} value={semester}>{semester}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={openCourseDialog}
-          className="w-[200px] justify-between"
-          disabled={!selectedSemester}
-          onClick={() => setOpenCourseDialog(true)}
-        >
-          {selectedCourse || "Select Course"}
-          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
+  <Select 
+    value={selectedSemester} 
+    onValueChange={setSelectedSemester}
+    disabled={!selectedProgram}
+  >
+    <SelectTrigger className="w-full sm:w-[180px]">
+      <SelectValue placeholder="Select Semester" />
+    </SelectTrigger>
+    <SelectContent>
+      {semesters.map((semester) => (
+        <SelectItem key={semester} value={semester}>{semester}</SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
 
-        <CommandDialog open={openCourseDialog} onOpenChange={setOpenCourseDialog}>
-        <CommandInput placeholder="Type a course or search..." />
-        <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Courses">
-            {filteredCourses.map((course) => (
-              <CommandItem key={course} onSelect={() => setSelectedCourse(course)}>
-                <span>{course}</span>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </CommandList>
-      </CommandDialog>
+  <Button
+    variant="outline"
+    role="combobox"
+    aria-expanded={openCourseDialog}
+    className="w-full sm:w-[200px] justify-between"
+    disabled={!selectedSemester}
+    onClick={() => setOpenCourseDialog(true)}
+  >
+    {selectedCourse || "Select Course"}
+    <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+  </Button>
 
+  <CommandDialog open={openCourseDialog} onOpenChange={setOpenCourseDialog}>
+    <CommandInput placeholder="Type a course or search..." />
+    <CommandList>
+      <CommandEmpty>No results found.</CommandEmpty>
+      <CommandGroup heading="Courses">
+        {filteredCourses.map((course) => (
+          <CommandItem key={course} onSelect={() => setSelectedCourse(course)}>
+            <span>{course}</span>
+          </CommandItem>
+        ))}
+      </CommandGroup>
+    </CommandList>
+  </CommandDialog>
 
-        <Select value={selectedResourceType} onValueChange={setSelectedResourceType}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Resource Type" />
-          </SelectTrigger>
-          <SelectContent>
-            {resourceTypes.map((type) => (
-              <SelectItem key={type} value={type}>{type}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+  <Select value={selectedResourceType} onValueChange={setSelectedResourceType}>
+    <SelectTrigger className="w-full sm:w-[180px]">
+      <SelectValue placeholder="Resource Type" />
+    </SelectTrigger>
+    <SelectContent>
+      {resourceTypes.map((type) => (
+        <SelectItem key={type} value={type}>{type}</SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
 
-        <Select value={selectedFileType} onValueChange={setSelectedFileType}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="File Type" />
-          </SelectTrigger>
-          <SelectContent>
-            {fileTypes.map((type) => (
-              <SelectItem key={type} value={type}>{type}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+  <Select value={selectedFileType} onValueChange={setSelectedFileType}>
+    <SelectTrigger className="w-full sm:w-[180px]">
+      <SelectValue placeholder="File Type" />
+    </SelectTrigger>
+    <SelectContent>
+      {fileTypes.map((type) => (
+        <SelectItem key={type} value={type}>{type}</SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+</div>
+
     </div>
   )
 }
