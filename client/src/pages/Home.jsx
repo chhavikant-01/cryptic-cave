@@ -1,6 +1,7 @@
 import { Card, CardContent } from "../components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "../components/ui/avatar"
-import homeImg from "./home.jpg"
+import Lottie from "lottie-react";
+import animationData from "./animationData.json";
 
 export default function Home() {
   return (
@@ -26,13 +27,11 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <img
-                src={homeImg}
-                width="550"
-                height="550"
-                alt="Hero"
-                className="mx-auto aspect-video overflow-hidden rounded-xl object-bottom sm:w-full lg:order-last lg:aspect-square"
-              />
+              <Lottie
+          animationData={animationData}
+          className="flex justify-center items-center"
+          loop={true}
+        />
             </div>
           </div>
         </section>

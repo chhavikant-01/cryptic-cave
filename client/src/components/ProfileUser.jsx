@@ -86,7 +86,7 @@ const ProfileUser = () => {
 
   return (
     <main>
-      <div className="container mx-auto grid gap-8 px-4 md:px-6 lg:px-8 mb-10">
+      <div className="container mx-auto grid gap-8 px-4 md:px-6 lg:px-8">
         <Card>
           <CardHeader>
             <CardTitle>Profile</CardTitle>
@@ -96,7 +96,7 @@ const ProfileUser = () => {
             {userData.map(({ label, value, setter, backendField, type = "text", editable }) => (
               <div className="sm:grid sm:grid-cols-[1fr_auto] items-center sm:gap-2 flex flex-col" key={label}>
                 <p className="text-sm font-medium mb-2">{label}</p>
-                <div className="sm:flex items-center flex flex-col-reverse gap-2">
+                <div className="sm:flex sm:flex-row items-center flex flex-col-reverse gap-2">
                   {editField === label && editable && (
                     <div className="flex items-center gap-2">
                       <Button
