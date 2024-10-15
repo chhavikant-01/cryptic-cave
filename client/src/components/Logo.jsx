@@ -41,7 +41,6 @@ export default function Logo() {
     WebkitTextFillColor: 'transparent',
     backgroundSize: '200% 200%',
     animation: `gradient 5s ease infinite`,
-    padding: '20px',
     borderRadius: '8px',
     textAlign: 'center',
     display: 'inline-block',
