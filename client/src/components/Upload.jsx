@@ -89,63 +89,82 @@ export default function Upload() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!formValues.title || !formValues.desc || !formValues.category.program || !formValues.category.course){
+  
+    // Check if required fields are filled
+    if (!formValues.title || !formValues.desc || !formValues.category.program || !formValues.category.course) {
       return toast.error("Please fill out all the fields");
     }
-
+  
     dispatch(updateStart());
-
-    const formData = new FormData();
+  
+    // Use toast.promise to show the status of the file upload
+    toast.promise(
+      (async () => {
+        const formData = new FormData();
         formData.append("file", file);
         formData.append("title", formValues.title);
         formData.append("desc", formValues.desc);
         formData.append("program", formValues.category.program);
         formData.append("course", formValues.category.course);
         formData.append("resourceType", formValues.category.resourceType);
-
+  
         const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/upload`, {
           method: "POST",
           body: formData,
           credentials: "include",
         });
-    const data  = await res.json();
-    if(!res.ok){
-      updateFailure(data.message);
-      return toast.error(data.message);
-    }
-    if(res.ok){
-      let newPost = data.newPost;
-      newPost.author = {
-        _id: currentUser._id,
-        username: currentUser.username,
-        name: currentUser.firstname + " " + currentUser.lastname,
-        profilePicture: currentUser.profilePicture,
-        program: currentUser.program,
-        yearOfGraduation: currentUser.yearOfGraduation,
-        numberOfPosts: currentUser.posts.length,
-        numberOfFollowers: currentUser.followers.length,
-      };
-      let updatedUser = {...currentUser, posts: [...currentUser.posts, newPost._id]};
-      dispatch(updateSuccess(updatedUser));
-      toast.success(data.message);
-      dispatch(addPost(newPost));
-      setFormValues({
-        title: "",
-        desc: "",
-        fileType: "",
-        fileName: "",
-        fileUrl: "",
-        category: {
-          program: "",
-          semester: "",
-          course: "",
-          resourceType: "",
-            }
+  
+        const data = await res.json();
+  
+        if (!res.ok) {
+          dispatch(updateFailure(data.message));
+          throw new Error(data.message); // This will trigger the error toast
+        }
+  
+        let newPost = data.newPost;
+        newPost.author = {
+          _id: currentUser._id,
+          username: currentUser.username,
+          name: `${currentUser.firstname} ${currentUser.lastname}`,
+          profilePicture: currentUser.profilePicture,
+          program: currentUser.program,
+          yearOfGraduation: currentUser.yearOfGraduation,
+          numberOfPosts: currentUser.posts.length,
+          numberOfFollowers: currentUser.followers.length,
+        };
+  
+        let updatedUser = { ...currentUser, posts: [...currentUser.posts, newPost._id] };
+        dispatch(updateSuccess(updatedUser));
+        dispatch(addPost(newPost));
+  
+        // Clear the form after successful upload
+        setFormValues({
+          title: "",
+          desc: "",
+          fileType: "",
+          fileName: "",
+          fileUrl: "",
+          category: {
+            program: "",
+            semester: "",
+            course: "",
+            resourceType: "",
+          }
         });
-      setFile(null);
-      setUploadProgress(0);
-    }
+        setFile(null);
+        setUploadProgress(0);
+  
+        return data.message; // Return success message to show success toast
+      })(),
+      {
+        loading: 'Uploading file...',
+        success: 'File uploaded successfully!',
+        error: 'Failed to upload file',
+      }
+    );
   };
+  
+  
 
   const handleRemoveFile = () => {
     if (uploadTask) {

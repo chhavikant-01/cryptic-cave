@@ -6,11 +6,14 @@ import UserCard from "../components/UserCard"
 import download from "downloadjs";
 import { formatDistanceToNow } from "date-fns"
 import toast from "react-hot-toast"
+import { updateStart, updateSuccess, updateFailure } from "../redux/user/userSlice"
+import { updatePostLikes } from "../redux/posts/postSlice"
+import { useDispatch } from "react-redux"
 export default function Dossier() {
   const [postId, setPostId] = useState('');
   const [saved, setSaved] = useState(false);
   const [liked, setLiked] = useState(false);
-  
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -28,28 +31,95 @@ export default function Dossier() {
     console.error('Invalid date value:', post?.updatedAt);
   }
 
-  const handleFileDownload = async () => {
+  const handleSave = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/download-file/${post?._id}`, {
+      if (!user) {
+        return toast.error('Please login to save this post');
+      }
+
+      dispatch(updateStart());
+      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/${post._id}/save`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      })
+
+      const data = await res.json();
+      if (!res.ok) {
+        dispatch(updateFailure(data.message));
+        return toast.error(data.message);
+      }
+
+      dispatch(updateSuccess(data.rest));
+      setSaved(!saved);
+      return toast.success(data.message);
+    } catch (err) {
+      dispatch(updateFailure(err.message));
+      return toast.error(err.message);
+    }
+  }
+
+  const handleLike = async () => {
+    try {
+      if(!user){
+        return toast.error('Please login to like this post');
+      }
+      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/${post._id}/like`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         credentials: 'include',
       });
-  
-      if (!response.ok) {
-        toast.error('Failed to download file');
-        throw new Error('Failed to download file');
+      const data = await res.json();
+      if(!res.ok){
+        return toast.error('Failed to like post');
       }
-  
-      const blob = await response.blob();  // Get the file as a blob
-      const fileName = post?.fileName || 'file';  // Get the file name from the post object
-  
-      download(blob, fileName, post?.fileType);  // Use downloadjs to trigger the download
-  
-      toast.success('File downloaded successfully');
-    } catch (e) {
-      console.error(e);
-      toast.error('Failed to download file');
+      if(res.ok){
+        setLiked(!liked);
+        if(data.offset === 1){
+          dispatch(updatePostLikes({postId: post._id, userId: user._id, offset: 1}));
+          return toast(data.message, {icon: '🥳'});
+        }
+        if(data.offset === -1){
+          dispatch(updatePostLikes({postId: post._id, userId: user._id, offset: -1}));
+          return toast(data.message, {icon: '🥹' });
+        }
+      }
+    }catch(e){
+      return toast.error(e.message);
     }
+  }
+
+
+  const handleFileDownload = async () => {
+    toast.promise(
+      (async () => {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/download-file/${post?._id}`, {
+          credentials: 'include',
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to download file');
+        }
+  
+        const blob = await response.blob();  // Get the file as a blob
+        const fileName = post?.fileName || 'file';  // Get the file name from the post object
+  
+        download(blob, fileName, post?.fileType);  // Use downloadjs to trigger the download
+  
+        return 'File downloaded successfully';  // Success message to be displayed by toast
+      })(),
+      {
+        loading: 'Downloading file...',
+        success: 'File downloaded successfully!',
+        error: 'Failed to download file',
+      }
+    );
   };
+  
   
 
   useEffect(() => {
@@ -82,11 +152,11 @@ export default function Dossier() {
           <Button size="sm" variant="outline" className="hover:cursor-text">
             {post?.category.resourceType}
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={handleLike}>
             <StarIcon className={liked ? "h-4 mr-2 w-4 fill-current text-[#e2b340]" : "h-4 mr-2 w-4"} />
             {liked ? "Starred":"Star"}
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={handleSave}>
             <Bookmark className={saved ? "h-5 mr-2 w-5 fill-current text-blue-500" : "h-5 mr-2 w-5"} />
             {saved ? "Saved":"Save"}
           </Button>
@@ -125,12 +195,12 @@ export default function Dossier() {
             </div>
             <div className="flex justify-between">
             <div className="p-4">
-              <div className="flex items-center justify-between py-2 hover:bg-muted rounded px-2">
+              {/* <div className="flex items-center justify-between py-2 hover:bg-muted rounded px-2">
                 <div className="flex items-center">
                   <FileIcon className="mr-2 h-4 w-4 text-muted-foreground" />
                   <span>Description.md</span>
                 </div>
-              </div>
+              </div> */}
               <div className="flex items-center justify-between py-2 hover:bg-muted rounded px-2">
                 <div className="flex items-center">
                   <FileIcon className="mr-2 h-4 w-4 text-muted-foreground" />
@@ -150,7 +220,7 @@ export default function Dossier() {
           {/* Descriotion Preview */}
           <div className="bg-card border-2 text-card-foreground rounded-lg shadow-sm p-6">
             <div className="flex border-b items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold">Description.md</h2>
+              <h2 className="text-xl font-semibold">Description</h2>
               {/* <Button variant="ghost" size="sm">
                 <FilePenLine className="mr-2 h-4 w-4" />
                 Edit
