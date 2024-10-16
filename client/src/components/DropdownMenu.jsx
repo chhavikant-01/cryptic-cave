@@ -137,8 +137,8 @@ export default function DropMenu(props) {
       <>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full bg-primary">
-              <PencilIcon className="h-4 w-4 text-primary-foreground" />
+            <Button variant="ghost" size="icon" className="rounded-full text-[#94a3b8] bg-[#020817]">
+              <PencilIcon className="h-4 w-4" />
               <span className="sr-only">Edit post</span>
             </Button>
           </DropdownMenuTrigger>

@@ -1,6 +1,6 @@
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext } from "./ui/pagination"
 import { useSelector } from "react-redux"
-import DropMenu from "./DropdownMenu"
+import ProfilePostCard from "./ProfilePostCard"
 
 
 export default function ProfilePosts() {
@@ -9,51 +9,27 @@ export default function ProfilePosts() {
   const posts = currentPosts.filter(post => userPosts.includes(post._id.toString()));
 
   return (
-    <section className="w-full py-12 md:py-16 lg:py-20">
+    <section className="w-full">
       <div className="container mx-auto px-4 md:px-6">
         <div className="mb-8 md:mb-10 lg:mb-12">
           <h2 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">My Posts</h2>
         </div>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {posts.map((post, key) => (
-
-          <div key={key} className="group bg-slate-900 relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
-            <div href="#" className="absolute inset-0 z-10" prefetch="false">
-              <span className="sr-only">View post</span>
-            </div>
-            <img
-              src="https://picsum.photos/seed/picsum/300/200"
-              alt="Post thumbnail"
-              width={300}
-              height={200}
-              className="h-40 w-full object-cover transition-all duration-300 group-hover:scale-105"
-            />
-            <div className="p-4">
-              <div className="flex flex-col gap-2 mb-2">
-                <div className="text-sm text-muted-foreground">{post.category.program}, {post.category.course}, {post.fileType}</div>
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <HeartIcon className="w-4 h-4" />
-                  <span>{post.likes.length}</span>
-                  <MessageCircleIcon className="w-4 h-4" />
-                  <span>{post.comments.length}</span>
-                </div>
-              </div>
-              <div className="flex justify-between"><h3 className="text-lg font-semibold transition-colors duration-300 group-hover:text-primary">
-                {post.title}
-              </h3>
-              <div className="z-20 bottom-0 right-0 p-1 shadow-md">
-              <DropMenu 
-                title={post.title}
+        <div className="relative grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {posts.map((post) => (
+              <ProfilePostCard 
+                key={post._id}
                 _id={post._id}
-                description={post.desc} 
-                program={post.category.program} 
+                author={post.author}
+                likes={post.likes.length}
+                likedBy={post.likes}
+                comments={post.comments.length}
+                title={post.title}
+                program={post.category.program}
+                description={post.desc}
+                thumbnail={post.thumbnail}
                 course={post.category.course}
-              />
-              </div>  
-              </div>
-              
-            </div>
-          </div>
+                category={post.category.resourceType}
+                uploadedAt={post.createdAt} />
         ) )}
         </div>
         <div className="mt-8 md:mt-10 lg:mt-12 flex justify-center">

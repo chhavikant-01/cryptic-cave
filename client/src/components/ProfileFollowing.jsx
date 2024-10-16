@@ -42,7 +42,7 @@ export default function UserFollowing() {
   }, [location.search, currentUser._id, tab]); 
 
   return (
-    <section className="w-full py-12 md:py-16 lg:py-20">
+    <section className="w-full">
       <div className="container max-w-6xl px-4 md:px-6">
         <div className="mb-8 md:mb-10 lg:mb-12">
           <h2 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">
