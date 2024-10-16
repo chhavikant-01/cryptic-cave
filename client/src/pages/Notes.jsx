@@ -21,6 +21,7 @@ export default function Notes() {
                   likedBy={post.likes}
                   comments={post.comments.length}
                   title={post.title}
+                  program={post.category.program}
                   description={post.desc}
                   thumbnail={post.thumbnail}
                   uploadedAt={post.createdAt} />

@@ -3,8 +3,41 @@ import { Avatar, AvatarImage, AvatarFallback } from "../components/ui/avatar"
 import Lottie from "lottie-react";
 import animationData from "./animationData.json";
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import HomeCard from "../components/HomeCard";
+
 
 export default function Home() {
+  const currentPosts = useSelector((state) => state.posts.posts);
+  const [topThreeRecent, setTopThreeRecent] = useState([]);
+  const [topThreePopular, setTopThreePopular] = useState([]);
+
+  useEffect(() => {
+    if (currentPosts) {
+      const posts = currentPosts.map((post) => {
+        return {
+          _id: post._id,
+          createdAt: post.createdAt,
+        };
+      });
+
+      const sortedPosts = posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      const topThree1 = currentPosts.filter((post) => {
+        return sortedPosts.slice(0, 3).some((sortedPost) => sortedPost._id === post._id);
+      });
+
+      const popularPosts = posts.sort((a, b) => b.likes?.length - a.likes?.length);
+      const topThree2 = currentPosts.filter((post) => {
+        return popularPosts.slice(0, 3).some((sortedPost) => sortedPost._id === post._id);
+      });
+
+  setTopThreeRecent(topThree1);
+  setTopThreePopular(topThree2);
+}
+  }, [currentPosts]);
+
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -31,7 +64,7 @@ export default function Home() {
         <section className="w-full py-4 md:py-6 lg:py-12 border-y">
           <div className="px-4 md:px-6 space-y-10 xl:space-y-16">
             <div className="flex md:flex-row flex-col max-w-[1300px] mx-auto gap-4 px-4 sm:px-6 md:px-10 md:grid-cols-2 md:gap-16">
-              <div className="md:w-1/2 w-full text-center ">
+              <div className="md:w-1/2 w-full md:text-left text-center ">
               <motion.h1
                 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-white"
                 variants={containerVariants}
@@ -79,67 +112,21 @@ export default function Home() {
               </div>
             </div>
             <div className="mx-auto grid items-start gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
-              <Card>
-                <CardContent>
-                  <div className="flex flex-col gap-2">
-                    <div className="text-lg font-bold">Calculus Notes</div>
-                    <div className="text-sm text-muted-foreground">
-                      Comprehensive notes covering all topics in Calculus 1.
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Avatar>
-                        <AvatarImage src="/placeholder-user.jpg" />
-                        <AvatarFallback>JD</AvatarFallback>
-                      </Avatar>
-                      <div className="text-sm text-muted-foreground">John Doe</div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <DownloadIcon className="w-4 h-4 text-muted-foreground" />
-                      <div className="text-sm text-muted-foreground">345 downloads</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent>
-                  <div className="flex flex-col gap-2">
-                    <div className="text-lg font-bold">Physics Problem Sets</div>
-                    <div className="text-sm text-muted-foreground">
-                      Practice problems and solutions for Physics 101.
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Avatar>
-                        <AvatarImage src="/placeholder-user.jpg" />
-                        <AvatarFallback>SA</AvatarFallback>
-                      </Avatar>
-                      <div className="text-sm text-muted-foreground">Sarah Adams</div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <DownloadIcon className="w-4 h-4 text-muted-foreground" />
-                      <div className="text-sm text-muted-foreground">201 downloads</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent>
-                  <div className="flex flex-col gap-2">
-                    <div className="text-lg font-bold">Marketing Case Studies</div>
-                    <div className="text-sm text-muted-foreground">Real-world case studies for Marketing 301.</div>
-                    <div className="flex items-center gap-2">
-                      <Avatar>
-                        <AvatarImage src="/placeholder-user.jpg" />
-                        <AvatarFallback>EM</AvatarFallback>
-                      </Avatar>
-                      <div className="text-sm text-muted-foreground">Emily Martinez</div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <DownloadIcon className="w-4 h-4 text-muted-foreground" />
-                      <div className="text-sm text-muted-foreground">156 downloads</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              {topThreeRecent && topThreeRecent.map((post) => (
+                <HomeCard
+                  key={post._id}
+                  _id={post._id}
+                  author={post.author}
+                  likes={post.likes.length}
+                  likedBy={post.likes}
+                  comments={post.comments.length}
+                  title={post.title}
+                  program={post.category.program}
+                  description={post.desc}
+                  thumbnail={post.thumbnail}
+                  uploadedAt={post.createdAt}
+                />
+              ))}
             </div>
           </div>
         </section>
@@ -154,84 +141,25 @@ export default function Home() {
               </div>
             </div>
             <div className="mx-auto grid items-start gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
-              <Card>
-                <CardContent>
-                  <div className="flex flex-col gap-2">
-                    <div className="text-lg font-bold">Organic Chemistry Notes</div>
-                    <div className="text-sm text-muted-foreground">
-                      Detailed notes covering all topics in Organic Chemistry.
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Avatar>
-                        <AvatarImage src="/placeholder-user.jpg" />
-                        <AvatarFallback>JW</AvatarFallback>
-                      </Avatar>
-                      <div className="text-sm text-muted-foreground">Jessica Wang</div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <DownloadIcon className="w-4 h-4 text-muted-foreground" />
-                      <div className="text-sm text-muted-foreground">1,234 downloads</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent>
-                  <div className="flex flex-col gap-2">
-                    <div className="text-lg font-bold">Data Structures Cheatsheet</div>
-                    <div className="text-sm text-muted-foreground">
-                      Quick reference guide for common data structures and algorithms.
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Avatar>
-                        <AvatarImage src="/placeholder-user.jpg" />
-                        <AvatarFallback>MR</AvatarFallback>
-                      </Avatar>
-                      <div className="text-sm text-muted-foreground">Michael Rodriguez</div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <DownloadIcon className="w-4 h-4 text-muted-foreground" />
-                      <div className="text-sm text-muted-foreground">987 downloads</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent>
-                  <div className="flex flex-col gap-2">
-                    <div className="text-lg font-bold">Economics Textbook Solutions</div>
-                    <div className="text-sm text-muted-foreground">
-                      Detailed solutions to end-of-chapter problems in the Economics textbook.
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Avatar>
-                        <AvatarImage src="/placeholder-user.jpg" />
-                        <AvatarFallback>LT</AvatarFallback>
-                      </Avatar>
-                      <div className="text-sm text-muted-foreground">Lisa Tran</div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <DownloadIcon className="w-4 h-4 text-muted-foreground" />
-                      <div className="text-sm text-muted-foreground">765 downloads</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+            {topThreePopular && topThreePopular.map((post) => (
+                <HomeCard
+                  key={post._id}
+                  _id={post._id}
+                  author={post.author}
+                  likes={post.likes.length}
+                  likedBy={post.likes}
+                  comments={post.comments.length}
+                  title={post.title}
+                  program={post.category.program}
+                  description={post.desc}
+                  thumbnail={post.thumbnail}
+                  uploadedAt={post.createdAt}
+                />
+              ))}
             </div>
           </div>
         </section>
       </main>
-      <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
-        <p className="text-xs text-muted-foreground">&copy; 2024 University Resource Sharing. All rights reserved.</p>
-        <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-          <div href="#" className="text-xs hover:underline underline-offset-4" prefetch="false">
-            Terms of Service
-          </div>
-          <div href="#" className="text-xs hover:underline underline-offset-4" prefetch="false">
-            Privacy
-          </div>
-        </nav>
-      </footer>
     </div>
   )
 }

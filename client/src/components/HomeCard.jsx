@@ -7,17 +7,15 @@ import { Button } from './ui/button'
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateFailure, updateStart, updateSuccess } from '../redux/user/userSlice'
-import Comments from './Comments'
 import { Link } from 'react-router-dom'
 import UserCard from './UserCard'
 import { updatePostLikes } from '../redux/posts/postSlice'
-import { Star } from 'lucide-react';
+import { Share2, Star } from 'lucide-react';
 
 const HomeCard = (props) => {
   const [isSaved, setIsSaved] = useState(false)
   const [isLiked, setIsLiked] = useState(false)
   const [numberOfLikes, setNumberOfLikes] = useState(props.likes)
-  const [numberOfComments, setNumberOfComments] = useState(props.comments)
   const currentUser = useSelector((state) => state.user.currentUser);
   const currentPosts = useSelector((state) => state.posts.posts);
   const dispatch = useDispatch();
@@ -122,7 +120,7 @@ const HomeCard = (props) => {
               <UserCard user={props.author} />
               <div className='text-center'>
                 <p className="font-medium">{props.name}</p>
-                <p className="text-sm text-muted-foreground">Computer Science</p>
+                <p className="text-sm text-muted-foreground">{props.program}</p>
               </div>
             </div>
             <Button variant="ghost" onClick={handleSave} className=''>
@@ -154,8 +152,9 @@ const HomeCard = (props) => {
                 <Star className={isLiked ? "h-5 w-5 fill-current text-[#e2b340]" : "h-5 w-5"} />
                 <span>{numberOfLikes}</span>
               </Button>
-             
-              <Comments comments={numberOfComments} />
+              <Button variant="ghost" className='flex items-center gap-1'>
+                <Share2 className='h-5 w-5' />
+              </Button>
             </div>
             <h3>
               {formattedDate}
