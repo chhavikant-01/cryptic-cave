@@ -2,36 +2,69 @@ import { Card, CardContent } from "../components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "../components/ui/avatar"
 import Lottie from "lottie-react";
 import animationData from "./animationData.json";
+import { motion } from "framer-motion";
 
 export default function Home() {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+      },
+    },
+  }
   return (
     <div className="flex flex-col min-h-dvh">
       <main className="flex-1">
-        <section className="w-full pt-4 md:pt-6 lg:pt-12 border-y">
+        <section className="w-full py-4 md:py-6 lg:py-12 border-y">
           <div className="px-4 md:px-6 space-y-10 xl:space-y-16">
-            <div className="grid max-w-[1300px] mx-auto gap-4 px-4 sm:px-6 md:px-10 md:grid-cols-2 md:gap-16">
-              <div>
-                <h1 className="lg:leading-tighter text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl xl:text-[3.4rem] 2xl:text-[3.75rem]">
-                Elevate Your Academic Journey
-                </h1>
-                <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-                Discover, share, and collaborate on university resources with ease.
-                </p>
-                <div className="mt-6">
-                  <div
-                    href="#"
-                    className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                    prefetch="false"
-                  >
-                    Join Now
-                  </div>
-                </div>
+            <div className="flex md:flex-row flex-col max-w-[1300px] mx-auto gap-4 px-4 sm:px-6 md:px-10 md:grid-cols-2 md:gap-16">
+              <div className="md:w-1/2 w-full text-center ">
+              <motion.h1
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-white"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <motion.span className="block mb-2 md:mb-4" variants={itemVariants}>
+                  Discover
+                </motion.span>
+                <motion.span className="block mb-2 md:mb-4 text-[#4169e1]" variants={itemVariants}>
+                  share
+                </motion.span>
+                <motion.span className="block mb-2 md:mb-4" variants={itemVariants}>
+                  and <span className="text-[#4169e1]">collaborate on</span>
+                </motion.span>
+                <motion.span className="block mb-2 md:mb-4" variants={itemVariants}>
+                  university resources
+                </motion.span>
+                <motion.span
+                  className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-gray-400"
+                  variants={itemVariants}
+                >
+                  with ease.
+                </motion.span>
+              </motion.h1>
               </div>
+              <div className="md:w-1/2 w-full ">
               <Lottie
-          animationData={animationData}
-          className="flex justify-center items-center"
-          loop={true}
-        />
+                animationData={animationData}
+                className="flex justify-center items-center w-full h-full"  
+                loop={true}
+              />
+              </div>
             </div>
           </div>
         </section>

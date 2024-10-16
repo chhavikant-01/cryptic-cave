@@ -114,67 +114,69 @@ export default function ProfileTopbar() {
   };
 
   return (
-    <div className="bg-background rounded-lg shadow-md p-6 flex items-center gap-6">
-      <div className="relative">
-        <Avatar className="h-20 w-20">
-          <AvatarImage src={imageSrc} />
-          <AvatarFallback>{currentUser.firstname[0].toUpperCase()}{currentUser.lastname && currentUser.lastname[0]}{!currentUser.lastname && currentUser.firstname[1].toUpperCase()}</AvatarFallback>
-        </Avatar>
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute bottom-0 right-0 rounded-full bg-background p-1 shadow-md"
-              onClick={triggerFileInput}
-            >
-              <PencilIcon className="h-4 w-4" />
-              <span className="sr-only">Edit profile picture</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" sideOffset={8}>
-            <DropdownMenuItem className="flex items-center gap-2 cursor-pointer" onClick={triggerFileInput}>
-              <FilePenIcon className="h-4 w-4" />
-              <span>Upload</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive flex items-center gap-2 cursor-pointer">
-              <TrashIcon className="h-4 w-4" />
-              <span>Remove</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="hidden"
-        />
-      </div>
-      <div className="grid gap-2 flex-1">
-        <div className="sm:flex items-center justify-between">
-          <div className="font-semibold text-lg">{currentUser.firstname} {currentUser.lastname}</div>
-          <div className="flex items-center gap-2 text-muted-foreground text-sm">
-            <span>@{currentUser.username}</span>
-            <span>|</span>
-            <span>{currentUser.email}</span>
+    <div className="bg-background rounded-lg shadow-md p-6 flex md:flex-row flex-col-reverse items-center gap-6 justify-between">
+      <div className="md:flex-row flex flex-col">
+        <div className="relative md:flex-none flex flex-col justify-center items-center">
+          <Avatar className="h-20 w-20">
+            <AvatarImage src={imageSrc} />
+            <AvatarFallback>{currentUser.firstname[0].toUpperCase()}{currentUser.lastname && currentUser.lastname[0]}{!currentUser.lastname && currentUser.firstname[1].toUpperCase()}</AvatarFallback>
+          </Avatar>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute top-0 md:right-0 rounded-full bg-background p-1 shadow-md"
+                onClick={triggerFileInput}
+              >
+                <PencilIcon className="h-4 w-4" />
+                <span className="sr-only">Edit profile picture</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="absolute bottom-0 left-0">
+              <DropdownMenuItem className="flex items-center gap-2 cursor-pointer" onClick={triggerFileInput}>
+                <FilePenIcon className="h-4 w-4" />
+                <span>Upload</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="text-destructive flex items-center gap-2 cursor-pointer">
+                <TrashIcon className="h-4 w-4" />
+                <span>Remove</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        <div className="font-semibold text-lg">{currentUser.firstname} {currentUser.lastname}</div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="hidden"
+          />
+        </div>
+        <div className="grid gap-2 flex-1 md:ml-5 ml-0 md:mt-0 mt-5">
+          <div className="flex items-center gap-6 text-lg font-medium text-secondary-foreground dark:text-secondary-foreground">
+            <div className="sm:flex items-center flex flex-col justify-center sm:justify-start gap-2">
+              <UsersIcon className="h-6 w-6" />
+              <span>{followers} Followers</span>
+            </div>
+            <div className="sm:flex items-center flex flex-col justify-center sm:justify-normal gap-2">
+              <ImageIcon className="h-6 w-6" />
+              <span>{posts} Posts</span>
+            </div>
+            <div className="sm:flex items-center flex flex-col justify-center sm:justify-normal gap-2">
+              <BookmarkIcon className="h-6 w-6" />
+              <span>{saved} Saved</span>
+            </div>
           </div>
         </div>
-        <div className="mt-5 sm:mt-0 flex items-center gap-6 text-lg font-medium text-secondary-foreground dark:text-secondary-foreground">
-          <div className="sm:flex items-center flex flex-col justify-center sm:justify-normal gap-2">
-            <UsersIcon className="h-6 w-6" />
-            <span>{followers} Followers</span>
-          </div>
-          <div className="sm:flex items-center flex flex-col justify-center sm:justify-normal gap-2">
-            <ImageIcon className="h-6 w-6" />
-            <span>{posts} Posts</span>
-          </div>
-          <div className="sm:flex items-center flex flex-col justify-center sm:justify-normal gap-2">
-            <BookmarkIcon className="h-6 w-6" />
-            <span>{saved} Saved</span>
-          </div>
         </div>
-      </div>
+        <div className="sm:flex items-center justify-end">
+            <div className="flex items-center gap-2 text-muted-foreground text-sm">
+              <span>@{currentUser.username}</span>
+              <span>|</span>
+              <span>{currentUser.email}</span>
+            </div>
+          </div>
     </div>
   );
 }

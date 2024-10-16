@@ -1,21 +1,9 @@
-import { useState, useEffect } from 'react'
-import { Card, CardContent } from "../components/ui/card"
 
 const fontImport = `
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap');
 `
 
 export default function Logo() {
-  const [mounted, setMounted] = useState(false)
-  const [animationSpeed, setAnimationSpeed] = useState(5)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) {
-    return null
-  }
 
   const gradients = [
     {
