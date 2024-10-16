@@ -5,8 +5,10 @@ import { useLocation } from 'react-router-dom';
 import Upload from './Upload';
 import { XIcon } from "lucide-react";
 import Logo from './Logo';
+import { useSelector } from 'react-redux';
 
 const Navbar = () => {
+  const user = useSelector((state) => state.user.currentUser);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const path = useLocation().pathname;
 
@@ -48,7 +50,9 @@ const Navbar = () => {
               {isMobileMenuOpen ? <XIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
               <span className="sr-only">Toggle menu</span>
             </Button>
-            <Upload />
+            {user &&
+              <Upload />
+            }
           </div>
         </div>
 
