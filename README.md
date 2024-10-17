@@ -2,17 +2,5 @@
 
 ## Setup
 
-1. Clone the repository
-2. Backend:  
-    - `npm install`
-    - `cd api`
-    - create a `.env` file with the following content:
-        ```
-        PORT= port number
-        MONGO_URL= mongodb uri
-        ```
-    - `node index.js`
-3. Frontend:
-    - `cd client`
-    - `npm install`
-    - `npm run start`
+1. Frontend: Clone this repository 
+2. Backend: Clone the repository from: https://github.com/chhavikant-01/cryptic-cave-backend

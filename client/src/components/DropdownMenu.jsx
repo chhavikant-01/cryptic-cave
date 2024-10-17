@@ -20,6 +20,7 @@ import toast from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux"
 import { updateSuccess } from "../redux/user/userSlice"
 import { anonymizePost } from "../redux/posts/postSlice"
+import { Edit, Edit2, Trash2 } from "lucide-react"
 
 const programOptions = [
   { 
@@ -135,24 +136,12 @@ export default function DropMenu(props) {
   
     return (
       <>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full text-[#94a3b8] bg-[#020817]">
-              <PencilIcon className="h-4 w-4" />
-              <span className="sr-only">Edit post</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" sideOffset={8}>
-            <DropdownMenuItem className="flex items-center gap-2" onClick={handleEditClick}>
-                <FilePenIcon className="h-4 w-4" />
-                <span>Edit</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive flex items-center gap-2 cursor-pointer" onClick={handleDeleteClick}>
-              <TrashIcon className="h-4 w-4" />
-              <span>Delete</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Button variant="ghost" size="icon" className="rounded-full text-[#94a3b8] bg-[#020817]" onClick={handleEditClick}>
+            <Edit2 className="h-5 w-5" />  
+        </Button>
+        <Button variant="ghost" size="icon" className="text-red-600" onClick={handleDeleteClick}>
+            <Trash2 className="h-5 w-5" />  
+        </Button>
   
         {isAlertDialogOpen && (
           <AlertDialog open={isAlertDialogOpen} onOpenChange={setIsAlertDialogOpen}>
