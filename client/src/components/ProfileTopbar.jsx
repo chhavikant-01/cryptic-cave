@@ -118,7 +118,7 @@ export default function ProfileTopbar() {
       <div className="md:flex-row flex flex-col">
         <div className="relative md:flex-none flex flex-col justify-center items-center">
           <Avatar className="h-20 w-20">
-            <AvatarImage src={imageSrc} />
+            <AvatarImage src={imageSrc} className='object-cover' />
             <AvatarFallback>{currentUser.firstname[0].toUpperCase()}{currentUser.lastname && currentUser.lastname[0]}{!currentUser.lastname && currentUser.firstname[1].toUpperCase()}</AvatarFallback>
           </Avatar>
           <DropdownMenu>
