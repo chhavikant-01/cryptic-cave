@@ -18,15 +18,15 @@ import {
     CommandList,
   } from "./ui/command"
 
+  import { CSE_CORE, CSE_CSF, CSE_AIDS } from "../programme.js"
+
 // Mock data for dropdowns
-const programs = ['BTech', 'BSc', 'BBA', 'BA', 'BCom']
+const programs = [CSE_CSF.name, CSE_CORE.name, CSE_AIDS.name, ]
 const semesters = ['1', '2', '3', '4', '5', '6', '7', '8']
 const courses = {
-  BTech: ['Computer Science', 'Electrical Engineering', 'Mechanical Engineering', 'Civil Engineering'],
-  BSc: ['Physics', 'Chemistry', 'Mathematics', 'Biology', 'Computer Science', 'Statistics', 'Geology', 'Zoology', 'Botany', 'Biotechnology', 'Microbiology', 'Biochemistry', 'Environmental Science', 'Agriculture'],
-  BBA: ['Finance', 'Marketing', 'Human Resources', 'Operations Management'],
-  BA: ['English', 'History', 'Psychology', 'Sociology'],
-  BCom: ['Accounting', 'Economics', 'Business Law', 'Taxation']
+  [CSE_CSF.name]: CSE_CSF.courses,
+  [CSE_CORE.name]: CSE_CORE.courses,
+  [CSE_AIDS.name]: CSE_AIDS.courses,
 }
 const resourceTypes = ['Research Paper', 'PYQ', 'Notes', 'Textbook', 'Lab Manual']
 const fileTypes = ['PDF', 'PPT', 'DOC', 'XLSX', 'TXT']
@@ -96,27 +96,13 @@ export default function FilterBar() {
     </SelectContent>
   </Select>
 
-  <Select 
-    value={selectedSemester} 
-    onValueChange={setSelectedSemester}
-    disabled={!selectedProgram}
-  >
-    <SelectTrigger className="w-full sm:w-[180px]">
-      <SelectValue placeholder="Select Semester" />
-    </SelectTrigger>
-    <SelectContent>
-      {semesters.map((semester) => (
-        <SelectItem key={semester} value={semester}>{semester}</SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
 
   <Button
     variant="outline"
     role="combobox"
     aria-expanded={openCourseDialog}
     className="w-full sm:w-[200px] justify-between"
-    disabled={!selectedSemester}
+    disabled={!selectedProgram}
     onClick={() => setOpenCourseDialog(true)}
   >
     {selectedCourse || "Select Course"}
@@ -130,13 +116,26 @@ export default function FilterBar() {
       <CommandGroup heading="Courses">
         {filteredCourses.map((course) => (
           <CommandItem key={course} onSelect={() => setSelectedCourse(course)}>
-            <span>{course}</span>
+            <span>{course.name}</span>
           </CommandItem>
         ))}
       </CommandGroup>
     </CommandList>
   </CommandDialog>
 
+  <Select 
+    value={selectedSemester} 
+    onValueChange={setSelectedSemester}
+  >
+    <SelectTrigger className="w-full sm:w-[180px]">
+      <SelectValue placeholder="Select Semester" />
+    </SelectTrigger>
+    <SelectContent>
+      {semesters.map((semester) => (
+        <SelectItem key={semester} value={semester}>{semester}</SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
   <Select value={selectedResourceType} onValueChange={setSelectedResourceType}>
     <SelectTrigger className="w-full sm:w-[180px]">
       <SelectValue placeholder="Resource Type" />
