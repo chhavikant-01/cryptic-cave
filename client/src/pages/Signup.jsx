@@ -5,11 +5,11 @@ import "./custom.css";
 import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
-
 export const Signup = () => {
   const [formData, setFormData] = useState({});
   const [emailSent, setEmailSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -19,14 +19,31 @@ export const Signup = () => {
     });
   };
 
+  const handlePasswordConfirmationChange = (e) => {
+    setPasswordConfirmation(e.target.value);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    if (!formData.email || !formData.password || !formData.firstname) {
+
+    // Ensure all fields are filled
+    if (!formData.email || !formData.password || !formData.firstname || !passwordConfirmation) {
       toast.error("Please enter all fields!");
       setLoading(false);
       return;
     }
+
+    // Convert email to lowercase
+    formData.email = formData.email.toLowerCase();
+
+    // Check if passwords match
+    if (formData.password !== passwordConfirmation) {
+      toast.error("Passwords do not match!");
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/signup`, {
         method: 'POST',
@@ -70,7 +87,19 @@ export const Signup = () => {
             <Input onChange={handleChange} id="email" placeholder="name@example.com" />
           </div>
           <div>
-            <Input onChange={handleChange} id="password" placeholder="password" />
+            <Input 
+              type="password" 
+              onChange={handleChange} 
+              id="password" 
+              placeholder="password" 
+            />
+          </div>
+          <div>
+            <Input 
+              type="password" 
+              onChange={handlePasswordConfirmationChange} 
+              placeholder="confirm password" 
+            />
           </div>
           <div>
             <Button type='submit' className="w-full bg-[#bd1e59] text-white" disabled={loading}>

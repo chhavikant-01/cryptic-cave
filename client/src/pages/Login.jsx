@@ -30,6 +30,9 @@ export const Login = () => {
       dispatch(signInFailure("Please enter all fields!"));
       return toast.error(error);
     }
+
+    formData.email = formData.email.toLowerCase();
+    
     try {
       dispatch(signInStart());
       const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/login`, {
