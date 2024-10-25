@@ -226,8 +226,10 @@ export default function Dossier() {
                 Edit
               </Button> */}
             </div>
-            <div className="prose max-w-none">
-              <p>{post?.desc}</p>
+            <div 
+            className="prose max-w-none post-content"
+            dangerouslySetInnerHTML={{ __html: post?.desc }}
+            >
             </div>
           </div>
         </div>

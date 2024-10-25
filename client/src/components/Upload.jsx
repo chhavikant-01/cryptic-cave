@@ -13,6 +13,8 @@ import { CSE_AIDS, CSE_CSF, CSE_CORE, semesters, resourceTypes } from "../progra
 import { ChevronDown } from "lucide-react";
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "./ui/command";
 import { useEffect } from "react";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; // Import the Quill CSS
 
 const programs = [CSE_AIDS.name, CSE_CORE.name, CSE_CSF.name]
 const courses = {
@@ -67,6 +69,7 @@ export default function Upload() {
   
     // Check if required fields are filled
     if (!formValues.title || !formValues.desc || !formValues.category.program || !formValues.category.course) {
+      console.log(formValues);
       return toast.error("Please fill out all the fields");
     }
 
@@ -196,6 +199,10 @@ export default function Upload() {
     }));
   }
 
+  useEffect(() => {
+    formValues.desc = desc;
+  }, [desc]);
+
   return (
     <Dialog defaultClose>
       <DialogTrigger asChild>
@@ -210,9 +217,8 @@ export default function Upload() {
           <DialogDescription>Fill out the form to add a new resource to the system.</DialogDescription>
         </DialogHeader>
         <form className="grid gap-4 py-4" onSubmit={handleSubmit}>
-          <div className="grid grid-cols-2 gap-4">
             
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 mb-10">
             <div className="space-y-2">
               <Input id="title" placeholder="Enter course title" value={title} onChange={(e)=>{
                 setTitle(e.target.value);
@@ -260,27 +266,27 @@ export default function Upload() {
             >
               <span className="truncate max-w-[150px]">{selectedCourse || "Select Course"}</span>
               <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-          </Button>
+              </Button>
 
-          <CommandDialog open={openCourseDialog} onOpenChange={setOpenCourseDialog}>
-            <CommandInput placeholder="Type a course or search..." />
-            <CommandList>
-              <CommandEmpty>No results found.</CommandEmpty>
-              <CommandGroup heading="Courses">
-                {filteredCourses.map((course) => (
-                  <CommandItem key={course.name} onSelect={
-                    () => {
-                      setSelectedCourse(course.name);
-                      handleCourseChange(course.name);
-                      setOpenCourseDialog(false);
-                    }
-                  }>
-                    <span>{course.name}</span>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </CommandDialog>
+            <CommandDialog open={openCourseDialog} onOpenChange={setOpenCourseDialog}>
+              <CommandInput placeholder="Type a course or search..." />
+              <CommandList>
+                <CommandEmpty>No results found.</CommandEmpty>
+                <CommandGroup heading="Courses">
+                  {filteredCourses.map((course) => (
+                    <CommandItem key={course.name} onSelect={
+                      () => {
+                        setSelectedCourse(course.name);
+                        handleCourseChange(course.name);
+                        setOpenCourseDialog(false);
+                      }
+                    }>
+                      <span>{course.name}</span>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </CommandDialog>
 
             </div>
             <div className="space-y-2">
@@ -295,13 +301,33 @@ export default function Upload() {
                 </SelectContent>
               </Select>
             </div>
-          </div>
-          <div className="space-y-2">
-              <Textarea id="description" placeholder="Enter course description" className="h-full" value={formValues.desc} onChange={(e)=>setFormValues({...formValues, desc: e.target.value})} />
+            <div className="space-y-2 ">
+              <Label htmlFor="description">Description</Label>
+              <ReactQuill
+                      value={desc}
+                      onChange={(value)=>{
+                        setDesc(value);
+                      }}
+                      modules={{
+                        toolbar: [
+                          [{ 'header': '1' }, { 'header': '2' }],
+                          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                          ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                          [{ 'align': [] }],
+                          ['link'],
+                          ['clean']
+                        ],
+                      }}
+                      formats={[
+                        'header', 'list', 'bold', 'italic', 'underline', 'strike',
+                        'blockquote', 'align', 'link'
+                      ]}
+                      placeholder="Write your description here..."
+                      className="h-full"
+                    />
             </div>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="file">File</Label>
+          <div className="space-y-2 mt-20">
             <div className="grid gap-2">
               {file ? (
                 <div className="flex items-center justify-between border rounded-md p-4">
