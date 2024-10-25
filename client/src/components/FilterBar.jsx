@@ -18,29 +18,26 @@ import {
     CommandList,
   } from "./ui/command"
 
-  import { CSE_CORE, CSE_CSF, CSE_AIDS } from "../programme.js"
+  import { CSE_CORE, CSE_CSF, CSE_AIDS, resourceTypes, fileTypes, semesters } from "../programme.js"
 
-// Mock data for dropdowns
-const programs = [CSE_CSF.name, CSE_CORE.name, CSE_AIDS.name, ]
-const semesters = ['1', '2', '3', '4', '5', '6', '7', '8']
-const courses = {
-  [CSE_CSF.name]: CSE_CSF.courses,
-  [CSE_CORE.name]: CSE_CORE.courses,
-  [CSE_AIDS.name]: CSE_AIDS.courses,
-}
-const resourceTypes = ['Research Paper', 'PYQ', 'Notes', 'Textbook', 'Lab Manual']
-const fileTypes = ['PDF', 'PPT', 'DOC', 'XLSX', 'TXT']
+  const programs = [CSE_CSF.name, CSE_CORE.name, CSE_AIDS.name, ]
+  const courses = {
+    [CSE_CSF.name]: CSE_CSF.courses,
+    [CSE_CORE.name]: CSE_CORE.courses,
+    [CSE_AIDS.name]: CSE_AIDS.courses,
+  }
 
 export default function FilterBar() {
   const [searchQuery, setSearchQuery] = useState('')
-  const [sortOption, setSortOption] = useState('newest')
+  const [sortOption, setSortOption] = useState('desc')
   const [selectedProgram, setSelectedProgram] = useState('')
   const [selectedSemester, setSelectedSemester] = useState('')
   const [selectedCourse, setSelectedCourse] = useState('')
   const [selectedResourceType, setSelectedResourceType] = useState('')
   const [selectedFileType, setSelectedFileType] = useState('')
-  const [openCourseDialog, setOpenCourseDialog] = useState(false)
+
   const [filteredCourses, setFilteredCourses] = useState([])
+  const [openCourseDialog, setOpenCourseDialog] = useState(false)
 
   useEffect(() => {
     if (selectedProgram && courses[selectedProgram]) {
@@ -52,14 +49,26 @@ export default function FilterBar() {
   }, [selectedProgram])
   
 
-  const handleCourseSearch = (value) => {
-    if (selectedProgram) {
-      const filtered = courses[selectedProgram].filter(course => 
-        course.toLowerCase().includes(value.toLowerCase())
-      )
-      setFilteredCourses(filtered)
+
+    const filterPosts = async () => {
+      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/filter`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          semester: selectedSemester,
+          resourceType: selectedResourceType,
+          fileType: selectedFileType,
+          sort: sortOption,
+          keyword: searchQuery,
+          course: selectedCourse,
+          program: selectedProgram
+        })
+      })
+      const posts = await res.json()
+      console.log(posts)
     }
-  }
 
   return (
     <div className="p-4 space-y-4 bg-[#020817] rounded-lg shadow">
@@ -78,8 +87,8 @@ export default function FilterBar() {
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="newest">Newest</SelectItem>
-            <SelectItem value="oldest">Oldest</SelectItem>
+            <SelectItem value="asc">Newest</SelectItem>
+            <SelectItem value="desc">Oldest</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -115,7 +124,7 @@ export default function FilterBar() {
       <CommandEmpty>No results found.</CommandEmpty>
       <CommandGroup heading="Courses">
         {filteredCourses.map((course) => (
-          <CommandItem key={course} onSelect={() => setSelectedCourse(course)}>
+          <CommandItem key={course.name} onSelect={() => setSelectedCourse(course.name)}>
             <span>{course.name}</span>
           </CommandItem>
         ))}
@@ -157,6 +166,22 @@ export default function FilterBar() {
       ))}
     </SelectContent>
   </Select>
+</div>
+<div className='flex sm:flex-wrap sm:flex-row sm:gap-2 gap-4 w-full flex-col justify-center'>
+  <Button
+    onClick={filterPosts}
+    variant="outline"
+    className="bg-[#3c82f6] hover:bg-[#306fd5]"
+
+  > 
+    Apply Filters 
+  </Button>
+  <Button
+    variant="outline"
+    className="bg-[#1e293b] hover:bg-[#101722]"
+  >
+    Reset Filters
+  </Button>
 </div>
 
     </div>
