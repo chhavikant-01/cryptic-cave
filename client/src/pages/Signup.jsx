@@ -4,13 +4,17 @@ import { Button } from "../components/ui/button";
 import "./custom.css";
 import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import { CSE_AIDS, CSE_CORE, CSE_CSF } from "../programme";
 
 export const Signup = () => {
   const [formData, setFormData] = useState({});
   const [emailSent, setEmailSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [selectedProgram, setSelectedProgram] = useState(""); // State for selected program
   const navigate = useNavigate();
+
+  const programOptions = [CSE_CSF.name, CSE_CORE.name, CSE_AIDS.name];
 
   const handleChange = (e) => {
     setFormData({
@@ -23,12 +27,16 @@ export const Signup = () => {
     setPasswordConfirmation(e.target.value);
   };
 
+  const handleProgramChange = (e) => {
+    setSelectedProgram(e.target.value); // Update selected program state
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     // Ensure all fields are filled
-    if (!formData.email || !formData.password || !formData.firstname || !passwordConfirmation) {
+    if (!formData.email || !formData.password || !formData.firstname || !passwordConfirmation || !selectedProgram) {
       toast.error("Please enter all fields!");
       setLoading(false);
       return;
@@ -43,6 +51,9 @@ export const Signup = () => {
       setLoading(false);
       return;
     }
+
+    // Include selected program in form data
+    formData.program = selectedProgram;
 
     try {
       const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/signup`, {
@@ -85,6 +96,21 @@ export const Signup = () => {
           </div>
           <div>
             <Input onChange={handleChange} id="email" placeholder="name@example.com" />
+          </div>
+          <div className="">
+            <select
+              id="program"
+              value={selectedProgram}
+              onChange={handleProgramChange}
+              placeholder="Select your program"
+              className="mt-1 block w-full border text-gray-500 text-sm py-2 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
+              required
+            >
+              <option value="" disabled>Select your program</option>
+              {programOptions.map((program, index) => (
+                <option key={index} value={program}>{program}</option>
+              ))}
+            </select>
           </div>
           <div>
             <Input 

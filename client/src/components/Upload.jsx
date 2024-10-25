@@ -9,57 +9,18 @@ import toast from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
 import { addPost } from "../redux/posts/postSlice";
 import { updateStart, updateSuccess, updateFailure } from "../redux/user/userSlice";
+import { CSE_AIDS, CSE_CSF, CSE_CORE, semesters, resourceTypes } from "../programme";
+import { ChevronDown } from "lucide-react";
+import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "./ui/command";
+import { useEffect } from "react";
 
-const programOptions = [
-  { 
-    value: "BTech CSF", 
-    label: "BTech CSF", 
-    courseOptions: [
-      "Computer Networks",
-      "Operating System",
-      "Database Management System", 
-      "Information of Cyber Security", 
-      "Full Stack Development", 
-      "Security Management and Cyber Laws"
-    ] 
-  },
-  { 
-    value: "BTech CSE", 
-    label: "BTech CSE", 
-    courseOptions: [
-      "Computer Networks",
-      "Operating System",
-      "Database Management System", 
-      "Big Data", 
-      "Artificial Intelligence",  
-      "Machine Learning"  
-    ] 
-  },
-  { 
-    value: "BTech ECE", 
-    label: "BTech ECE", 
-    courseOptions: [
-      "Digital Signal Processing",  
-      "VLSI Design",  
-      "Microprocessors and Microcontrollers",  
-      "Embedded Systems",  
-      "Wireless Communication"  
-    ] 
-  },
-  { 
-    value: "BTech AIDS", 
-    label: "BTech AIDS", 
-    courseOptions: [
-      "Data Mining",  
-      "Artificial Intelligence",  
-      "Machine Learning",  
-      "Data Science",  
-      "Natural Language Processing"  
-    ] 
-  }  
-]
+const programs = [CSE_AIDS.name, CSE_CORE.name, CSE_CSF.name]
+const courses = {
+  [CSE_AIDS.name]: CSE_AIDS.courses,
+  [CSE_CORE.name]: CSE_CORE.courses,
+  [CSE_CSF.name]: CSE_CSF.courses,
+}
 
-const resourceTypeOptions = ["Project","Lecture Notes", "Question Paper", "Syllabus", "Book", "Research Paper","Other"];
 
 export default function Upload() {
 
@@ -68,6 +29,13 @@ export default function Upload() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadTask, setUploadTask] = useState(null);
   const fileInputRef = useRef(null);
+  const [openCourseDialog, setOpenCourseDialog] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState("");
+  const [selectedCourse, setSelectedCourse] = useState("");
+  const [filteredCourses, setFilteredCourses] = useState([]);
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
+  const [resourceType, setResourceType] = useState("");
   const [formValues, setFormValues] = useState({
     title: "",
     desc: "",
@@ -84,7 +52,14 @@ export default function Upload() {
   const dispatch = useDispatch();
   const currentUser = useSelector((state)=>state.user.currentUser);
 
-  const selectedProgram = programOptions.find((program) => program.value === formValues.category.program);
+  useEffect(() => {
+    if (selectedProgram && courses[selectedProgram]) {
+        setSelectedCourse('')
+        setFilteredCourses(courses[selectedProgram])
+    } else {
+      setFilteredCourses([])  // Reset when there's no valid program
+    }
+  }, [selectedProgram])
 
 
   const handleSubmit = async (e) => {
@@ -94,6 +69,8 @@ export default function Upload() {
     if (!formValues.title || !formValues.desc || !formValues.category.program || !formValues.category.course) {
       return toast.error("Please fill out all the fields");
     }
+
+    console.log(formValues);
   
     dispatch(updateStart());
   
@@ -192,6 +169,33 @@ export default function Upload() {
     }));
   };
 
+  const handleCourseChange = (course) => {
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      category: {
+        ...prevValues.category,
+        course: course,
+      },
+    }));
+  }
+  const handleProgramChange = (program) => {
+    setSelectedProgram(program); // Update selected program
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      category: {
+        ...prevValues.category,
+        program: program,
+      },
+    }));
+  };
+
+  const handleTitleChange = ()=>{
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      title: title,
+    }));
+  }
+
   return (
     <Dialog defaultClose>
       <DialogTrigger asChild>
@@ -210,59 +214,82 @@ export default function Upload() {
             
           <div className="flex flex-col gap-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Title</Label>
-              <Input id="title" placeholder="Enter course title" value={formValues.title} onChange={(e)=>setFormValues({...formValues, title:e.target.value})} />
+              <Input id="title" placeholder="Enter course title" value={title} onChange={(e)=>{
+                setTitle(e.target.value);
+                handleTitleChange();
+              }} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="program">Program</Label>
-              <Select id="program" name="program" onValueChange={(value)=>handleChange({target:{name:'program', value}})} value={formValues.category.program} >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select program"  />
-                </SelectTrigger>
-                <SelectContent >
-                  {programOptions.map((program) => (
-                    <SelectItem key={program.value} value={program.value}>{program.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <Select
+              value={selectedProgram}
+              onValueChange={(program) => handleProgramChange(program)}
+            >
+              <SelectTrigger className="w-full sm:w-[180px]">
+                <SelectValue placeholder="Select Program" />
+              </SelectTrigger>
+              <SelectContent>
+
+                  <SelectItem value={currentUser.program}>
+                    {currentUser.program}
+                  </SelectItem>
+
+              </SelectContent>
+            </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="semester">Semester</Label>
               <Select id="semester" name="semester" onValueChange={(value)=>handleChange({target:{name:'semester', value}})} value={formValues.category.semester}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select semester"  />
                 </SelectTrigger>
                 <SelectContent>
                   {[...Array(8)].map((_, index) => (
-                    <SelectItem key={index} value={`${index + 1}`}>Semester {index + 1}</SelectItem>
+                    <SelectItem key={index} value={`${index + 1}`} className="text-center">{index + 1}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="course">Course</Label>
-              <Select id="course" name="course" disabled={!selectedProgram} onValueChange={(value)=>handleChange({target:{name:'course', value}})} value={formValues.category.course}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select course"  />
-                </SelectTrigger>
-                <SelectContent>
-                  { selectedProgram ? selectedProgram.courseOptions.map((course) => (
-                    <SelectItem key={course} value={course}>{course}</SelectItem>
-                  )) :  
-                    <SelectItem disabled>Select a program first</SelectItem>
-                  }
-      
-                </SelectContent>
-              </Select>
+            <Button
+              variant="outline"
+              role="combobox"
+              type="button"
+              aria-expanded={openCourseDialog}
+              className="w-full sm:w-[200px] justify-between"
+              disabled={!selectedProgram}
+              onClick={() => setOpenCourseDialog(true)}
+            >
+              <span className="truncate max-w-[150px]">{selectedCourse || "Select Course"}</span>
+              <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+
+          <CommandDialog open={openCourseDialog} onOpenChange={setOpenCourseDialog}>
+            <CommandInput placeholder="Type a course or search..." />
+            <CommandList>
+              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandGroup heading="Courses">
+                {filteredCourses.map((course) => (
+                  <CommandItem key={course.name} onSelect={
+                    () => {
+                      setSelectedCourse(course.name);
+                      handleCourseChange(course.name);
+                      setOpenCourseDialog(false);
+                    }
+                  }>
+                    <span>{course.name}</span>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </CommandDialog>
+
             </div>
             <div className="space-y-2">
-              <Label htmlFor="resourceType">Resource Type</Label>
               <Select id="resourceType" name="resourceType" onValueChange={(value)=>handleChange({target:{name:'resourceType', value}})} value={formValues.category.resourceType}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {resourceTypeOptions.map((resourceType) => (
+                  {resourceTypes.map((resourceType) => (
                     <SelectItem key={resourceType} value={resourceType}>{resourceType}</SelectItem>
                   ))}
                 </SelectContent>
@@ -270,7 +297,6 @@ export default function Upload() {
             </div>
           </div>
           <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
               <Textarea id="description" placeholder="Enter course description" className="h-full" value={formValues.desc} onChange={(e)=>setFormValues({...formValues, desc: e.target.value})} />
             </div>
           </div>

@@ -26,7 +26,7 @@ const ProfileUser = () => {
     { label: "Name", value: name, setter: setName, backendField: "name", editable: false },
     { label: "Username", value: username, setter: setUsername, backendField: "username", editable: false },
     { label: "Email", value: email, setter: setEmail, backendField: "email", editable: false },
-    { label: "Program", value: program, setter: setProgram, backendField: "program", editable: true },
+    { label: "Program", value: program, setter: setProgram, backendField: "program", editable: false },
     { label: "Year Of Graduation", value: yearOfGraduation, setter: setYearOfGraduation, backendField: "yearOfGraduation", editable: true },
     { label: "Password", value: password, setter: setPassword, backendField: "newPassword", type:"password", editable: true },
   ];
