@@ -2,15 +2,31 @@ import HomeCard from "../components/HomeCard"
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationLink, PaginationNext } from "../components/ui/pagination"
 import { useSelector } from "react-redux"
 import FilterBar from "../components/FilterBar"
+import LoadingCard from "../components/LoadingCard"
 
 export default function Notes() {
   
   const currentPosts = useSelector((state) => state.posts.posts);
+  const status = useSelector((state) => state.posts.status);
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-8">
         <FilterBar />
         <div className="flex flex-col gap-6">
+        {
+          status === 'loading' ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <LoadingCard />
+              <LoadingCard />
+              <LoadingCard />
+              <LoadingCard />
+              <LoadingCard />
+              <LoadingCard />
+              <LoadingCard />
+              <LoadingCard />
+              <LoadingCard />
+            </div>
+          ):(
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {currentPosts && currentPosts.map((post) => (
                 <HomeCard
@@ -27,6 +43,8 @@ export default function Notes() {
                   uploadedAt={post.createdAt} />
               ))}
           </div>
+          )
+        }
           <div className="flex justify-end">
             <Pagination>
               <PaginationContent>

@@ -87,33 +87,33 @@ export default function UserCard(props) {
       <PopoverTrigger asChild>
       <Avatar className="cursor-pointer">
             <AvatarImage src="/placeholder-user.jpg" />
-            <AvatarFallback>{props.user.name ? props.user.name.split(" ")[0][0] + props.user.name.split(" ")[1][0] : "UN"}</AvatarFallback>
+          <AvatarFallback>{props.user?.name.split(" ")[0][0]}{props.user?.name.split(" ")[0][1]}</AvatarFallback>
         </Avatar>
       </PopoverTrigger>
       <PopoverContent className="w-80">
         <div className="flex flex-col items-center justify-center space-y-4 p-6">
           <div className="flex flex-col items-center space-y-2">
-            <div className="text-xl font-bold">{props.user.name}s</div>
-            <div className="text-sm text-muted-foreground">{props.user.program}</div>
+            <div className="text-xl font-bold">{props.user?.name}s</div>
+            <div className="text-sm text-muted-foreground">{props.user?.program}</div>
           </div>
           <div className="grid grid-cols-3 gap-4 text-center">
             <div className="space-y-1">
-              <div className="text-xl font-bold">{props.user.yearOfGraduation}</div>
+              <div className="text-xl font-bold">{props.user?.yearOfGraduation}</div>
               <div className="text-sm text-muted-foreground">Graduation</div>
             </div>
             <div className="space-y-1">
-              <div className="text-xl font-bold">{props.user.numberOfPosts}</div>
+              <div className="text-xl font-bold">{props.user?.numberOfPosts}</div>
               <div className="text-sm text-muted-foreground">Posts</div>
             </div>
             <div className="space-y-1">
-              <div className="text-xl font-bold">{props.user.numberOfFollowers}</div>
+              <div className="text-xl font-bold">{props.user?.numberOfFollowers}</div>
               <div className="text-sm text-muted-foreground">Followers</div>
             </div>
           </div>
-          {!currentUser.followings.includes(props.user._id) && <Button variant="" onClick={handleFollow} className="w-full">
+          {!currentUser.followings.includes(props.user?._id) && <Button variant="" onClick={handleFollow} className="w-full">
             Follow
           </Button>}
-          {currentUser.followings.includes(props.user._id) && <Button variant="outline" onClick={handleUnfollow} className="w-full">
+          {currentUser.followings.includes(props.user?._id) && <Button variant="outline" onClick={handleUnfollow} className="w-full">
             Unollow
           </Button>}
           

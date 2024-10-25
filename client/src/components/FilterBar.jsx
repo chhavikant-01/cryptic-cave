@@ -19,6 +19,8 @@ import {
   } from "./ui/command"
 
   import { CSE_CORE, CSE_CSF, CSE_AIDS, resourceTypes, fileTypes, semesters } from "../programme.js"
+  import { useDispatch } from 'react-redux'
+  import { setPosts, setStatus, setError } from "../redux/posts/postSlice";
 
   const programs = [CSE_CSF.name, CSE_CORE.name, CSE_AIDS.name, ]
   const courses = {
@@ -26,6 +28,8 @@ import {
     [CSE_CORE.name]: CSE_CORE.courses,
     [CSE_AIDS.name]: CSE_AIDS.courses,
   }
+
+
 
 export default function FilterBar() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -39,6 +43,8 @@ export default function FilterBar() {
   const [filteredCourses, setFilteredCourses] = useState([])
   const [openCourseDialog, setOpenCourseDialog] = useState(false)
 
+  const dispatch = useDispatch()
+
   useEffect(() => {
     if (selectedProgram && courses[selectedProgram]) {
         setSelectedCourse('')
@@ -51,6 +57,7 @@ export default function FilterBar() {
 
 
     const filterPosts = async () => {
+      dispatch(setStatus('loading'))
       const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/filter`, {
         method: 'POST',
         headers: {
@@ -67,8 +74,24 @@ export default function FilterBar() {
         })
       })
       const posts = await res.json()
-      console.log(posts)
+      dispatch(setStatus('succeeded'))
+      dispatch(setPosts(posts))
     }
+
+    const handleClearFilters = async () => {
+      setSearchQuery('')
+      setSortOption('desc')
+      setSelectedProgram('')
+      setSelectedSemester('')
+      setSelectedCourse('')
+      setSelectedResourceType('')
+      setSelectedFileType('')
+     } 
+     useEffect(() => {
+      // Call `filterPosts` whenever any filter changes
+      filterPosts()
+    }, [selectedProgram, selectedSemester, selectedCourse, selectedResourceType, selectedFileType, sortOption, searchQuery])
+    
 
   return (
     <div className="p-4 space-y-4 bg-[#020817] rounded-lg shadow">
@@ -168,17 +191,18 @@ export default function FilterBar() {
   </Select>
 </div>
 <div className='flex sm:flex-wrap sm:flex-row sm:gap-2 gap-4 w-full flex-col justify-center'>
-  <Button
+  {/* <Button
     onClick={filterPosts}
     variant="outline"
     className="bg-[#3c82f6] hover:bg-[#306fd5]"
 
   > 
     Apply Filters 
-  </Button>
+  </Button> */}
   <Button
     variant="outline"
     className="bg-[#1e293b] hover:bg-[#101722]"
+    onClick={handleClearFilters}
   >
     Reset Filters
   </Button>
