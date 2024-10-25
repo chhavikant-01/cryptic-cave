@@ -86,8 +86,8 @@ export default function UserCard(props) {
     <Popover>
       <PopoverTrigger asChild>
       <Avatar className="cursor-pointer">
-            <AvatarImage src="/placeholder-user.jpg" />
-          <AvatarFallback>{props.user?.name.split(" ")[0][0]}{props.user?.name.split(" ")[0][1]}</AvatarFallback>
+            <AvatarImage src={props.user?.profilePicture} className="object-cover" />
+          <AvatarFallback></AvatarFallback>
         </Avatar>
       </PopoverTrigger>
       <PopoverContent className="w-80">

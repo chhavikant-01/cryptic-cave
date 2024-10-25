@@ -144,7 +144,7 @@ export default function Dossier() {
               <UserCard user={post.author} /> 
           }
           <h1 className="text-2xl font-bold">
-            {post?.author.username} / <span className="text-blue-500">{post?.title.replace(/ /g,"-")}</span>
+            {post?.author?.username} / <span className="text-blue-500">{post?.title.replace(/ /g,"-")}</span>
           </h1>
           
         </div>
