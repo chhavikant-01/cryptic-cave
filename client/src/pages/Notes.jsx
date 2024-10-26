@@ -44,6 +44,12 @@ export default function Notes() {
               ))}
           </div>
           )
+        }{
+          currentPosts.length === 0 && status !== 'loading' && (
+            <div className="flex items-center justify-center h-[50vh]">
+              <p className="text-muted-foreground">No posts found</p>
+            </div>
+          )
         }
           <div className="flex justify-end">
             <Pagination>

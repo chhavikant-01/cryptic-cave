@@ -58,24 +58,30 @@ export default function FilterBar() {
 
     const filterPosts = async () => {
       dispatch(setStatus('loading'))
-      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/filter`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          semester: selectedSemester,
-          resourceType: selectedResourceType,
-          fileType: selectedFileType,
-          sort: sortOption,
-          keyword: searchQuery,
-          course: selectedCourse,
-          program: selectedProgram
+      try{
+
+        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/filter`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            semester: selectedSemester,
+            resourceType: selectedResourceType,
+            fileType: selectedFileType,
+            sort: sortOption,
+            keyword: searchQuery,
+            course: selectedCourse,
+            program: selectedProgram
+          })
         })
-      })
-      const posts = await res.json()
-      dispatch(setStatus('succeeded'))
-      dispatch(setPosts(posts))
+        const posts = await res.json()
+        dispatch(setStatus('succeeded'))
+        dispatch(setPosts(posts))
+      }catch(err){
+        dispatch(setStatus('failed'))
+        dispatch(setError(err.message))
+      }
     }
 
     const handleClearFilters = async () => {

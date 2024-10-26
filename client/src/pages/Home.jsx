@@ -6,12 +6,14 @@ import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import HomeCard from "../components/HomeCard";
+import LoadingCard from "../components/LoadingCard";
 
 
 export default function Home() {
   const currentPosts = useSelector((state) => state.posts.posts);
   const [topThreeRecent, setTopThreeRecent] = useState([]);
   const [topThreePopular, setTopThreePopular] = useState([]);
+  const status = useSelector((state) => state.posts.status);
 
   useEffect(() => {
     if (currentPosts) {
@@ -111,7 +113,15 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="mx-auto grid items-start gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
+            {
+              status === 'loading' ? (
+                <div className="mx-auto grid items-start gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
+                  <LoadingCard />
+                  <LoadingCard />
+                  <LoadingCard />
+                </div>
+              ):(
+                <div className="mx-auto grid items-start gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
               {topThreeRecent && topThreeRecent.map((post) => (
                 <HomeCard
                   key={post._id}
@@ -128,6 +138,14 @@ export default function Home() {
                 />
               ))}
             </div>
+              )
+            }{
+              currentPosts.length === 0 && status !== 'loading' && (
+                <div className="flex items-center justify-center h-[20vh]">
+                  <p className="text-muted-foreground">No posts found</p>
+                </div>
+              )
+            }
           </div>
         </section>
         <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
@@ -140,8 +158,16 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="mx-auto grid items-start gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
-            {topThreePopular && topThreePopular.map((post) => (
+            {
+              status === 'loading' ? (
+                <div className="mx-auto grid items-start gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
+                  <LoadingCard />
+                  <LoadingCard />
+                  <LoadingCard />
+                </div>
+              ):(
+                <div className="mx-auto grid items-start gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
+              {topThreePopular && topThreePopular.map((post) => (
                 <HomeCard
                   key={post._id}
                   _id={post._id}
@@ -157,6 +183,14 @@ export default function Home() {
                 />
               ))}
             </div>
+              )
+            }{
+              currentPosts.length === 0 && status !== 'loading' && (
+                <div className="flex items-center justify-center h-[20vh]">
+                  <p className="text-muted-foreground">No posts found</p>
+                </div>
+              )
+            }
           </div>
         </section>
       </main>
