@@ -1,12 +1,37 @@
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext } from "./ui/pagination"
 import { useSelector } from "react-redux"
 import ProfilePostCard from "./ProfilePostCard"
+import { useEffect, useState } from "react";
+import LoadingCard from "./LoadingCard";
 
 
 export default function ProfilePosts() {
-  const userPosts = useSelector((state)=>state.user.currentUser.posts);
-  const currentPosts = useSelector((state)=>state.posts.posts);
-  const posts = currentPosts.filter(post => userPosts.includes(post._id.toString()));
+  const user = useSelector((state)=>state.user.currentUser);
+  const [loading, setLoading] = useState(false);
+  const [userPosts, setUserPosts] = useState([]); 
+
+  const fetchUserPosts = async () => {
+
+    try{
+      setLoading(true);
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/all-post/${user._id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+      const posts = await response.json();
+      setUserPosts(posts);
+      setLoading(false);
+    }catch(error){
+      setLoading(false);
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchUserPosts();
+  }, [])
 
   return (
     <section className="w-full">
@@ -14,8 +39,17 @@ export default function ProfilePosts() {
         <div className="mb-8 md:mb-10 lg:mb-12">
           <h2 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">My Posts</h2>
         </div>
+        {
+          loading && (
+            <div className="relative grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+              <LoadingCard />
+              <LoadingCard />
+              <LoadingCard />
+            </div>
+          )
+        }
         <div className="relative grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {posts.map((post) => (
+        {userPosts?.map((post) => (
               <ProfilePostCard 
                 key={post._id}
                 _id={post._id}
@@ -31,6 +65,13 @@ export default function ProfilePosts() {
                 category={post.category.resourceType}
                 uploadedAt={post.createdAt} />
         ) )}
+        {
+          userPosts.length === 0 && (
+            <div className="text-center w-full">
+              <p className="text-lg text-gray-600">No posts found</p>
+            </div>
+          )
+        }
         </div>
         <div className="mt-8 md:mt-10 lg:mt-12 flex justify-center">
           <Pagination>
