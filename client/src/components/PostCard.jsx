@@ -110,7 +110,11 @@ const PostCard = (props) => {
 
       <UserCard user={props.author} />
         <div className="flex-grow">
-          <h3 className="font-semibold text-lg">{props.author.name.split(' ')[0]}</h3>
+          {props.author.name ? 
+            <h3 className="font-semibold text-lg">{props.author.name.split(' ')[0]}</h3>
+          :
+            <h3 className="font-semibold text-lg">User</h3>
+          }
           <p className="text-sm text-muted-foreground">{props.author.program}</p>
         </div>
       </div>
