@@ -10,13 +10,25 @@ import { updateFailure, updateStart, updateSuccess } from '../redux/user/userSli
 import { Link } from 'react-router-dom'
 import UserCard from './UserCard'
 import { updatePostLikes } from '../redux/posts/postSlice'
-import { Share2, Star } from 'lucide-react';
-import DropMenu from './DropdownMenu'
+import { Share2, Star, ClockIcon } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "./ui/alert-dialog"
+import { anonymizePost } from "../redux/posts/postSlice"
+import {  Trash2 } from "lucide-react"
 
 const HomeCard = (props) => {
   const [isSaved, setIsSaved] = useState(false)
   const [isLiked, setIsLiked] = useState(false)
   const [numberOfLikes, setNumberOfLikes] = useState(props.likes)
+  const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
   const currentUser = useSelector((state) => state.user.currentUser);
   const currentPosts = useSelector((state) => state.posts.posts);
   const dispatch = useDispatch();
@@ -112,89 +124,126 @@ const HomeCard = (props) => {
     }
   }
 
+  const handleDeletePost = async () => {
+    try{
+      console.log(props._id)
+      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/${props._id}/anonymize`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  })
+    const data = await res.json()
+    if(!res.ok){
+      setIsAlertDialogOpen(false)
+      return toast.error(data.message)
+    }
+    if(res.ok){
+      const author = {
+        _id: data.anonymousId,
+        username: 'anonymous',
+        name: "Anonymous User",
+        profilePicture: ""
+      }
+      const restPosts = currentUser.posts.filter(post => post !== props._id)
+      const updatedUser = {...currentUser, posts: restPosts}
+      dispatch(updateSuccess(updatedUser))
+      dispatch(anonymizePost({postId: props._id, author}))
+      setIsAlertDialogOpen(false)
+
+      return toast.success(data.message)
+    }
+    }catch(err){
+      return toast.error('Something went wrong, try again later!')
+    }
+  }
+
+  const handleDeleteClick = () => {
+    setIsAlertDialogOpen(true);
+  };
+
+  const handleCloseAlertDialog = () => {
+    setIsAlertDialogOpen(false);
+  };
+
   return (
-    <div>
-      <Card>
-        <CardContent>
-          <div className="flex items-center justify-between p-2">
-            <div className="flex items-center gap-2">
-              <UserCard user={props.author} />
-              <div className='text-center'>
-                <p className="font-medium">{props.name}</p>
-                <p className="text-sm text-muted-foreground">{props.program}</p>
-              </div>
-            </div>
-            <Button variant="ghost" onClick={handleSave} className=''>
-              <BookmarkIcon className={isSaved ? "h-5 w-5 fill-current text-blue-500" : "h-5 w-5"} />
-            </Button>
-            <DropMenu 
-                title={props.title}
-                _id={props._id}
-                description={props.description} 
-                program={props.program} 
-                course={props.course}
-                category={props.category}
-                  />
-          </div>
-          <Link to={`/dossier?id=${props._id}`}>
-            <div className="mt-4 h-[100px]">
-              <img
-                src={Thumbnail}
-                width={400}
-                height={225}
-                alt="Note thumbnail"
-                className="rounded-md object-cover aspect-video"
-              />
-            </div>
-            <div className="mt-4">
-              <h3 className="text-lg font-medium">{props.title}</h3>
-              <p className="text-sm text-muted-foreground">
-                {truncateText((props.description), 60)}
-              </p>
-            </div>
-          </Link>
-        </CardContent>
-        <CardFooter className="text-sm text-muted-foreground">
-          <div className='flex mt-4 items-center gap-5 p-2'>
-            <div className="flex items-center text-muted-foreground">
-              <Button variant="ghost" onClick={handleLike} className='flex items-center gap-1'>
-                <Star className={isLiked ? "h-5 w-5 fill-current text-[#e2b340]" : "h-5 w-5"} />
-                <span>{numberOfLikes}</span>
-              </Button>
-              <Button variant="ghost" className='flex items-center gap-1'>
-                <Share2 className='h-5 w-5' />
-              </Button>
-            </div>
-            <h3>
-              {formattedDate}
-            </h3>
-          </div>
-        </CardFooter>
-      </Card>
+    <div className="rounded-lg shadow-md p-6 border-2">
+      <div className="flex justify-between mb-4">
+      <div className='flex items-start gap-2'>
+
+      <UserCard user={props.author} />
+        <div className="flex-grow">
+          {props.author.name ? 
+            <h3 className="font-semibold text-lg">{props.author.name.split(' ')[0]}</h3>
+          :
+            <h3 className="font-semibold text-lg">User</h3>
+          }
+          <p className="text-sm text-muted-foreground">{props.author.program}</p>
+        </div>
+      </div>
+        <div className="flex items-center text-sm text-muted-foreground">
+          <ClockIcon className="w-4 h-4 mr-1" />
+          <span>{formattedDate}</span>
+        </div>
+      </div>
+      <Link to={`/dossier?id=${props._id}`} className='hover:text-[#3c82f6]'>
+      <h2 className="text-2xl font-bold mb-4">{props.title}</h2>
+      <div className="flex flex-wrap gap-2 px-4 py-2">
+      <Button
+        variant="outline"
+        className={`h-6 rounded-full px-2 py-0 text-xs font-medium bg-[#0f2727] text-[#01e6c4] border-2 cursor-default`
+        }
+      >
+        {props.resourceType}
+      </Button>
+      <Button
+        variant="outline"
+        className={`h-6 rounded-full px-2 py-0 text-xs font-medium bg-[#1e1e40] text-[#c2b8ff] border-2 cursor-default`
+        }
+      >
+        {props.course}
+      </Button>
+    </div>
+    </Link>
+      <div className="flex flex-wrap gap-2">
+        <Button variant="ghost" onClick={handleLike} className='flex items-center gap-1'>
+            <Star className={isLiked ? "h-5 w-5 fill-current text-[#e2b340]" : "h-5 w-5"} />
+            <span>{numberOfLikes}</span>
+        </Button>
+        <Button variant="ghost" onClick={handleSave} className=''>
+            <BookmarkIcon className={isSaved ? "h-5 w-5 fill-current text-blue-500" : "h-5 w-5"} />
+        </Button>
+        <Button variant="ghost" className='flex items-center gap-1'>
+            <Share2 className='h-5 w-5' />
+        </Button>
+        <Button variant="ghost" size="icon" className="text-red-600" onClick={handleDeleteClick}>
+            <Trash2 className="h-5 w-5" />  
+        </Button>
+  
+        {isAlertDialogOpen && (
+          <AlertDialog open={isAlertDialogOpen} onOpenChange={setIsAlertDialogOpen}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete your
+                  account and remove your data from our servers.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={handleCloseAlertDialog}>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDeletePost}>Continue</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        )}
+      </div>
     </div>
   )
 }
 
 export default HomeCard
-
-function HeartIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-    </svg>
-  )
-}
 
 function BookmarkIcon(props) {
   return (

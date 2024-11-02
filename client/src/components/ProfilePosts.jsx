@@ -9,6 +9,7 @@ export default function ProfilePosts() {
   const user = useSelector((state)=>state.user.currentUser);
   const [loading, setLoading] = useState(false);
   const [userPosts, setUserPosts] = useState([]); 
+  const currentUser = useSelector((state)=>state.user.currentUser);
 
   const fetchUserPosts = async () => {
 
@@ -31,7 +32,7 @@ export default function ProfilePosts() {
 
   useEffect(() => {
     fetchUserPosts();
-  }, [])
+  }, [currentUser])
 
   return (
     <section className="w-full">

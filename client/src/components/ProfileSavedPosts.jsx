@@ -7,6 +7,7 @@ import { useSelector } from "react-redux"
 import HomeCard from "./HomeCard"
 import { useEffect, useState } from "react";
 import LoadingCard from "./LoadingCard";
+import PostCard from "./PostCard";
 
 export default function ProfileSavedPosts() {
   const user = useSelector((state)=>state.user.currentUser);
@@ -52,9 +53,9 @@ export default function ProfileSavedPosts() {
         )
       }
       <div className="relative grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-      {savedPosts.map((post) => (
-            <HomeCard 
-               key={post._id}
+      {savedPosts && savedPosts.map((post) => (
+        <PostCard
+                  key={post._id}
                   _id={post._id}
                   author={post.author}
                   likes={post.likes.length}
@@ -63,8 +64,11 @@ export default function ProfileSavedPosts() {
                   title={post.title}
                   program={post.category.program}
                   description={post.desc}
+                  course={post.category.course}
+                  resourceType={post.category.resourceType}
                   thumbnail={post.thumbnail}
-                  uploadedAt={post.createdAt} />
+                  uploadedAt={post.createdAt}
+                />
       ) )}
       {
         savedPosts.length === 0 && (

@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import HomeCard from "../components/HomeCard";
 import LoadingCard from "../components/LoadingCard";
+import PostCard from "../components/PostCard";
 
 
 export default function Home() {
@@ -123,7 +124,7 @@ export default function Home() {
               ):(
                 <div className="mx-auto grid items-start gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
               {topThreeRecent && topThreeRecent.map((post) => (
-                <HomeCard
+                <PostCard
                   key={post._id}
                   _id={post._id}
                   author={post.author}
@@ -133,6 +134,8 @@ export default function Home() {
                   title={post.title}
                   program={post.category.program}
                   description={post.desc}
+                  course={post.category.course}
+                  resourceType={post.category.resourceType}
                   thumbnail={post.thumbnail}
                   uploadedAt={post.createdAt}
                 />
@@ -168,7 +171,7 @@ export default function Home() {
               ):(
                 <div className="mx-auto grid items-start gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
               {topThreePopular && topThreePopular.map((post) => (
-                <HomeCard
+                <PostCard
                   key={post._id}
                   _id={post._id}
                   author={post.author}
@@ -178,6 +181,8 @@ export default function Home() {
                   title={post.title}
                   program={post.category.program}
                   description={post.desc}
+                  course={post.category.course}
+                  resourceType={post.category.resourceType}
                   thumbnail={post.thumbnail}
                   uploadedAt={post.createdAt}
                 />
