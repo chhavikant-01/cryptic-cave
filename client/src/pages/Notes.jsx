@@ -40,6 +40,8 @@ export default function Notes() {
                   title={post.title}
                   program={post.category.program}
                   description={post.desc}
+                  course={post.category.course}
+                  resourceType={post.category.resourceType}
                   thumbnail={post.thumbnail}
                   uploadedAt={post.createdAt} />
               ))}

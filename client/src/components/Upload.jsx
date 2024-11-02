@@ -234,10 +234,12 @@ export default function Upload() {
                 <SelectValue placeholder="Select Program" />
               </SelectTrigger>
               <SelectContent>
-
-                  <SelectItem value={currentUser.program}>
-                    {currentUser.program}
-                  </SelectItem>
+              { currentUser && currentUser.program &&
+                <SelectItem value={currentUser.program}>
+                  {currentUser.program}
+                </SelectItem>
+              }
+                
 
               </SelectContent>
             </Select>

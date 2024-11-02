@@ -86,7 +86,7 @@ export default function UserCard(props) {
     <Popover>
       <PopoverTrigger asChild>
       <Avatar className="cursor-pointer">
-            <AvatarImage src={props.user?.profilePicture} className="object-cover" />
+            <AvatarImage src={props.user?.profilePicture || "./default_pfp.svg"} className="object-cover" />
           <AvatarFallback></AvatarFallback>
         </Avatar>
       </PopoverTrigger>

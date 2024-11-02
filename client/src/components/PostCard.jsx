@@ -11,6 +11,7 @@ import { updatePostLikes } from '../redux/posts/postSlice'
 import { Share2, Star } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns'
 
+
 const PostCard = (props) => {
     const [isSaved, setIsSaved] = useState(false)
     const [isLiked, setIsLiked] = useState(false)
@@ -124,6 +125,22 @@ const PostCard = (props) => {
         </div>
       </div>
       <Link to={`/dossier?id=${props._id}`} className='hover:text-[#3c82f6]'><h2 className="text-2xl font-bold mb-4">{props.title}</h2></Link>
+      <div className="flex flex-wrap gap-2 p-4">
+      <Button
+        variant="outline"
+        className={`h-6 rounded-full px-2 py-0 text-xs font-medium bg-[#0f2727] text-[#01e6c4] border-2 cursor-default`
+        }
+      >
+        {props.resourceType}
+      </Button>
+      <Button
+        variant="outline"
+        className={`h-6 rounded-full px-2 py-0 text-xs font-medium bg-[#1e1e40] text-[#c2b8ff] border-2 cursor-default`
+        }
+      >
+        {props.course}
+      </Button>
+    </div>
       <div className="flex flex-wrap gap-2">
         <Button variant="ghost" onClick={handleLike} className='flex items-center gap-1'>
             <Star className={isLiked ? "h-5 w-5 fill-current text-[#e2b340]" : "h-5 w-5"} />
