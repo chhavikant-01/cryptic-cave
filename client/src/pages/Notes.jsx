@@ -3,6 +3,7 @@ import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, Pagi
 import { useSelector } from "react-redux"
 import FilterBar from "../components/FilterBar"
 import LoadingCard from "../components/LoadingCard"
+import PostCard from "../components/PostCard"
 
 export default function Notes() {
   
@@ -29,7 +30,7 @@ export default function Notes() {
           ):(
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {currentPosts && currentPosts.map((post) => (
-                <HomeCard
+                <PostCard
                   key={post._id}
                   _id={post._id}
                   author={post.author}
