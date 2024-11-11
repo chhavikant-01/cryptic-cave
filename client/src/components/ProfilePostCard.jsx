@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { updateFailure, updateStart, updateSuccess } from '../redux/user/userSlice'
 import { Link } from 'react-router-dom'
 import UserCard from './UserCard'
-import { updatePostLikes } from '../redux/posts/postSlice'
+import { deletePost, updatePostLikes } from '../redux/posts/postSlice'
 import { Share2, Star, ClockIcon } from 'lucide-react';
 import {
   AlertDialog,
@@ -127,8 +127,8 @@ const HomeCard = (props) => {
   const handleDeletePost = async () => {
     try{
       console.log(props._id)
-      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/${props._id}/anonymize`, {
-      method: 'PUT',
+      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/${props._id}/delete`, {
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
     },
@@ -140,16 +140,10 @@ const HomeCard = (props) => {
       return toast.error(data.message)
     }
     if(res.ok){
-      const author = {
-        _id: data.anonymousId,
-        username: 'anonymous',
-        name: "Anonymous User",
-        profilePicture: ""
-      }
       const restPosts = currentUser.posts.filter(post => post !== props._id)
       const updatedUser = {...currentUser, posts: restPosts}
       dispatch(updateSuccess(updatedUser))
-      dispatch(anonymizePost({postId: props._id, author}))
+      dispatch(deletePost(props._id))
       setIsAlertDialogOpen(false)
 
       return toast.success(data.message)
