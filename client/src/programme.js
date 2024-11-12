@@ -82,7 +82,8 @@ export const CSE_CORE = {
         { "name": "Vulnerability Identification and Penetration Testing" },
         { "name": "Wireless and Mobile Networks" },
         { "name": "Yoga – I" },
-        { "name": "Yoga - II" }
+        { "name": "Yoga - II" },
+        { "name": "Other" }
     ]
 };
 
@@ -170,7 +171,8 @@ export const CSE_AIDS = {
         { "name": "University Elective - III" },
         { "name": "User Interface and User Experience Design" },
         { "name": "Yoga – I" },
-        { "name": "Yoga – II" }
+        { "name": "Yoga – II" },
+        { "name": "Other" }
     ]
     
 };
@@ -259,11 +261,12 @@ export const CSE_CSF = {
         { "name": "Vulnerability Assessment and Penetration Testing" },
         { "name": "Wireless and Mobile Device Security" },
         { "name": "Yoga – I" },
-        { "name": "Yoga – II" }
+        { "name": "Yoga – II" },
+        { "name": "Other" }
     ]
     
 }
 
 export const resourceTypes = ['Research Paper', 'PYQ', 'Notes', 'Textbook', 'Lab Manual', 'Other']
 export const fileTypes = ['PDF', 'PPT', 'DOC', 'XLSX', 'TXT']
-export const semesters = ['1', '2', '3', '4', '5', '6', '7', '8']
+export const semesters = ['1', '2', '3', '4', '5', '6', '7', '8', 'NA']
