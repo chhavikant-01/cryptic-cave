@@ -116,8 +116,8 @@ export default function FilterBar() {
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="asc">Newest</SelectItem>
-            <SelectItem value="desc">Oldest</SelectItem>
+            <SelectItem value="desc">Newest</SelectItem>
+            <SelectItem value="asc">Oldest</SelectItem>
           </SelectContent>
         </Select>
       </div>
