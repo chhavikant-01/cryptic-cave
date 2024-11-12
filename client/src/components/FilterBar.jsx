@@ -184,17 +184,6 @@ export default function FilterBar() {
       ))}
     </SelectContent>
   </Select>
-
-  <Select value={selectedFileType} onValueChange={setSelectedFileType}>
-    <SelectTrigger className="w-full sm:w-[180px]">
-      <SelectValue placeholder="File Type" />
-    </SelectTrigger>
-    <SelectContent>
-      {fileTypes.map((type) => (
-        <SelectItem key={type} value={type}>{type}</SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
 </div>
 <div className='flex sm:flex-wrap sm:flex-row sm:gap-2 gap-4 w-full flex-col justify-center'>
   {/* <Button
