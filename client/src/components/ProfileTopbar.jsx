@@ -113,6 +113,29 @@ export default function ProfileTopbar() {
     fileInputRef.current.click();
   };
 
+  const handleRemoveProfilePicture = async () => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/user/update-user`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ profilePicture: "./default_pfp.svg" }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        return toast.error(data.message);
+      }
+      setImageSrc("./default_pfp.svg");
+      const updatedUser = { ...currentUser, profilePicture: "./default_pfp.svg" };
+      dispatch(updateSuccess(updatedUser));
+      return toast.success('Profile picture removed successfully');
+    } catch (error) {
+      return toast.error('Failed to remove profile picture');
+    }
+  }
+
   return (
     <div className="bg-background rounded-lg shadow-md p-6 flex md:flex-row flex-col-reverse items-center gap-6 justify-between">
       <div className="md:flex-row flex flex-col">
@@ -133,12 +156,12 @@ export default function ProfileTopbar() {
                 <span className="sr-only">Edit profile picture</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="absolute bottom-0 left-0">
+            <DropdownMenuContent className="absolute top-0 left-0">
               <DropdownMenuItem className="flex items-center gap-2 cursor-pointer" onClick={triggerFileInput}>
                 <FilePenIcon className="h-4 w-4" />
                 <span>Upload</span>
               </DropdownMenuItem>
-              <DropdownMenuItem className="text-destructive flex items-center gap-2 cursor-pointer">
+              <DropdownMenuItem className="text-destructive flex items-center gap-2 cursor-pointer" onClick={handleRemoveProfilePicture}>
                 <TrashIcon className="h-4 w-4" />
                 <span>Remove</span>
               </DropdownMenuItem>

@@ -116,13 +116,13 @@ export default function Home() {
             </div>
             {
               status === 'loading' ? (
-                <div className="mx-auto grid items-start gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   <LoadingCard />
                   <LoadingCard />
                   <LoadingCard />
                 </div>
               ):(
-                <div className="mx-auto grid items-start gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {topThreeRecent && topThreeRecent.map((post) => (
                 <PostCard
                   key={post._id}
@@ -138,6 +138,7 @@ export default function Home() {
                   resourceType={post.category.resourceType}
                   thumbnail={post.thumbnail}
                   uploadedAt={post.createdAt}
+                  border="black"
                 />
               ))}
             </div>
@@ -151,7 +152,7 @@ export default function Home() {
             }
           </div>
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
+        <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container space-y-12 px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
@@ -163,13 +164,13 @@ export default function Home() {
             </div>
             {
               status === 'loading' ? (
-                <div className="mx-auto grid items-start gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   <LoadingCard />
                   <LoadingCard />
                   <LoadingCard />
                 </div>
               ):(
-                <div className="mx-auto grid items-start gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {topThreePopular && topThreePopular.map((post) => (
                 <PostCard
                   key={post._id}

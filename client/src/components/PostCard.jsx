@@ -127,20 +127,18 @@ const PostCard = (props) => {
       <Link to={`/dossier?id=${props._id}`} className='hover:text-[#3c82f6]'>
       <h2 className="text-2xl font-bold mb-4">{props.title}</h2>
       <div className="flex flex-wrap gap-2 px-4 py-2">
-      <Button
-        variant="outline"
-        className={`h-6 rounded-full px-2 py-0 text-xs font-medium bg-[#0f2727] text-[#01e6c4] border-2 cursor-default`
+      <div
+        className={`min-h-6 rounded-full px-2 py-0 text-xs font-medium bg-[#0f2727] text-[#01e6c4] border-2 cursor-default`
         }
       >
         {props.resourceType}
-      </Button>
-      <Button
-        variant="outline"
-        className={`h-6 rounded-full px-2 py-0 text-xs font-medium bg-[#1e1e40] text-[#c2b8ff] border-2 cursor-default`
+      </div>
+      <div
+        className={`min-h-6 rounded-full px-2 py-0 text-xs font-medium bg-[#1e1e40] text-[#c2b8ff] border-2 cursor-default`
         }
       >
         {props.course}
-      </Button>
+      </div>
     </div>
     </Link>
       <div className="flex flex-wrap gap-2">
