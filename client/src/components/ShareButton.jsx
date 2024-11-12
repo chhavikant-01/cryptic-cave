@@ -44,7 +44,7 @@ export default function ShareButton(props) {
           </div>
           
           {/* Social media links with hover effect */}
-          <div className="flex justify-center gap-6">
+          {/* <div className="flex justify-center gap-6">
             <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`} aria-label="Share on Facebook" prefetch={false} className="hover:scale-105 transition-transform" target="_blank">
               <FacebookIcon className="h-8 w-8 text-[#1877F2]" />
             </a>
@@ -64,7 +64,7 @@ export default function ShareButton(props) {
   <InstagramIcon className="h-8 w-8 text-[#E1306C]" />
 </a>
 
-          </div>
+          </div> */}
         </div>
         <DrawerFooter className="flex justify-center">
           <DrawerClose asChild>
