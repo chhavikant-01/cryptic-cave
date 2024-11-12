@@ -12,7 +12,7 @@ export default function Notes() {
   const currentUser = useSelector((state) => state.user.currentUser);
   
   const filteredPosts = currentPosts.filter(post => 
-    !currentUser.blacklistedPosts.includes(post._id)
+    !currentUser.blacklistedPosts?.includes(post._id)
   );
   
 

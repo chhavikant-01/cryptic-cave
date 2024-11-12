@@ -10,6 +10,7 @@ import UserCard from './UserCard'
 import { updatePostLikes } from '../redux/posts/postSlice'
 import { Share2, Star } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns'
+import ShareButton from './ShareButton'
 
 
 const PostCard = (props) => {
@@ -149,9 +150,7 @@ const PostCard = (props) => {
         <Button variant="ghost" onClick={handleSave} className=''>
             <BookmarkIcon className={isSaved ? "h-5 w-5 fill-current text-blue-500" : "h-5 w-5"} />
         </Button>
-        <Button variant="ghost" className='flex items-center gap-1'>
-            <Share2 className='h-5 w-5' />
-        </Button>
+        <ShareButton url={`${window.location.origin}/dossier?id=${props._id}`} />
       </div>
     </div>
   )

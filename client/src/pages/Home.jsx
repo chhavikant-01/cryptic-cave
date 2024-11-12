@@ -12,9 +12,13 @@ import PostCard from "../components/PostCard";
 
 export default function Home() {
   const currentPosts = useSelector((state) => state.posts.posts);
+  const currentUser = useSelector((state) => state.user.currentUser);
   const [topThreeRecent, setTopThreeRecent] = useState([]);
   const [topThreePopular, setTopThreePopular] = useState([]);
   const status = useSelector((state) => state.posts.status);
+  const filteredPosts = currentPosts?.filter(post => 
+    !currentUser.blacklistedPosts?.includes(post._id)
+  );
 
   useEffect(() => {
     if (currentPosts) {
@@ -26,12 +30,12 @@ export default function Home() {
       });
 
       const sortedPosts = posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      const topThree1 = currentPosts.filter((post) => {
+      const topThree1 = filteredPosts.filter((post) => {
         return sortedPosts.slice(0, 3).some((sortedPost) => sortedPost._id === post._id);
       });
 
       const popularPosts = posts.sort((a, b) => b.likes?.length - a.likes?.length);
-      const topThree2 = currentPosts.filter((post) => {
+      const topThree2 = filteredPosts.filter((post) => {
         return popularPosts.slice(0, 3).some((sortedPost) => sortedPost._id === post._id);
       });
 
