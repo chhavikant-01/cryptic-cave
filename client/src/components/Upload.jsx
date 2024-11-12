@@ -192,10 +192,10 @@ export default function Upload() {
     }));
   };
 
-  const handleTitleChange = ()=>{
+  const handleTitleChange = (newTitle) => {
     setFormValues((prevValues) => ({
       ...prevValues,
-      title: title,
+      title: newTitle, 
     }));
   }
 
@@ -220,9 +220,10 @@ export default function Upload() {
             
           <div className="flex flex-col gap-4 mb-10">
             <div className="space-y-2">
-              <Input id="title" placeholder="Enter course title" value={title} onChange={(e)=>{
-                setTitle(e.target.value);
-                handleTitleChange();
+              <Input id="title" placeholder="Enter post title" value={title} onChange={(e) => {
+                const newTitle = e.target.value;
+                setTitle(newTitle);
+                handleTitleChange(newTitle);
               }} />
             </div>
             <div className="space-y-2">
