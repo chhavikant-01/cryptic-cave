@@ -267,6 +267,6 @@ export const CSE_CSF = {
     
 }
 
-export const resourceTypes = ['Research Paper', 'PYQ', 'Notes', 'Textbook', 'Lab Manual', 'Other']
+export const resourceTypes = ['Research Paper', 'PYQ', 'Notes', 'Textbook', 'Lab Manual','Project','Other']
 export const fileTypes = ['jpeg', 'jpg', 'png', 'webp', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx']
 export const semesters = ['1', '2', '3', '4', '5', '6', '7', '8', 'NA']
