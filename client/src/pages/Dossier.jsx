@@ -4,15 +4,19 @@ import { StarIcon, Bookmark,FilePenLine, EyeIcon, FileIcon, FolderIcon } from "l
 import { useSelector } from "react-redux"
 import UserCard from "../components/UserCard"
 import download from "downloadjs";
-import { formatDistanceToNow } from "date-fns"
+import { formatDistanceToNow, set } from "date-fns"
 import toast from "react-hot-toast"
 import { updateStart, updateSuccess, updateFailure } from "../redux/user/userSlice"
 import { updatePostLikes } from "../redux/posts/postSlice"
 import { useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "../components/ui/alert-dialog"
 export default function Dossier() {
+  const navigate = useNavigate();
   const [postId, setPostId] = useState('');
   const [saved, setSaved] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -135,6 +139,34 @@ export default function Dossier() {
     }
   },[postId, user, post?.likes]);
 
+  const handleReport = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/${post._id}/report`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setLoading(false);
+        return toast.error(data.message);
+      }
+
+      const updatedUser = {...user, blacklistedPosts: [...user.blacklistedPosts, post._id]};
+      dispatch(updateSuccess(updatedUser));
+      setLoading(false);
+      navigate('/notes');
+      return toast.success(data.message);
+    } catch (err) {
+      setLoading(false);
+      return toast.error(err.message);
+    }
+  }
+
   return (
     <div className="container mx-auto xl:px-[300px] lg:px-[200px] md:px-[100px] py-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
@@ -188,9 +220,26 @@ export default function Dossier() {
                 <Button size="sm" onClick={handleFileDownload} >
                   Download
                 </Button>
-                <Button variant="destructive" size="sm">
-                  Report
-                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive" size="sm" disabled={loading}>
+                      Report
+                    </Button>
+                                        
+                      </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                              Are you sure you want to report this post? This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction className="bg-red-500" onClick={handleReport} disabled={loading}>Yes, Report</AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                     </AlertDialog>
               </div>
             </div>
             <div className="flex justify-between">

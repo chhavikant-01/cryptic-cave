@@ -9,6 +9,12 @@ export default function Notes() {
   
   const currentPosts = useSelector((state) => state.posts.posts);
   const status = useSelector((state) => state.posts.status);
+  const currentUser = useSelector((state) => state.user.currentUser);
+  
+  const filteredPosts = currentPosts.filter(post => 
+    !currentUser.blacklistedPosts.includes(post._id)
+  );
+  
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-8">
@@ -29,7 +35,7 @@ export default function Notes() {
             </div>
           ):(
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {currentPosts && currentPosts.map((post) => (
+          {filteredPosts && filteredPosts.map((post) => (
                 <PostCard
                   key={post._id}
                   _id={post._id}
