@@ -15,7 +15,6 @@ import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, C
 import { useEffect } from "react";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import the Quill CSS
-import { semesters } from "../programme";
 
 const programs = [CSE_AIDS.name, CSE_CORE.name, CSE_CSF.name]
 const courses = {
