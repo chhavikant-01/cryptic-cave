@@ -15,6 +15,7 @@ import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, C
 import { useEffect } from "react";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import the Quill CSS
+import { semesters } from "../programme";
 
 const programs = [CSE_AIDS.name, CSE_CORE.name, CSE_CSF.name]
 const courses = {
@@ -250,8 +251,8 @@ export default function Upload() {
                   <SelectValue placeholder="Select semester"  />
                 </SelectTrigger>
                 <SelectContent>
-                  {[...Array(8)].map((_, index) => (
-                    <SelectItem key={index} value={`${index + 1}`} className="text-center">{index + 1}</SelectItem>
+                  {semesters.map((semester, index) => (
+                    <SelectItem key={index} value={`${semester}`} className="text-center">{semester}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
