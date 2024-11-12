@@ -78,7 +78,7 @@ export default function ProfileSavedPosts() {
         )
       }
       </div>
-      <div className="mt-8 md:mt-10 lg:mt-12 flex justify-center">
+      {/* <div className="mt-8 md:mt-10 lg:mt-12 flex justify-center">
         <Pagination>
           <PaginationContent>
             <PaginationItem>
@@ -89,7 +89,7 @@ export default function ProfileSavedPosts() {
             </PaginationItem>
           </PaginationContent>
         </Pagination>
-      </div>
+      </div> */}
     </div>
   </section>
   )

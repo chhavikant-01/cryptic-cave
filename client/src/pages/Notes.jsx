@@ -60,7 +60,7 @@ export default function Notes() {
             </div>
           )
         }
-          <div className="flex justify-end">
+          {/* <div className="flex justify-end">
             <Pagination>
               <PaginationContent>
                 <PaginationItem>
@@ -82,7 +82,7 @@ export default function Notes() {
                 </PaginationItem>
               </PaginationContent>
             </Pagination>
-          </div>
+          </div> */}
         </div>
 
     </div>

@@ -74,7 +74,7 @@ export default function ProfilePosts() {
           )
         }
         </div>
-        <div className="mt-8 md:mt-10 lg:mt-12 flex justify-center">
+        {/* <div className="mt-8 md:mt-10 lg:mt-12 flex justify-center">
           <Pagination>
             <PaginationContent>
               <PaginationItem>
@@ -85,7 +85,7 @@ export default function ProfilePosts() {
               </PaginationItem>
             </PaginationContent>
           </Pagination>
-        </div>
+        </div> */}
       </div>
     </section>
   )
