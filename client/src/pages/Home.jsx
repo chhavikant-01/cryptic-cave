@@ -156,53 +156,6 @@ export default function Home() {
             }
           </div>
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container space-y-12 px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Most Popular</h2>
-                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  These are the resources that have gained the most traction among your peers.
-                </p>
-              </div>
-            </div>
-            {
-              status === 'loading' ? (
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <LoadingCard />
-                  <LoadingCard />
-                  <LoadingCard />
-                </div>
-              ):(
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {topThreePopular && topThreePopular.map((post) => (
-                <PostCard
-                  key={post._id}
-                  _id={post._id}
-                  author={post.author}
-                  likes={post.likes.length}
-                  likedBy={post.likes}
-                  comments={post.comments.length}
-                  title={post.title}
-                  program={post.category.program}
-                  description={post.desc}
-                  course={post.category.course}
-                  resourceType={post.category.resourceType}
-                  thumbnail={post.thumbnail}
-                  uploadedAt={post.createdAt}
-                />
-              ))}
-            </div>
-              )
-            }{
-              currentPosts.length === 0 && status !== 'loading' && (
-                <div className="flex items-center justify-center h-[20vh]">
-                  <p className="text-muted-foreground">No posts found</p>
-                </div>
-              )
-            }
-          </div>
-        </section>
       </main>
     </div>
   )
