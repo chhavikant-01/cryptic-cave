@@ -71,23 +71,12 @@ export const Login = () => {
             <Input onChange={handleChange} id="email" placeholder="name@example.com" />
           </div>
           <div>
-            <Input onChange={handleChange} id="password" placeholder="password" />
+            <Input onChange={handleChange} id="password" placeholder="password" type="password" />
           </div>
           <div>
             <Button type='submit' className="w-full bg-[#bd1e59] text-white" disabled={loading}>
               {loading ? <div className="spinner"></div> : 'Login'}
             </Button>
-          </div>
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">OR CONTINUE WITH</span>
-            </div>
-          </div>
-          <div>
-            <Button className="w-full bg-white text-gray-700 border border-gray-300 shadow-sm">Google</Button>
           </div>
         </form>
         <p className="mt-6 text-xs text-gray-500">
