@@ -23,6 +23,7 @@ import {
 } from "./ui/alert-dialog"
 import { anonymizePost } from "../redux/posts/postSlice"
 import {  Trash2 } from "lucide-react"
+import ShareButton from './ShareButton'
 
 const HomeCard = (props) => {
   const [isSaved, setIsSaved] = useState(false)
@@ -206,9 +207,7 @@ const HomeCard = (props) => {
         <Button variant="ghost" onClick={handleSave} className=''>
             <BookmarkIcon className={isSaved ? "h-5 w-5 fill-current text-blue-500" : "h-5 w-5"} />
         </Button>
-        <Button variant="ghost" className='flex items-center gap-1'>
-            <Share2 className='h-5 w-5' />
-        </Button>
+        <ShareButton url={`${window.location.origin}/dossier?id=${props._id}`} />
         <Button variant="ghost" size="icon" className="text-red-600" onClick={handleDeleteClick}>
             <Trash2 className="h-5 w-5" />  
         </Button>
