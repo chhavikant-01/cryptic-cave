@@ -28,7 +28,11 @@ export const Login = () => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
       dispatch(signInFailure("Please enter all fields!"));
-      return toast.error(error);
+      return toast.error("Please enter all fields!");
+    }
+    if(formData.email.split('@')[1] !== process.env.REACT_APP_ALLOWED_EMAIL_DOMAIN) {
+      dispatch(signInFailure("Please enter a valid college email address!"));
+      return toast.error(`Please enter a email address ending with ${process.env.REACT_APP_ALLOWED_EMAIL_DOMAIN}`);
     }
 
     formData.email = formData.email.toLowerCase();
@@ -68,7 +72,7 @@ export const Login = () => {
         </div>
         <form className="mb-0 space-y-6" onSubmit={handleSubmit}>
           <div>
-            <Input onChange={handleChange} id="email" placeholder="name@example.com" />
+            <Input onChange={handleChange} id="email" placeholder="1234567890@mitwpu.edu.in" />
           </div>
           <div>
             <Input onChange={handleChange} id="password" placeholder="password" type="password" />

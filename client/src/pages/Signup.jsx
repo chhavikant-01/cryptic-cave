@@ -13,6 +13,7 @@ export const Signup = () => {
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [selectedProgram, setSelectedProgram] = useState(""); // State for selected program
   const navigate = useNavigate();
+  const validDomain = process.env.REACT_APP_ALLOWED_EMAIL_DOMAIN;
 
   const programOptions = [CSE_CSF.name, CSE_CORE.name, CSE_AIDS.name];
 
@@ -44,6 +45,12 @@ export const Signup = () => {
 
     // Convert email to lowercase
     formData.email = formData.email.toLowerCase();
+
+    if(formData.email.split('@')[1] !== validDomain) {
+      toast.error(`Please enter a email address ending with ${validDomain}`);
+      setLoading(false);
+      return;
+    }
 
     // Check if passwords match
     if (formData.password !== passwordConfirmation) {
@@ -95,7 +102,7 @@ export const Signup = () => {
             <Input onChange={handleChange} id="lastname" placeholder="lastname" />
           </div>
           <div>
-            <Input onChange={handleChange} id="email" placeholder="name@example.com" />
+            <Input onChange={handleChange} type="email" id="email" placeholder="1234567890@mitwpu.edu.in" />
           </div>
           <div className="">
             <select
