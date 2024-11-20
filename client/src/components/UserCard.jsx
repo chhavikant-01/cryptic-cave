@@ -96,8 +96,8 @@ export default function UserCard(props) {
             <div className="text-xl font-bold">{props.user?.name}</div>
             <div className="text-sm text-muted-foreground">{props.user?.program}</div>
             {
-              props.user?.professionalProfile &&
-              <a href={`https://sharespace.bio/${props.user?.professionalProfile}/professional`} target="_blank" className="text-sm font-bold hover:underline text-blue-600">Visit Profile</a>
+              props.user?.shareSpaceProfile &&
+              <a href={`https://sharespace.bio/${props.user?.shareSpaceProfile.username}/${props.user?.shareSpaceProfil.profileType}`} target="_blank" className="text-sm font-bold hover:underline text-blue-600">Visit Profile</a>
             }
           </div>
           <div className="grid grid-cols-3 gap-4 text-center">
