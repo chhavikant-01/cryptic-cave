@@ -11,8 +11,8 @@ export default function UserCard(props) {
   const dispatch = useDispatch()  
   const currentUser = useSelector((state)=> state.user.currentUser);
   const currentPosts = useSelector((state)=> state.posts.posts);
-  const shareSpaceUsername = props.user?.shareSpaceProfile.username | null
-  const shareSpaceProfileType = props.user?.shareSpaceProfile.profileType | "professional"
+  const shareSpaceUsername = props.user?.shareSpaceProfile?.username | null
+  const shareSpaceProfileType = props.user?.shareSpaceProfile?.profileType | "professional"
   const handleFollow = async() =>{
         try{
           dispatch(updateStart());
