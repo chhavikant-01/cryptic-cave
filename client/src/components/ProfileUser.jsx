@@ -18,7 +18,6 @@ const ProfileUser = () => {
   const [program, setProgram] = useState(currentUser.program);
   const [yearOfGraduation, setYearOfGraduation] = useState(currentUser.yearOfGraduation);
   const [username, setUsername] = useState(currentUser.username);
-  const [professionalProfile, setProfessionalProfile] = useState(currentUser.professionalProfile);
   const [password, setPassword] = useState("");
   const [editField, setEditField] = useState(null);
   const [currentPassword, setCurrentPassword] = useState("");
@@ -31,7 +30,6 @@ const ProfileUser = () => {
     { label: "Username", value: username, setter: setUsername, backendField: "username", editable: false },
     { label: "Email", value: email, setter: setEmail, backendField: "email", editable: false },
     { label: "Program", value: program, setter: setProgram, backendField: "program", editable: false },
-    { label: "ShareSpace Username", value: professionalProfile, setter: setProfessionalProfile, backendField: "professionalProfile", editable: true },
     { label: "Year Of Graduation", value: yearOfGraduation, setter: setYearOfGraduation, backendField: "yearOfGraduation", editable: true },
     { label: "Password", value: password, setter: setPassword, backendField: "newPassword", type:"password", editable: true },
   ];
@@ -197,16 +195,6 @@ const ProfileUser = () => {
               <div className="sm:grid sm:grid-cols-[1fr_auto] items-center sm:gap-2 flex flex-col" key={label}>
                 <p className="text-sm font-medium mb-2 flex flex-col">
                   {label}
-                {
-                  label === "ShareSpace Username" && (
-                    <p className="text-xs text-muted-foreground mb-2 max-w-sm mt-2">
-                      Your ShareSpace username is used to create your profile link. Don't have an account? 
-                        <a href="https://www.sharespace.bio/sign-up" className="text-blue-600 hover:underline">
-                          Click here
-                        </a>
-                    </p>
-                  )
-                }
                 </p>
                 <div className="sm:flex sm:flex-row items-center flex flex-col-reverse gap-2">
                   {editField === label && editable && (
