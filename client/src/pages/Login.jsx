@@ -83,6 +83,9 @@ export const Login = () => {
             </Button>
           </div>
         </form>
+        <p className="mt-6 text-xs text-gray-700">
+          Forgot Password? <Link to='/password-reset' className="text-blue-600 hover:underline cursor-pointer">Click here</Link>
+        </p>
         <p className="mt-6 text-xs text-gray-500">
           By clicking continue, you agree to our Terms of Service and Privacy Policy.
         </p>

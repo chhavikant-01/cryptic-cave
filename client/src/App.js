@@ -12,6 +12,8 @@ import { fetchPosts } from "./redux/posts/postsThunks";
 import { useEffect } from "react";
 import Dossier from "./pages/Dossier";
 import Footer from "./components/Footer";
+import { ForgotPassword } from "./pages/ForgotPassword";
+import { ResetPassword } from "./pages/ResetPassword";
 
 
 function App() {
@@ -43,6 +45,8 @@ function App() {
           </Route>
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/password-reset" element={<ForgotPassword />} />
+          <Route path="reset-password/:token" element={<ResetPassword />} />
         </Routes>
         <Footer />
       </BrowserRouter>
