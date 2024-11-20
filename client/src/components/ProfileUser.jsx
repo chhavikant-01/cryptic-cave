@@ -101,7 +101,12 @@ const ProfileUser = () => {
                   {label}
                 {
                   label === "ShareSpace Username" && (
-                    <p className="text-xs text-muted-foreground mb-2 max-w-sm mt-2">Your ShareSpace username is used to create your profile link. Don't have an account? <a href="https://www.sharespace.bio/sign-up" className="text-blue-600 hover:underline">Click here</a></p>
+                    <p className="text-xs text-muted-foreground mb-2 max-w-sm mt-2">
+                      Your ShareSpace username is used to create your profile link. Don't have an account? 
+                        <a href="https://www.sharespace.bio/sign-up" className="text-blue-600 hover:underline">
+                          Click here
+                        </a>
+                    </p>
                   )
                 }
                 </p>
