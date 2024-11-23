@@ -119,10 +119,10 @@ export default function UserCard(props) {
               <div className="text-sm text-muted-foreground">Followers</div>
             </div>
           </div>
-          {!currentUser.followings.includes(props.user?._id) && <Button variant="" onClick={handleFollow} className="w-full">
+          {!currentUser?.followings?.includes(props.user?._id) && <Button variant="" onClick={handleFollow} className="w-full">
             Follow
           </Button>}
-          {currentUser.followings.includes(props.user?._id) && <Button variant="outline" onClick={handleUnfollow} className="w-full">
+          {currentUser?.followings?.includes(props.user?._id) && <Button variant="outline" onClick={handleUnfollow} className="w-full">
             Unollow
           </Button>}
           

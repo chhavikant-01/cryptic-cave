@@ -14,6 +14,7 @@ import Dossier from "./pages/Dossier";
 import Footer from "./components/Footer";
 import { ForgotPassword } from "./pages/ForgotPassword";
 import { ResetPassword } from "./pages/ResetPassword";
+import { EmailVerifying } from "./pages/ActivationPage";
 
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/password-reset" element={<ForgotPassword />} />
           <Route path="reset-password/:token" element={<ResetPassword />} />
+          <Route path="/auth/activation/:token" element={<EmailVerifying />} />
         </Routes>
         <Footer />
       </BrowserRouter>

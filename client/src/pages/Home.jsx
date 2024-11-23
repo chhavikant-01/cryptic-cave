@@ -1,11 +1,8 @@
-import { Card, CardContent } from "../components/ui/card"
-import { Avatar, AvatarImage, AvatarFallback } from "../components/ui/avatar"
 import Lottie from "lottie-react";
 import animationData from "./animationData.json";
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import HomeCard from "../components/HomeCard";
 import LoadingCard from "../components/LoadingCard";
 import PostCard from "../components/PostCard";
 

@@ -22,7 +22,7 @@ const PostCard = (props) => {
     const dispatch = useDispatch();
   
     useEffect(() => {
-      if (currentUser && currentUser.savedPosts.includes(props._id.toString())) {
+      if (currentUser && currentUser.savedPosts?.includes(props._id.toString())) {
         setIsSaved(true);
       } else {
         setIsSaved(false);
