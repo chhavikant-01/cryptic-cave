@@ -7,12 +7,12 @@ export default function Features() {
     {
       icon: <Share2 className="h-6 w-6" />,
       title: "Seamless Resource Sharing",
-      description: "Share previous year questions (PYQs), notes, research papers, and more with your university community effortlessly."
+      description: "Share previous year questions (PYQs), notes, projects, research papers, and more with your university community effortlessly."
     },
     {
       icon: <Layout className="h-6 w-6" />,
       title: "Personalized Dashboard",
-      description: "Manage your uploads, track downloads, and save resources you find helpful, all in your own customized space."
+      description: "Manage your uploads, track downloads, and save resources you find helpful, all in your own customized space. Create your own profile to showcase your expertise and let others connect with you directly!"
     },
     {
       icon: <Star className="h-6 w-6" />,
