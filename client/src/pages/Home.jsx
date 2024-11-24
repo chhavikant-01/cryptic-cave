@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import LoadingCard from "../components/LoadingCard";
 import PostCard from "../components/PostCard";
+import Features from "../components/Features";
 
 
 export default function Home() {
@@ -105,78 +106,8 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container space-y-12 px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Recently Uploaded</h2>
-                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Check out the latest resources shared by your fellow students.
-                </p>
-              </div>
-            </div>
-            {
-              status === 'loading' ? (
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <LoadingCard />
-                  <LoadingCard />
-                  <LoadingCard />
-                </div>
-              ):(
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {topThreeRecent && topThreeRecent.map((post) => (
-                <PostCard
-                  key={post._id}
-                  _id={post._id}
-                  author={post.author}
-                  likes={post.likes.length}
-                  likedBy={post.likes}
-                  comments={post.comments.length}
-                  title={post.title}
-                  program={post.category.program}
-                  description={post.desc}
-                  course={post.category.course}
-                  resourceType={post.category.resourceType}
-                  thumbnail={post.thumbnail}
-                  uploadedAt={post.createdAt}
-                  border="black"
-                />
-              ))}
-            </div>
-              )
-            }{
-              currentPosts.length === 0 && status !== 'loading' && (
-                <div className="flex items-center justify-center h-[20vh]">
-                  <p className="text-muted-foreground">No posts found</p>
-                </div>
-              )
-            }
-          </div>
-        </section>
+        <Features />
       </main>
     </div>
-  )
-}
-
-
-
-function DownloadIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-      <polyline points="7 10 12 15 17 10" />
-      <line x1="12" x2="12" y1="15" y2="3" />
-    </svg>
   )
 }
