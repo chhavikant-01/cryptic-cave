@@ -120,7 +120,13 @@ export default function OnboardingPage() {
 
               <div className="space-y-1">
                 <Label htmlFor="username" className="text-sm font-medium text-gray-300">
-                  ShareSpace Username (Optional)
+                  <h1>ShareSpace Username (Optional)</h1>
+                  <p className="text-xs text-muted-foreground mb-2 max-w-sm mt-2">
+                Your ShareSpace username is used to create your profile link. Don't have an account?&nbsp;
+                  <a href="https://www.sharespace.bio/sign-up" className="text-blue-600 hover:underline">
+                    Click here
+                  </a>
+              </p>
                 </Label>
                 <Input
                   id="username"
