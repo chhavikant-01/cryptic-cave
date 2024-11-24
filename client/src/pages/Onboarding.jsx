@@ -11,6 +11,7 @@ import toast from 'react-hot-toast'
 import { useDispatch } from 'react-redux'
 import { updateSuccess } from '../redux/user/userSlice'
 import { CSE_AIDS, CSE_CORE, CSE_CSF } from "../programme.js"
+import { signoutSuccess } from '../redux/user/userSlice'
 
 export default function OnboardingPage() {
   const [program, setProgram] = useState('')
@@ -48,10 +49,28 @@ export default function OnboardingPage() {
     }
   }
 
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/user/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+      await response.json();
+      if (response.ok) {
+        dispatch(signoutSuccess());
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black text-white flex">
       <div className="flex-1 flex flex-col justify-center px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-sm lg:w-96">
+        <Button onClick={handleLogout} variant='ghost' className='w-ful justify-start gap-2 text-sm font-medium bg-muted hover:bg-slate-700'>
+          Go Back
+        </Button>
           <div>
             <h2 className="mt-6 text-3xl font-extrabold">Welcome to LinkUni</h2>
             <p className="mt-2 text-sm text-gray-400">
