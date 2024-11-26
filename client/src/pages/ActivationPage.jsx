@@ -25,11 +25,11 @@ export const EmailVerifying = () => {
                 console.log("Response:", data);
 
                 if (!res.ok) {
-                    // navigate('/login');
+                    navigate('/login');
                     return toast.error(data.message);
                 }
 
-                // navigate('/login');
+                navigate('/login');
                 return toast.success(data.message);
             } catch (err) {
                 console.error("Error:", err);
