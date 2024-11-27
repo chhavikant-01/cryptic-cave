@@ -42,7 +42,6 @@ export default function OnboardingPage() {
     if (res.ok) {
       setLoading(false)
       dispatch(updateSuccess(data.user))
-      return window.location.href = '/'
     } else {
       setLoading(false)
       return toast.error('An error occurred. Please try again.')
