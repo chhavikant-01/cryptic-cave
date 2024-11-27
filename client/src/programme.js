@@ -264,8 +264,65 @@ export const CSE_CSF = {
         { "name": "Yoga – II" },
         { "name": "Other" }
     ]
+};
+
+    export const CSE_CSBS = {
+        "name": "CSE CSBS",
+        "courses": [
+            { "name": "Advanced Finance" },
+            { "name": "Advanced Social, Text and Media Analytics" },
+            { "name": "Analysis and Design of Algorithms" },
+            { "name": "Artificial Intelligence and Applications" },
+            { "name": "Behavioral Economics" },
+            { "name": "Business, Communication and Value Science" },
+            { "name": "Business Strategy" },
+            { "name": "Cloud, Microservices and Application" },
+            { "name": "Cognitive Science and Analytics" },
+            { "name": "Compiler Design" },
+            { "name": "Computer Networking" },
+            { "name": "Computer Organization and Architecture" },
+            { "name": "Conversational Systems" },
+            { "name": "Computational Finance and Modeling" },
+            { "name": "Computational Statistics" },
+            { "name": "Cryptology" },
+            { "name": "Data Mining and Analytics" },
+            { "name": "Data Structures 1" },
+            { "name": "Data Structures 2" },
+            { "name": "Design, Thinking and Innovation" },
+            { "name": "Discrete Mathematics for Computer Science" },
+            { "name": "Enterprise Systems" },
+            { "name": "Financial Cost and Management Accounting" },
+            { "name": "Financial Management" },
+            { "name": "Fundamentals of Computer Science" },
+            { "name": "Fundamentals of Database Management System" },
+            { "name": "Fundamentals of Economics" },
+            { "name": "Fundamentals of Management" },
+            { "name": "Human Resource Management" },
+            { "name": "Image Processing and Pattern Recognition" },
+            { "name": "Introduction to Innovation, IP, Management and Entrepreneurship" },
+            { "name": "Introduction to IoT" },
+            { "name": "Introduction to Machine Learning" },
+            { "name": "Linear Algebra" },
+            { "name": "Mobile Computing" },
+            { "name": "Modern Web Applications" },
+            { "name": "Object Oriented Programming" },
+            { "name": "Operations Research" },
+            { "name": "Operating Systems Concepts" },
+            { "name": "Principle of Electrical Engineering" },
+            { "name": "Principles of Electronics Engineering" },
+            { "name": "Principles of Information Security" },
+            { "name": "Psychology" },
+            { "name": "Quantum Computation and Quantum Information" },
+            { "name": "Robotics and Embedded Systems" },
+            { "name": "Software Design with UML" },
+            { "name": "Software Engineering Fundamentals" },
+            { "name": "Statistical Methods" },
+            { "name": "Physics for Computer Science" },
+            { "name": "Formal Language and Automata Theory" }
+        ]
     
-}
+    
+};
 
 export const resourceTypes = ['Research Paper', 'PYQ', 'Notes', 'Textbook', 'Lab Manual','Project','Other']
 export const fileTypes = ['jpeg', 'jpg', 'png', 'webp', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx']
