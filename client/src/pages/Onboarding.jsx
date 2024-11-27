@@ -10,7 +10,7 @@ import animationData from "../components/onboarding.json"
 import toast from 'react-hot-toast'
 import { useDispatch } from 'react-redux'
 import { updateSuccess } from '../redux/user/userSlice'
-import { CSE_AIDS, CSE_CORE, CSE_CSF } from "../programme.js"
+import { CSE_AIDS, CSE_CORE, CSE_CSF, CSE_CSBS} from "../programme.js"
 import { signoutSuccess } from '../redux/user/userSlice'
 
 export default function OnboardingPage() {
@@ -19,7 +19,7 @@ export default function OnboardingPage() {
   const [username, setUsername] = useState('')
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
-  const programOptions = [CSE_CSF.name, CSE_CORE.name, CSE_AIDS.name];
+  const programOptions = [CSE_CSF.name, CSE_CORE.name, CSE_AIDS.name, CSE_CSBS.name];
 
   const currentYear = new Date().getFullYear()
   const graduationYears = Array.from({length: 5}, (_, i) => currentYear + i)

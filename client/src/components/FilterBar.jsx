@@ -22,11 +22,12 @@ import {
   import { useDispatch } from 'react-redux'
   import { setPosts, setStatus, setError } from "../redux/posts/postSlice";
 
-  const programs = [CSE_CSF.name, CSE_CORE.name, CSE_AIDS.name, ]
+  const programs = [CSE_CSF.name, CSE_CORE.name, CSE_AIDS.name, CSE_CSBS.name]
   const courses = {
     [CSE_CSF.name]: CSE_CSF.courses,
     [CSE_CORE.name]: CSE_CORE.courses,
     [CSE_AIDS.name]: CSE_AIDS.courses,
+    [CSE_CSBS.name]: CSE_CSBS.courses,
   }
 
 
