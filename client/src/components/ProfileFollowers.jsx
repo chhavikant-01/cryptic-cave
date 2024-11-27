@@ -28,7 +28,6 @@ export default function UserFollowers() {
         if (!response.ok) {
           console.log(data.message);
         } else {
-          console.log("data.users ", data.users);
           setFollowings(data.users);
         }
       } catch (error) {

@@ -69,11 +69,9 @@ export default function Upload() {
   
     // Check if required fields are filled
     if (!formValues.title || !formValues.desc || !formValues.category.program || !formValues.category.course) {
-      console.log(formValues);
       return toast.error("Please fill out all the fields");
     }
 
-    console.log(formValues);
   
     dispatch(updateStart());
   

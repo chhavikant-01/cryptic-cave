@@ -41,7 +41,6 @@ export default function ProfileTopbar() {
             "state_changed",
             (snapshot) => {
               const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-              console.log(progress);
             },
             (error) => {
               dispatch(updateFailure(error.message));
@@ -51,7 +50,6 @@ export default function ProfileTopbar() {
               try {
                 const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
                 setImageSrc(downloadURL);
-                console.log("File available at", downloadURL);
                 resolve(downloadURL);
               } catch (error) {
                 dispatch(updateFailure(error.message));
@@ -64,7 +62,6 @@ export default function ProfileTopbar() {
 
       const updateDB = async (downloadURL) => {
         return new Promise(async (resolve, reject) => {
-          console.log("updateDB was called");
           try {
             const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/user/update-user`, {
               method: 'PUT',
@@ -103,10 +100,8 @@ export default function ProfileTopbar() {
   }, [imageFile, currentUser._id, dispatch]);
 
   const handleImageChange = (e) => {
-    console.log("handleImageChange was called");
     const file = e.target.files[0];
     setImageFile(file);
-    console.log(file);
   };
 
   const triggerFileInput = () => {

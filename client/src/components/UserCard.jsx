@@ -14,8 +14,6 @@ export default function UserCard(props) {
   const shareSpaceUsername = props.user?.shareSpaceProfile?.username
   const shareSpaceProfileType = props.user?.shareSpaceProfile?.profileType
 
-  console.log("Username: ", shareSpaceUsername)
-  console.log("ProfileType: ", shareSpaceProfileType)
   const handleFollow = async() =>{
         try{
           dispatch(updateStart());
@@ -33,7 +31,6 @@ export default function UserCard(props) {
           if(response.ok){
             const updatedUser = {...currentUser, followings: [...currentUser.followings, props.user._id]}
             const updatedPosts = updatePostUserFollowers(1);
-            console.log(updatedUser);
             dispatch(updatePosts(updatedPosts));
             dispatch(updateSuccess(updatedUser));
             toast(data.message, {icon: "👏"})
@@ -70,7 +67,6 @@ export default function UserCard(props) {
   }       
 }
   const updatePostUserFollowers = (offset) => {
-    console.log("updatePostUserFollowers called, offset: ", offset)
     const updatedPosts = currentPosts.map(post => {
       if (post.author._id === props.user._id) {
         const updatedAuthor = {

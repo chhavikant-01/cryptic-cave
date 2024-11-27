@@ -41,7 +41,6 @@ const ProfileUser = () => {
   const handleConfirmClick = async (backendField, value) => {
     const formData = { password: currentPassword };
     formData[backendField] = value;
-    console.log(formData)
     setEditField(null);
     try {
       dispatch(updateStart());

@@ -11,7 +11,6 @@ export const EmailVerifying = () => {
             if (!token) {
                 return toast.error("Invalid token");
             }
-            console.log("Token:", token);
 
             try {
                 const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/activation/${token}`, {
@@ -22,7 +21,6 @@ export const EmailVerifying = () => {
                 });
 
                 const data = await res.json();
-                console.log("Response:", data);
 
                 if (!res.ok) {
                     navigate('/login');

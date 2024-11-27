@@ -127,7 +127,6 @@ const HomeCard = (props) => {
 
   const handleDeletePost = async () => {
     try{
-      console.log(props._id)
       const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/${props._id}/delete`, {
       method: 'DELETE',
       headers: {
