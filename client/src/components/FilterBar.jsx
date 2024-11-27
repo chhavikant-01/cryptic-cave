@@ -18,7 +18,7 @@ import {
     CommandList,
   } from "./ui/command"
 
-  import { CSE_CORE, CSE_CSF, CSE_AIDS, resourceTypes, fileTypes, semesters } from "../programme.js"
+  import { CSE_CORE, CSE_CSF, CSE_AIDS, CSE_CSBS, resourceTypes, fileTypes, semesters } from "../programme.js"
   import { useDispatch } from 'react-redux'
   import { setPosts, setStatus, setError } from "../redux/posts/postSlice";
 
