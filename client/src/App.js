@@ -15,6 +15,7 @@ import Footer from "./components/Footer";
 import { ForgotPassword } from "./pages/ForgotPassword";
 import { ResetPassword } from "./pages/ResetPassword";
 import { EmailVerifying } from "./pages/ActivationPage";
+import { BetaBanner } from "./components/BetaBanner";
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
         reverseOrder={false}
        />
       <BrowserRouter>
+        <BetaBanner />
         <Navbar />
         <Routes>
           <Route element={<ProtectedRoute />} >
