@@ -25,8 +25,6 @@ LinkUni is a dynamic platform crafted exclusively for university students to eff
 ## 🌟 Our Mission  
 LinkUni empowers students by fostering a culture of sharing, collaboration, and easy access to educational resources. It's not just a platform; it's your academic ally.
 
-That's a great plan for your README! Here's a suggested structure that incorporates the screenshots and a guide for setting up locally:  
-
 ---
 
 # Welcome to LinkUni 🎓  
