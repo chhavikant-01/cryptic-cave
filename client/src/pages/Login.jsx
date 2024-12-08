@@ -82,10 +82,12 @@ export const Login = () => {
             <Button type='submit' className="w-full bg-[#bd1e59] text-white" disabled={loading}>
               {loading ? <div className="spinner"></div> : 'Login'}
             </Button>
-            <h1 className="text-gray-700 text-center my-3 text-sm">OR</h1>
-            <OAuth />
           </div>
         </form>
+        <div>
+          <h1 className="text-gray-700 text-center my-3 text-sm">OR</h1>
+          <OAuth />
+        </div>
         <p className="mt-6 text-xs text-gray-700 text-center">
           Forgot Password? <Link to='/password-reset' className="text-blue-600 hover:underline cursor-pointer">Click here</Link>
         </p>

@@ -114,10 +114,12 @@ export const Signup = () => {
             <Button type='submit' className="w-full bg-[#bd1e59] text-white" disabled={loading}>
               {loading ? <div className="spinner"></div> : 'Sign Up'}
             </Button>
-            <h1 className="text-gray-700 text-center my-3 text-sm">OR</h1>
-            <OAuth />
           </div>
         </form>
+        <div>
+            <h1 className="text-gray-700 text-center my-3 text-sm">OR</h1>
+            <OAuth />
+        </div>
         <p className="mt-6 text-xs text-gray-500">
           By continuing, you agree to our Terms of Service and Privacy Policy.
         </p>
