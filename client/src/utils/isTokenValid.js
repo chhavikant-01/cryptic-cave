@@ -1,3 +1,4 @@
+import { logout } from "../redux/user/userSlice";
 
 
 export const isTokenValid = async () => {
@@ -10,6 +11,8 @@ export const isTokenValid = async () => {
     });
     if(res.ok){
         return true;
+    } else {
+        logout();
+        return false;
     }
-    return false;
 }

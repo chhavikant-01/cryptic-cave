@@ -54,6 +54,12 @@ const userSlice = createSlice({
       state.error = null;
       state.loading = false;
     },
+    logout: (state) => {
+      state.currentUser = null;
+      state.error = null;
+      state.loading = false;
+      localStorage.removeItem('persist:user');
+    }
   },
 });
 
@@ -68,6 +74,7 @@ export const {
   deleteUserSuccess,
   deleteUserFailure,
   signoutSuccess,
+  logout,
 } = userSlice.actions;
 
 export default userSlice.reducer;
