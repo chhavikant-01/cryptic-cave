@@ -30,8 +30,6 @@ LinkUni empowers students by fostering a culture of sharing, collaboration, and 
 # Welcome to LinkUni 🎓  
 **Discover. Share. Collaborate.**  
 
-*(Brief introduction and features, as shared earlier.)*  
-
 ---
 
 ## 📸 Screenshots  
