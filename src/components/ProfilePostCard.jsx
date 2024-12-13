@@ -28,7 +28,6 @@ const HomeCard = (props) => {
   const [numberOfLikes, setNumberOfLikes] = useState(props.likes)
   const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
   const currentUser = useSelector((state) => state.user.currentUser);
-  const currentPosts = useSelector((state) => state.posts.posts);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -43,13 +42,6 @@ const HomeCard = (props) => {
       setIsLiked(false);
     }
   }, [currentUser, props._id, props.likedBy]);
-
-  const truncateText = (text, maxLength) => {
-    if (text?.length <= maxLength) {
-      return text;
-    }
-    return text?.substring(0, maxLength) + '...';
-  }
 
   let formattedDate = 'Invalid date';
   try {
