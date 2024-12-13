@@ -1,5 +1,3 @@
-import HomeCard from "../components/HomeCard"
-import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationLink, PaginationNext } from "../components/ui/pagination"
 import { useSelector } from "react-redux"
 import FilterBar from "../components/FilterBar"
 import LoadingCard from "../components/LoadingCard"

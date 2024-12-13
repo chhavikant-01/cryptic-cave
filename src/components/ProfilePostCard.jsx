@@ -1,6 +1,4 @@
 import React, { useEffect } from 'react'
-import { Card, CardContent, CardFooter } from "../components/ui/card"
-import Thumbnail from "../components/rusty-morning-view-through-windows.jpg"
 import { formatDistanceToNow } from 'date-fns'
 import { toast } from 'react-hot-toast'
 import { Button } from './ui/button'
@@ -10,7 +8,7 @@ import { updateFailure, updateStart, updateSuccess } from '../redux/user/userSli
 import { Link } from 'react-router-dom'
 import UserCard from './UserCard'
 import { deletePost, updatePostLikes } from '../redux/posts/postSlice'
-import { Share2, Star, ClockIcon } from 'lucide-react';
+import { Star, ClockIcon } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,7 +19,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./ui/alert-dialog"
-import { anonymizePost } from "../redux/posts/postSlice"
 import {  Trash2 } from "lucide-react"
 import ShareButton from './ShareButton'
 

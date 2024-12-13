@@ -4,7 +4,6 @@ import { Pagination,
   PaginationPrevious,
   PaginationNext } from "./ui/pagination"
 import { useSelector } from "react-redux"
-import HomeCard from "./HomeCard"
 import { useEffect, useState } from "react";
 import LoadingCard from "./LoadingCard";
 import PostCard from "./PostCard";
