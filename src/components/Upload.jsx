@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
 import { addPost } from "../redux/posts/postSlice";
 import { updateStart, updateSuccess, updateFailure } from "../redux/user/userSlice";
-import { CSE_AIDS, CSE_CSF, CSE_CORE, semesters, resourceTypes } from "../programme";
+import { CSE_AIDS, CSE_CSF, CSE_CORE,CSE_CSBS, semesters, resourceTypes } from "../programme";
 import { ChevronDown } from "lucide-react";
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "./ui/command";
 import { useEffect } from "react";
