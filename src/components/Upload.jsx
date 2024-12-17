@@ -21,6 +21,7 @@ const courses = {
   [CSE_AIDS.name]: CSE_AIDS.courses,
   [CSE_CORE.name]: CSE_CORE.courses,
   [CSE_CSF.name]: CSE_CSF.courses,
+  [CSE_CSBS.name]: CSE_CSBS.courses,
 }
 
 
