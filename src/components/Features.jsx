@@ -78,9 +78,7 @@ export default function Features() {
               href="https://www.sharespace.bio/linkuni/professional"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center px-6 py-3 text-lg font-medium text-white bg-green-600 rounded-full hover:bg-green-700 transition-all duration-300 shadow-lg hover:shadow-xl"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className="inline-flex items-center text-lg font-medium text-white hover:scale-105 transition-transform"
             >
               Start Contributing
               <ArrowRight className="ml-2 h-5 w-5" />

@@ -4,13 +4,15 @@ import { Button } from '../components/ui/button';
 import { useDispatch } from 'react-redux';
 import { signoutSuccess } from '../redux/user/userSlice';
 import { LogOutIcon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 
 
 
-export const LogOut = () => {
+export const SessionError = () => {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleLogout = async () => {
         try {
@@ -23,6 +25,7 @@ export const LogOut = () => {
             toast.error(data.message);
           }
           if (response.ok) {
+            navigate('/login');
             dispatch(signoutSuccess());
             toast.success(data.message);
           }
@@ -34,7 +37,7 @@ export const LogOut = () => {
     return (
         <div className="flex flex-col justify-center items-center h-screen w-full gap-y-5">
             <h1 className="font-bold text-3xl">Something Went Wrong...</h1>
-            <h1 className="text-2xl"> Please Logout and Login again!</h1>
+            <h1 className="text-2xl"> We encountered an error with your session.Please try logging in again.</h1>
             <div className=''>
               <Button
                 variant='ghost'

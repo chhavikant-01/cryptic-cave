@@ -5,6 +5,10 @@ export const fetchPosts = () => async (dispatch) => {
   try {
     const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/posts/`, {
           method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          credentials: 'include',
         });
     const data = await response.json();
     dispatch(setPosts(data));

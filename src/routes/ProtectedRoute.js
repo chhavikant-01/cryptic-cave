@@ -1,30 +1,36 @@
-import { useSelector } from "react-redux";
 import { Outlet, Navigate } from "react-router-dom";
 import OnboardingPage from "../pages/Onboarding";
-import { LogOut } from "../pages/Logout";
-import { isTokenValid } from "../utils/isTokenValid";
-import { logout } from "../redux/user/userSlice";
+import { SessionError } from "../pages/SessionError";
+import { useSessionCheck } from "../hooks/useSessionCheck";
+import ErrorBoundary from "../components/ErrorBoundary.js";
+import { toast } from "react-hot-toast";
+
+
+
+
 export const ProtectedRoute = () => {
-    const { currentUser } = useSelector((state) => state.user);
-
-    const isAuthenticated = () => {
-        if(!currentUser) {
-            logout();
-            return false;
-        }else{
-            return isTokenValid();
-        }
+    const { isAuthenticated, isValidUser, currentUser } = useSessionCheck();
+    // Using a more structured approach with early returns
+    if (!isAuthenticated || !isValidUser) {
+        toast.error('Please login to continue');
+        return <Navigate to="/login" />;
     }
 
-    if(!isAuthenticated()) {
-        return <Navigate to="/login" />
-    };
-    if(isAuthenticated && currentUser.isOnboarded === false) {
-        return <OnboardingPage />
+    // Now we know we have a valid authenticated user
+    switch (currentUser.isOnboarded) {
+        case false:
+            return (
+                <ErrorBoundary fallback={<SessionError />}>
+                    <OnboardingPage />
+                </ErrorBoundary>
+            );
+        case true:
+            return (
+                <ErrorBoundary fallback={<SessionError />}>
+                    <Outlet />
+                </ErrorBoundary>
+            );
+        default:
+            return <SessionError />;
     }
-    if(isAuthenticated && currentUser.isOnboarded) {
-        return <Outlet />
-    }else{
-        return <LogOut />   
-    }
-}
+};
